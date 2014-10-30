@@ -1,0 +1,84 @@
+
+<div id="calendar-legend">
+  <div id="legend-entry">
+    <div id="legend-symbol"> <div style='width:12px;height:12px;background:#000000; -moz-border-radius:2px; -webkit-border-radius:2px; margin:4px 3px 3px 3px; float:left;'></div></div>
+    <div id="legend-text">Events</div>
+  </div>
+  <div id="legend-entry">
+    <div id="legend-symbol"> <div style='width:12px;height:12px;background:#0C6C92; -moz-border-radius:2px; -webkit-border-radius:2px; margin:4px 3px 3px 3px; float:left;'></div></div>
+    <div id="legend-text">Examinations</div>
+  </div>
+  <div id="legend-entry">
+    <div id="legend-symbol"> <div style='width:12px;height:12px;background:#00b400; -moz-border-radius:2px; -webkit-border-radius:2px; margin:4px 3px 3px 3px; float:left;'></div></div>
+    <div id="legend-text">Holidays</div>
+  </div>
+  <div id="legend-entry">
+    <div id="legend-symbol"> <div style='width:12px;height:12px;background:#b40000; -moz-border-radius:2px; -webkit-border-radius:2px; margin:4px 3px 3px 3px; float:left;'></div></div>
+    <div id="legend-text">Dues</div>
+  </div>
+</div>
+<br/>
+<div id="head-month">
+<br/>
+  <div class="header">
+    <div class="prev">
+      <%= link_to "◄", calender_change_path(@show_month-1.month),remote:true%>
+    <div class="month">
+      <%= @show_month.strftime('%B %Y') %>
+    </div>
+    <div class="next">
+      <%= link_to "►", calender_change_path(@show_month+1.month),remote:true%>
+    </div>
+    <div class="extender"></div>
+  </div>
+</div>
+
+<table id="calendar-table" align="center" class="table-bordered" width="100%">
+  <tbody>
+    <tr class="blank"></tr>
+    <tr>
+      <% @days_of_week= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"] %>
+      <% @days_of_week.each do |d| %>
+        <td><span><%= d %></span></td>
+      <% end %>
+    </tr>
+    <% (1..6).each do |r|%>
+      <tr class="day">
+        <% (1..7).each do |c|%>
+          <td >
+            <% dt = c - @start_date_day + (r-1)*7 %>
+            <% unless (r == 1 and c <= @start_date_day) %>
+              <% unless dt > @last_day.day %>
+                  <% current_date="#{@show_month.year}-#{@show_month.month}-#{dt}".to_date %>
+                  <span><%=link_to dt,new_event_path(current_date) %></span>
+                  <% @event=Event.where("start_date<=? AND end_date>=?",current_date,current_date)%>
+                  <% @event.each do |event|%>
+                  <% unless event.nil? %>
+                  <% if event.is_holiday? %>
+                    <%= form_for :calendar, url:{action:'event_view',event_id:event.id },method: :get,remote:true,html:{id: "calender_form#{event.id}",style: 'width:12px;height:12px;background:#00b400; -moz-border-radius:2px;  -webkit-border-radius:2px;margin:2px;'} do |f| %>
+                    <%= link_to ".",'',{onmouseover:"$('#calender_form#{event.id}').submit();"}%>
+                    <%end%>
+                   <% elsif event.is_exam?%>
+                    <%= form_for :calendar, url:{action:'event_view',event_id:event.id },method: :get,remote:true,html:{id: "calender_form#{event.id}",style: 'width:12px;height:12px;background:#0C6C92; -moz-border-radius:2px;  -webkit-border-radius:2px;margin:2px;'} do |f| %>
+                    <%= link_to ".",'',{onmouseover:"$('#calender_form#{event.id}').submit();"}%>
+                    <%end%>
+                  <% else%>
+                    <%= form_for :calendar, url:{action:'event_view',event_id:event.id },method: :get,remote:true,html:{id: "calender_form#{event.id}",style: 'width:12px;height:12px;background:#000000; -moz-border-radius:2px;  -webkit-border-radius:2px;margin:2px;'} do |f| %>
+                    <%= link_to ".",'',{onmouseover:"$('#calender_form#{event.id}').submit();"}%>
+                    <%end%>
+                  <%end%>
+                  <%end%>
+                  <%end%>
+                <% date = "#{@show_month.year}-#{@show_month.month}-#{dt}".to_date
+                first_day = date.beginning_of_month
+                last_day = date.end_of_month
+              %>
+                </div>
+              <% end %>
+              <%end%>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table></div>

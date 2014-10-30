@@ -1,0 +1,17 @@
+<% unless flash[:ranking_level_notice].nil? %>
+    <div align="center" class="alert alert-success" style="width:100%"> <%= flash[:ranking_level_notice] %> </div>
+  <%end%>
+<div class="add_sub",style="margin-top:200px">
+ <%= link_to 'Add', course_ranking_levels_path(@course), remote:true%>
+</div> 
+   <table align="center" class="table table-hover" style="width:800px">
+  <thead>
+  	<tr class="tr-head">
+        <th colspan="3">Ranking Levels</th>
+     </tr>
+  </thead>
+  <tbody class="product-index">
+      <%= render 'newrank' %>
+    </tbody>
+
+</table>

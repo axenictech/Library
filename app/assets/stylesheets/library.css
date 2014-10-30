@@ -1,0 +1,75 @@
+.issuebook_book{
+
+float: left;
+width: 500px;
+margin-left: 60px;
+padding-left: 50px;
+}
+
+.issuebook_student{
+float: left;
+margin-left: 10%;
+}
+
+.search_student{
+margin-top: 0px;
+height: 25px;
+color: #555;
+float: left;
+font-size: 13px;
+}
+.search_button{
+	margin-top: -5px;
+margin-left: 5px;
+padding: 7px 10px;
+color: #FFF;
+background: none repeat scroll 0% 0% #27292B;
+font-weight: bold;
+font-size: 14px;
+border: medium none;
+font-family: arial;
+cursor: pointer;
+}
+
+.user-wrapper {
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.ad-number {
+    float: left;
+    height: auto;
+    text-align: left;
+    width: 90px;
+}
+.fullname {
+    width: 155px;
+    height: auto;
+    float: left;
+}
+.batch-fullname {
+    width: 164px;
+    height: auto;
+    float: left;
+}
+
+.name {
+    color: #999;
+    float: left;
+    width: 206px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 50px;
+}
+
+.val {
+    width: auto;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.label-field-pair {
+    height: 40px;
+    width: 600px;
+    padding-top: 3px;
+}

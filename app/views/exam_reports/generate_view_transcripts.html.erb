@@ -1,0 +1,35 @@
+<div id="content-header">
+  <h1>Exam Reports</h1>
+  <h3>View Transcripts</h3>
+  <div id="app-back-button">
+    <%= link_to image_tag("buttons/back.png",:border => 0), :back  %>
+  </div>
+<div><%= image_tag("underline.jpg",width: "100%")%></div>
+</div>
+<div id="inner-tab-menu">
+  <ul>
+    <li><%= link_to 'Pdf Report',exam_reports_students_transcripts_report_path(batch_id:@batch.id,format:"pdf")%></li>
+  </ul>
+</div>
+<div id="page-yield">
+  <div class="box">
+
+  <div class="bread_crumb">
+    <%= link_to 'Exams', '/exams' %> &raquo;
+    <%= link_to 'Report Center', '/exam_reports/report_center' %> &raquo;
+     <%= link_to 'View Transcripts', '/exam_reports/view_transcripts' %> &raquo;
+    Generated Report
+  </div></div><br/><br/>
+<div class="row">
+<div class="col-md-1"></div>
+<div class="col-md-2">
+<div id="student_list">
+    <%= render 'transcripts_student_list' %>
+  </div></div>
+<div class="col-md-9">
+<div id="report_transcript">
+    <%= render 'view_transcripts_report' %>
+  </div></div>
+</div>
+  </div>
+<br/><br/><br/>

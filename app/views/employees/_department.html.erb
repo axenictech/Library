@@ -1,0 +1,65 @@
+<% unless flash[:notice2].nil? %> <p class="flash-msg"> <%= flash[:notice2] %> </p><% end %>
+<div align="center">
+<ul class="errors2"></ul></div>
+
+
+<%= form_for @employee_department_new, url:{action:'add_department'},remote:true do |c|%>
+	<table class="table" style="width:500px" align="center">
+<tbody>
+		<tr>
+			<td><%= c.label :Name%></td>
+			<td><%= c.text_field :name%></td>
+		</tr>
+
+			<tr>
+			<td><%= c.label :Code%></td>
+			<td><%= c.text_field :code%></td>
+		</tr>
+
+		<tr>
+			<td><%= c.label :Status%> </td>
+			<td><%= c.radio_button "status", "true", checked: "checked" %> <%=c.label :Active%> 
+			<%= c.radio_button "status", "false"%> <%=c.label :Inactive%></td>
+		</tr>
+
+		<tr>
+			<td colspan="3"><%= c.submit 'Create'%></td>
+		</tr>
+	
+	</tbody>
+</table><%end%>
+
+<% if @departments1.empty? and @departments2.empty?%>
+<h3 align="center">No records</h3>
+<%else%>
+<table align="center" class="table table-hover table-bordered" style="width:800px">
+
+	<tr class="tr-head"><th colspan="3">Active Department</th>
+    </tr>
+	<tbody>
+		<%@departments1.each do |c| %>
+			<tr>
+			<td class="col-3"><%=c.name%> (<%=c.code%>)</td>
+			<td><%= link_to 'Edit',employees_edit_department_path(c),remote:true%></td>
+			<td><%= link_to 'Delete' ,employees_destroy_department_path(c),remote:true,method: :delete, data: { confirm: "Are you sure to delete #{c.name}?"}%></td>	 
+			</tr>
+		<%end%>
+	 </tbody>
+</table>
+ 
+<table align="center" class="table table-hover table-bordered" style="width:800px">
+
+	<tr class="tr-head"><th colspan="3">Inactive Department</th>
+    </tr>
+	<tbody>
+		<%@departments2.each do |c| %>
+			<tr>
+			<td class="col-3"><%=c.name%> (<%=c.code%>)</td>
+			<td><%= link_to 'Edit',employees_edit_department_path(c),remote:true%></td>
+			<td><%= link_to 'Delete' ,employees_destroy_department_path(c),remote:true,method: :delete, data: { confirm: "Are you sure to delete #{c.name}?"}%></td>	
+			</tr>
+		<%end%>
+	 </tbody>
+</table>
+<%end%>
+

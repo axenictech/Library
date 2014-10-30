@@ -1,0 +1,30 @@
+
+
+<% week =[] %>
+<% @days.each do |dr| %>
+  <% week.push dr %>
+
+<% end %>
+<%=form_for :weekday, :url => {:action=> 'create'} do |f| %>
+<%= f.hidden_field :batch_id, :value => @batch.id%>
+    
+	<table class="table">
+	<tbody> 
+    <% @days.each do |w| %>
+     <tr>
+        <% q = w.to_i %>
+        <td><%= @day[q] %></td>
+<% @weekday= Weekday.find_by_batch_id_and_weekday(@batch.id,@day[q]) %>
+    <% if @weekday.nil? %>
+        <td><%= check_box_tag "weekdays[]", w,false%></td>
+    <%else%>
+        <td><%= check_box_tag "weekdays[]", w,true%></td>
+    <%end%>
+     </tr> 
+    <% end %>
+    </tbody>
+    </table>
+  
+     <%= submit_tag "Save", :class=>'btn btn-primary' %>
+<% end %>
+

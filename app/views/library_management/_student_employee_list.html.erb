@@ -1,0 +1,22 @@
+    
+
+	<%if params["search"]['filter']=="Student"%>
+      <%  unless @student.nil?%>
+    <div class="user-wrapper">
+      <div class="ad-number"><%=@student.admission_no%> - </div><div class="fullname">
+      <%=link_to @student.first_name+" "+@student.last_name, library_management_get_book_details_path({id: @student,is_student: "Student"}),remote: true%>
+		</div>
+		 <div class="batch-fullname"><%=@student.batch.name%></div>
+    </div>
+       <%end%>
+  <%else%>
+<%  unless @employee.nil?%>
+   
+    <div class="user-wrapper">
+      <div class="ad-number"><%=@employee.employee_number%> - </div><div class="fullname">
+      <%=link_to @employee.first_name+" "+@employee.last_name, library_management_get_book_details_path({id: @employee,is_student: "Employee"}),remote: true%>
+		</div>
+		 <div class="batch-fullname"><%=@employee.employee_position.name%></div>
+    </div>
+   <%end%>
+  <%end%>

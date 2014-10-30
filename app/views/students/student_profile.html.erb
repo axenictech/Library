@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div align="center">
+<font color="purple"><h1><%= @general_setting.school_or_college_name%></h1>
+<h4><small><%= @general_setting.school_or_college_address%><br/>
+  Contact- <%= @general_setting.school_or_college_phone_no%></small></h4></font>
+</div>
+
+<table class="table" align="center" style="width:900px">
+<thead>
+<tr>
+    <th colspan="4">
+    <div id ="student_main_info">
+      <h3 align="left"> <%= @student.first_name.capitalize %> <%= @student.middle_name.capitalize %> <%= @student.last_name.capitalize %>  </h3>
+      <h4 align="left"> Course : <%= @student.batch.course.course_name %> </h4>
+      <h4 align="left"> Batch : <%= @student.batch.name %> </h4>
+      <h4 align="left"> Admission no. : <%= @student.admission_no %> </h4></div>
+   </th>
+  </tr>
+</thead>
+<tbody>
+<tr><td colspan="4"></td></tr>
+<tr>
+    <td class="col-2" colspan="4"><font color="brown">Student Personal Details</font></td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Admission Date</font> </td><td class="col-2" colspan="3"><%= @student.admission_date %></td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Date of birth</font></td><td class="col-2" colspan="3"><%= @student.date_of_birth%></td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Blood group</font></td><td class="col-2" colspan="3"><%= @student.blood_group %></td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Gender</font></td><td class="col-2"><%= @student.gender %></td>
+    <td class="col-2"><font color="grey">Nationality</font></td><td class="col-2"><%= @student.nationality.name %></td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Language</font></td><td class="col-2"> <%= @student.language %> </td>
+    <td class="col-2"><font color="grey">Category</font></td><td class="col-2"> <%= @student.category.name %> </td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Religion</font></td><td class="col-2"> <%= @student.religion %> </td>
+    <td class="col-2"><font color="grey">Address</font></td><td class="col-2"> <%= @student.address_line1+" "+@student.address_line2 %> </td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">City</font></td><td class="col-2"><%= @student.city %> </td>
+    <td class="col-2"><font color="grey">State</font></td><td class="col-2"> <%= @student.state %> </td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Country</font></td><td class="col-2"> <%= @student.country.name %></td>
+    <td class="col-2"><font color="grey">Phone</font></td><td class="col-2">  <%= @student.phone1 %>  </td>
+</tr>
+<tr>
+    <td class="col-2"><font color="grey">Mobile</font></td><td class="col-2"><%= @student.phone2 %> </td>
+    <td class="col-2"><font color="grey">Email</font></td><td class="col-2"> <%= @student.email %> </td>
+</tr>
+<% unless @immediate_contact.nil? %>
+<tr>
+    <td class="col-2" colspan="1"><font color="grey">Immediate Contact</font></td>
+    <td class="col-2" colspan="3"><font color="blue"><%= @immediate_contact.first_name+" "+@immediate_contact.last_name %></font></td>
+</tr>
+<%end%>
+<tr><td colspan="4"></td></tr>
+<tr>
+    <td class="col-2" colspan="4"><font color="brown">Student Previous Institution Details</font></td>
+</tr>
+<% unless @student_previous_data.nil? %>
+<tr>
+  <td class="col-2"><font color="grey">Institution Name</font></td>
+  <td class="col-2" colspan="3">
+  <%= @student_previous_data.institution %>
+  </td>
+</tr>
+<tr>
+  <td class="col-2"><font color="grey">Year</font></td>
+  <td class="col-2" colspan="3">
+  <%= @student_previous_data.year %>
+  </td>
+</tr>
+<tr>
+  <td class="col-2"><font color="grey">Course</font></td>
+  <td class="col-2" colspan="3">
+  <%= @student_previous_data.course %>
+  </td>
+</tr>
+<tr>
+  <td class="col-2"><font color="grey">Total Marks</font></td>
+  <td class="col-2" colspan="3">
+  <%= @student_previous_data.total_mark %>
+  </td>
+</tr>
+<tr><td colspan="4"></td></tr>
+<tr>
+    <td class="col-2" colspan="4"><font color="brown">Student Previous Subject Marks</font></td>
+</tr>
+<% unless @student_previous_subject_marks.nil? %>
+<tr>
+  <td class="col-2"><font color="green">Subject Name</font></td>
+  <td class="col-2" colspan="3"><font color="green">Marks</font></td>
+</tr>
+<% @student_previous_subject_marks.each do |psm| %>
+<tr>
+  <td class="col-2"><%= psm.subject %></td>
+  <td class="col-2" colspan="3"><%= psm.mark %></td>
+</tr>
+<%end%>
+<%end%>
+<%end%>
+<tr>
+  <td class="col-2" colspan="4"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

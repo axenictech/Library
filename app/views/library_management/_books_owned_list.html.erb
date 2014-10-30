@@ -1,0 +1,97 @@
+
+
+
+
+
+  <%=hidden_field(:issue_book, :is_student,value: params['is_student'])%>
+
+  <%if params['is_student']=="Student"%>
+      <%  unless @student.nil?%>
+
+        <%=hidden_field(:issue_book, :id,value: @student.id)%>
+         
+        <div class="label-field-pair">
+          <label for="user_name">Name </label>
+          <div >
+          <%=text_field_tag  'student_name', @student.first_name+" "+@student.last_name, {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+        </div>
+        </div>
+        <div class="label-field-pair">
+          
+          <label for="Admission_no.">Admission no.</label>
+          <div class="text-input-bg">
+          <%=text_field_tag  'student_addmission_no',@student.admission_no, {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+          </div>
+         
+        </div>
+        <%else%>
+ 
+         <div class="label-field-pair">
+          <label for="user_name">Name </label>
+          <div >
+          <%=text_field_tag  'student_name', '', {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+        </div>
+        </div>
+        <div class="label-field-pair">
+          
+          <label for="Admission_no.">Admission no.</label>
+          <div class="text-input-bg">
+          <%=text_field_tag  'student_addmission_no','', {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+          </div>
+         
+        </div>
+
+
+        <%end%>
+
+<%else%>
+<% unless @employee.nil?%>
+
+
+<%=hidden_field(:issue_book, :id,value: @employee.id)%>
+<div class="label-field-pair">
+          <label for="user_name">Name </label>
+          <div >
+          <%=text_field_tag  'student_name',  @employee.first_name+" "+@employee.last_name, {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+        </div>
+        </div>
+        <div class="label-field-pair">
+          
+          <label for="Admission_no.">Employee no.</label>
+          <div class="text-input-bg">
+          <%=text_field_tag  'student_addmission_no', @employee.employee_number, {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+          </div>
+         
+        </div>
+  <%else%>
+
+<div class="label-field-pair">
+          <label for="user_name">Name </label>
+          <div >
+          <%=text_field_tag  'student_name', '', {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+        </div>
+        </div>
+        <div class="label-field-pair">
+          
+          <label for="Admission_no.">Employee no.</label>
+          <div class="text-input-bg">
+          <%=text_field_tag  'student_addmission_no','', {class: "form-control",disabled: true,style: "height:30px;padding: 0;width:205px;background: none repeat scroll 0% 0% ",size:"30"}%>
+          </div>
+         
+        </div>
+
+
+  <%end%>
+<%end%>
+<%unless @books_taken.nil?%>
+<%@books_taken.each do |issue_books|%>
+<div class="pack"></div>
+<div class="name"></div><div class="val"><span></span><span class="cont themed_text"></span></div>
+<div class="name">Book Taken</div><div class="val"><span>:</span><span class="cont themed_text">3</span></div>
+  <div class="name">Book Title</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.book.title%></span></div>
+  <div class="name">Book Number</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.book.book_no%></span></div>
+  <div class="name">Issue date</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.issue_date%></span></div>
+  <div class="name">Due Date</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.due_date%></span></div>
+  <div class="pack"></div>
+  <%end%>
+  <%end%>

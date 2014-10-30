@@ -1,0 +1,65 @@
+
+<div id="content-header">
+  <h1>Exams</h1>
+  <h3>Exams Group</h3>
+  <div id="app-back-button">
+    <%= link_to image_tag("buttons/back.png",:border => 0),:back %>
+  </div>
+ <div><%= image_tag("underline.jpg",width: "100%")%></div>
+</div>
+<% unless @exam_group.result_published? %>
+<div id="inner-tab-menu">
+  <ul>
+    <li><%= link_to 'Publish Results',exam_groups_publish_result_path(@exam_group)%> </li>
+    <li><%= link_to 'New', new_exam_path(@exam_group) %> </li>
+  </ul>
+</div>
+<% end %>
+<div class="box">
+  
+    <div class="bread_crumb">
+    <%= link_to 'Course' ,courses_path%> &raquo;
+    <%= link_to @course.course_name,course_path(@course)%>  &raquo;
+    Batch&raquo;
+    <%= link_to @exam_group.batch.name,batches_display_path(@exam_group.batch)%>&raquo;
+    Exams&raquo;
+    <%= link_to @exam_group.name,exam_group_path(@exam_group.batch)%> &raquo;
+  </div>
+  </div><br/>
+<% unless flash[:result].nil? %>
+    <div align="center" class="alert alert-success" style="width:100%"> <%= flash[:result] %> </div>
+  <% end %>        
+<% unless flash[:result_error].nil? %>
+    <div align="center" class="alert alert-danger" style="width:100%"> <%= flash[:result_error] %> </div>
+  <% end %>        
+<table align="center" class="table table-hover table-bordered" style="width:800px">
+        <tr class="tr-head">
+        <th>Subject Name</th>
+        <%unless @exam_group.exam_type=="Grades"%>
+        <th>Maximum Marks</th>
+        <th>Minimum Marks</th>
+        <%end%>
+        <th>Manage</th>
+        </tr>
+        
+      <tbody>
+        <% @exams.each do |exam| %>
+        <tr>
+        
+        <td class="col-2"><%= link_to exam.subject.name, exam_exam_score_path(exam) %></td>
+        <%unless @exam_group.exam_type=="Grades"%>
+        <td><%= exam.maximum_marks %></td>  
+        <td><%= exam.minimum_marks %></td>
+        <% end %>
+        <% unless @exam_group.result_published? %>
+        <td><%= link_to 'Edit',edit_exam_path(exam)%>&nbsp;&nbsp;
+        <%= link_to 'Delete',exam,method: :delete,
+        data:{confirm:"Are you sure to delete Exam: #{exam.subject.name}"}%></td>
+        <%else%>
+        <td>Edit&nbsp;&nbsp;Delete</td>
+        <%end%>
+        </tr>
+         <%end%>
+         
+      </tbody>
+</table>

@@ -1,0 +1,24 @@
+<% if @reporting_manager.nil? %>
+ <h4 align="center">No Record Found </h4>
+   <% else %>
+<% if @reporting_manager.empty? %>
+ <h4 align="center">No Record Found </h4>
+   <% else %>
+ <div class="col-md-1"></div>
+      <table align="center" class="table table-hover" style="width:1000px">
+      <tr>
+            <th>Employee Name</th>
+            <th>Employee Id</th>
+            <th>Employee Deprtment</th>
+      </tr>
+
+      <%@reporting_manager.each do |emp|%>
+          <tr>
+                <td col-md-1><%= link_to emp.first_name,employees_update_reporting_manager_name_path(@employee,emp),remote:true%></td>
+                <td col-md-1><%= emp.employee_number%></td>
+                <td col-md-1><%= emp.employee_department.name%></td>
+         </tr>
+      <%end%>  
+      </table>
+  <% end %>
+  <%end%>

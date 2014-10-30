@@ -1,0 +1,59 @@
+<% unless flash[:notice4].nil? %> <p class="flash-msg"> <%= flash[:notice4] %> </p><% end %>
+<div align="center">
+<ul class="errors4"></ul></div>
+
+	<%= form_for @bank_field_new, url:{action:'add_bank_field'},remote:true do |c|%>
+		<table class="table" style="width:500px" align="center">
+<tbody>
+		<tr>
+			<td><%= c.label :Name%></td>
+			<td><%= c.text_field :name%></td>
+		</tr>
+
+			<tr>
+			<td><%= c.label :Status%> </td>
+			<td><%= c.radio_button "status", "true", checked: "checked" %> <%=c.label :Active%> 
+			<%= c.radio_button "status", "false"%> <%=c.label :Inactive%></td>
+		</tr>
+
+		<tr>
+			<td colspan="3"><%= c.submit 'Create'%></td>
+		</tr>
+	
+</tbody>
+</table><%end%>
+
+<% if @bank_fields1.empty? and @bank_fields2.empty?%>
+<h3 align="center">Bank Details record not found</h3>
+<%else%>
+<table align="center" class="table table-hover table-bordered" style="width:800px">
+
+	<tr class="tr-head"><th colspan="3">Active Bank fields</th>
+    </tr>
+	<tbody>
+		<%@bank_fields1.each do |c| %>
+			<tr>
+			<td class="col-2"><%=c.name%></td>
+			<td><%= link_to 'Edit',employees_edit_bank_field_path(c),remote:true%></td>
+			<td><%= link_to 'Delete' ,employees_destroy_bank_field_path(c),remote:true,method: :delete, data: { confirm: "Are you sure to delete #{c.name}?"}%></td>	 
+			</tr>
+		<%end%>
+	 </tbody>
+</table>
+
+
+<table align="center" class="table table-hover table-bordered" style="width:800px">
+
+	<tr class="tr-head"><th colspan="3">Inactive Bank fields</th>
+    </tr>
+	<tbody>
+		<%@bank_fields2.each do |c| %>
+			<tr>
+			<td class="col-2"><%=c.name%></td>
+			<td><%= link_to 'Edit',employees_edit_bank_field_path(c),remote:true%></td>
+			<td><%= link_to 'Delete' ,employees_destroy_bank_field_path(c),remote:true,method: :delete, data: { confirm: "Are you sure to delete #{c.name}?"}%></td>	 
+			</tr>
+		<%end%>
+	 </tbody>
+</table>
+ <%end%>
