@@ -7,7 +7,7 @@ class Student < ActiveRecord::Base
   has_one    :student_previous_data
   has_many   :student_previous_subject_marks
   has_many   :guardians
-  has_many   :issue_book
+  has_many   :issue_books
   has_attached_file :image
   validates_attachment_content_type :image, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
