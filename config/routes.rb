@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 #Library Module Routes
 root 'library_management#library_dashboard'
 get 'library_management/library_dashboard'
-get 'library_management/return_books',to: 'library_management#return_books',as: 'library_management_return_books'
+post 'library_management/return_books',to: 'library_management#return_books',as: 'library_management_return_books'
 post 'library_management/issue_books',to: 'library_management#issue_books',as: 'library_management_issue_books'
 get 'library_management/manage_books',to: 'library_management#manage_books',as: 'library_management_manage_books'
 get 'library_management/library_card_settings',to: 'library_management#library_card_settings',as: 'library_management_library_card_settings'
@@ -19,6 +19,13 @@ post 'library_management/search_book_for_issue_result',to: 'library_management#s
 get 'library_management/:id/book_issue_select_student_employee',to: 'library_management#book_issue_select_student_employee',as: 'library_management_book_issue_select_student_employee'
 post 'library_management/student_employee_list',to: 'library_management#student_employee_list',as: 'library_management_student_employee_list'
 get 'library_management/get_book_details',to: 'library_management#get_book_details',as: 'library_management_get_book_details'
+get 'library_management/search_book_for_return',to: 'library_management#search_book_for_return',as: 'library_management_search_book_for_return'
+post 'library_management/search_book_for_return_result',to: 'library_management#search_book_for_return_result',as: 'library_management_search_book_for_return_result'
+get 'library_management/:id/process_return_book',to: 'library_management#process_return_book',as: 'library_management_process_return_book'
+
+
+
+
 
 
 

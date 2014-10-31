@@ -73,3 +73,21 @@ cursor: pointer;
     width: 600px;
     padding-top: 3px;
 }
+
+.return_book{
+    margin-left: 30%
+}
+.exceeded {
+    font-size: 15px;
+    color: #D00;
+}
+.fine_amount {
+color: #444;
+display: block;
+font-size: 14px;
+margin: 0px;
+float: left;
+width: 200px;
+padding-top: 10px;
+font-weight: 600;
+}
