@@ -9,8 +9,16 @@
  <div class="bread_crumb">
     <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Issue Books
   </div>
-  
-  
+<%unless params["format"].nil?%>
+<div>
+ <p class="flash-msg" style="margin-left: 160px;"> Book has been issued </p>
+<%@message=nil%>
+ </div>
+<br>
+<br>
+<%end%>
+
+
   <div class="search_form">
     <%=form_for :search ,url: library_management_search_book_for_issue_result_path, method: :post,remote:true do |form|%>
    <div class="label-field-pair">

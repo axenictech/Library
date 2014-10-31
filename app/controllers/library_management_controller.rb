@@ -7,6 +7,7 @@ class LibraryManagementController < ApplicationController
     @books = Book.all
     
   end
+<<<<<<< HEAD
 
   def addbooks
     @book = Book.new
@@ -103,6 +104,8 @@ class LibraryManagementController < ApplicationController
   end
 
   
+=======
+>>>>>>> c9479b7590a98c56a298a907e2304a10ae612bf5
   def search_books
   	
   end
@@ -210,7 +213,28 @@ class LibraryManagementController < ApplicationController
 
 #issue Book Actions
   def issue_books
-  	
+         @issue_book=IssueBook.new
+         @book=Book.where(book_no: params["issue_book"]['book_no']).take
+         @issue_book.book=@book
+           @issue_book.issue_date=params["issue_book"]['issue_date']
+           @issue_book.due_date=params["issue_book"]['due_date']
+           @issue_book.status="borrowed"
+          if params["issue_book"]['is_student']=="Student"
+             @issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
+          else
+             @issue_book.employee=Employee.where(id: params["issue_book"]['student_employee_id']).take
+          end
+        begin
+         if @issue_book.save
+          @message="Book has been issued "
+          @book.update(status: "borrowed")
+          p "-----------------------------"
+        end
+          redirect_to library_management_search_book_for_issue_path(@message)
+        rescue Exception =>e
+          p e
+        end
+
   end
   def search_book_for_issue
   	
@@ -223,7 +247,7 @@ class LibraryManagementController < ApplicationController
 
   def search_book_for_issue_result
   	@book_no=get_book_no_for_search['bookno_barcode']
-   	@books=Book.where("book_no = ? OR barcode_no = ? AND status = 'available' OR status='reserved'", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
+   	@books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'available' OR status='reserved')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
   end
   def student_employee_list
   
@@ -259,6 +283,35 @@ class LibraryManagementController < ApplicationController
   end
 
   end
+
+  
+  def search_book_for_return_result
+    @book_no=get_book_no_for_search['bookno_barcode']
+    @books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'borrowed')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
+  end
+  def search_book_for_return
+    
+  end
+  def process_return_book
+     @book=IssueBook.where("book_id = ? AND status='borrowed'", params['id']).take   
+  end
+  def return_books
+    begin
+   @book=IssueBook.where("id = ? AND status='borrowed'",params["returnbook"]["book_id"]).take   
+   if @book.due_date >=Date.today
+   @book.update(status: "available",returned_date: Date.today)
+   @book.book.update(status: "available")
+   @message="Book has been returned "
+   redirect_to library_management_search_book_for_return_path(@message)
+   else
+   #save fine and update book
+   end 
+   rescue Exception=> e
+    @message="Book already returned "
+    redirect_to library_management_search_book_for_return_path(@message)
+   end
+  end
+
 
 
  private

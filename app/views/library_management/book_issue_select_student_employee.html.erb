@@ -13,10 +13,9 @@
 <div id="page-yield-bookissue" class="issuebook_book">
    <div class="extender"></div>
    <div >
-   <%=form_for :issue_book ,url: library_management_issue_books_path, method: :post,remote:true do |form|%>
+   <%=form_for :issue_book ,url: library_management_issue_books_path, method: :post do |form|%>
 	<%=form.hidden_field :is_student,:value => ""%>
-	<%=form.hidden_field :student_id,:value => ""%>
-	<%=form.hidden_field :employee_id,:value => ""%>
+	<%=form.hidden_field :student_employee_id,:value => ""%>
 	<%=form.hidden_field :book_no,:value => @book.book_no%>
 
    </div>
