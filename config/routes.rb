@@ -5,9 +5,9 @@ root 'library_management#library_dashboard'
 get 'library_management/library_dashboard'
 get 'library_management/return_books',to: 'library_management#return_books',as: 'library_management_return_books'
 post 'library_management/issue_books',to: 'library_management#issue_books',as: 'library_management_issue_books'
-get 'library_management/manage_books',to: 'library_management#manage_books',as: 'library_management_manage_books'
+
 get 'library_management/library_card_settings',to: 'library_management#library_card_settings',as: 'library_management_library_card_settings'
-get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
+
 get 'library_management/manage_barcodes',to: 'library_management#manage_barcodes',as: 'library_management_manage_barcodes'
 get 'library_management/movement_log',to: 'library_management#movement_log',as: 'library_management_movement_log'
 get 'library_management/book_renewal',to: 'library_management#book_renewal',as: 'library_management_book_renewal'
@@ -21,8 +21,19 @@ post 'library_management/student_employee_list',to: 'library_management#student_
 get 'library_management/get_book_details',to: 'library_management#get_book_details',as: 'library_management_get_book_details'
 
 
+get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
+post 'library_management/search_books_list_result',to: 'library_management#search_books_list_result',as: 'library_management_search_books_list_result'
+get 'library_management/books',to: 'library_management#books',as: 'library_management_books'
+get 'library_management/addbooks',to: 'library_management#addbooks',as: 'library_management_addbooks'
+post 'library_management/saveNewBook',to: 'library_management#saveNewBook',as: 'library_management_saveNewBook'
+post 'library_management/books_sorted_list',to: 'library_management#books_sorted_list',as:'library_management_books_sorted_list'
+get 'library_management/:id/view_selected_book',to: 'library_management#view_selected_book',as:'library_management_view_selected_book'
+post 'library_management/:id/reserve_book',to:'library_management#reserve_book',as:'library_management_reserve_book'
+get 'library_management/:id/edit_book',to: 'library_management#edit_book',as:'library_management_edit_book'
+patch 'library_management/:id/update_book',to: 'library_management#update_book',as:'library_management_update_book'
+delete 'library_management/:id/delete_book',to: 'library_management#delete_book',as:'library_management_delete_book'
 
-devise_for :users
+devise_for :users 
 mount Ckeditor::Engine => '/ckeditor'
 get 'setting/course_batch'
 get 'general_settings/all'

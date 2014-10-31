@@ -22,3 +22,24 @@ $(document).ready(function(){
         });
     }
 });  
+
+
+function showbookSelectedField()
+{
+	
+	
+          if($("#type").val() == '2') {
+
+                $("#barcode_field").show();
+                 $("#count_area").hide();
+          
+          }
+          else {
+
+          		$("#barcode_field").hide();
+                 $("#count_area").show();
+
+               }
+          
+
+}
