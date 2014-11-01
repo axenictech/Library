@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141020135342) do
+ActiveRecord::Schema.define(version: 20141101110808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,6 +219,37 @@ ActiveRecord::Schema.define(version: 20141020135342) do
 
   add_index "batches_online_exams", ["batch_id"], name: "index_batches_online_exams_on_batch_id", using: :btree
   add_index "batches_online_exams", ["online_exam_id"], name: "index_batches_online_exams_on_online_exam_id", using: :btree
+
+  create_table "book_more_details", force: true do |t|
+    t.string   "name"
+    t.string   "status"
+    t.string   "is_mandatory"
+    t.string   "input_method"
+    t.boolean  "is_active"
+    t.integer  "serial_no"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "book_more_fields", force: true do |t|
+    t.integer  "book_id"
+    t.integer  "book_more_detail_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "book_more_fields", ["book_id"], name: "index_book_more_fields_on_book_id", using: :btree
+  add_index "book_more_fields", ["book_more_detail_id"], name: "index_book_more_fields_on_book_more_detail_id", using: :btree
+
+  create_table "book_more_values", force: true do |t|
+    t.integer  "book_more_detail_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "book_more_values", ["book_more_detail_id"], name: "index_book_more_values_on_book_more_detail_id", using: :btree
 
   create_table "books", force: true do |t|
     t.integer  "book_no"
@@ -1093,6 +1124,11 @@ ActiveRecord::Schema.define(version: 20141020135342) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "is_active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tmps", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end

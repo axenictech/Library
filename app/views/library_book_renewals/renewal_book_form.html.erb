@@ -13,29 +13,39 @@
 <div align="center">
 <ul class="errors3"></ul></div>
 
-<%= form_for @ib,url:{action: 'update_due_date',id:@ib.id} do |c|%>
+<%= form_for @issue_book,url:{action: 'update_due_date',id:@issue_book.id} do |c|%>
     <table class="table" style="width:500px" align="center">
   <tbody>
     <tr>
       <td><%= c.label :'book number'%></td>
-      <td><%= text_field_tag :book_no,@ib.book.book_no,readonly:true %></td>
+      <td><%= text_field_tag :book_no,@issue_book.book.book_no,readonly:true %></td>
     </tr>
 
     <tr>
       <td><%= c.label :'book title'%></td>
-      <td><%= text_field_tag :book_name,@ib.book.title,readonly:true %></td>
+      <td><%= text_field_tag :book_name,@issue_book.book.title,readonly:true %></td>
+    </tr>
+    <% if @issue_book.student_id.nil? %>
+    <tr>
+      <td><%= c.label :employee_name %></td>
+      <td><%= text_field_tag :book_name,@issue_book.employee.first_name,readonly:true %></td>
     </tr>
 
     <tr>
-      <td><%= c.label :name %></td>
-      <td><%= text_field_tag :book_name,@ib.student.first_name,readonly:true %></td>
+      <td><%= c.label :'Employee No'%></td>
+      <td><%= text_field_tag :book_name,@issue_book.employee.employee_number,readonly:true %></td>
+    </tr>
+    <%else%>
+    <tr>
+      <td><%= c.label :student_name %></td>
+      <td><%= text_field_tag :book_name,@issue_book.student.first_name,readonly:true %></td>
     </tr>
 
     <tr>
-      <td><%= c.label :'Admission No'%></td>
-      <td><%= text_field_tag :book_name,@ib.student.admission_no,readonly:true %></td>
+      <td><%= c.label :'admission No'%></td>
+      <td><%= text_field_tag :book_name,@issue_book.student.admission_no,readonly:true %></td>
     </tr>
-
+    <%end%>
     <tr>
       <td><%= c.label :'issue date'%></td>
       <td><%= c.date_field :issue_date,readonly:true %></td>
@@ -52,6 +62,6 @@
       
     </tr>
   </tbody>
-</table><% unless flash[:notice].nil? %><p class="flash-msg"> <%= flash[:notice] %> </p><% end %>
+</table>
 <%end%></div>
  
