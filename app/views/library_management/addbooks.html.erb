@@ -12,6 +12,16 @@
 <div id="add_new_books">
 
  <%= form_for @book,url:{action: 'saveNewBook'},method: :post do |form|%>
+
+  <% if @book.errors.any? %>
+    <div class="alert alert-danger">
+    <h2>Errors prohibited to being saved:</h2>
+    <h3>User account not created</h3>
+    <ul><% @book.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %></ul>
+    </div>
+  <% end %>
   	<div class="label-field-pair" style="float:left" >
   	 <%=form.label :Bookadd ,"Book addition mode" %>
 
@@ -75,15 +85,17 @@
         <div class="label-field-pair">
           <%=form.label :tag ,"Tags" %>
           <div class="tags_list">
+
             <div class="label-field-pair-checkbox">
-
-         <% @tags.each do |t| %>
-
-  			<%= check_box_tag "tag_ids[#{t.id}]", t.id, false,:name => "tag_ids[]"%>
+            
+           <% @tags.last(10).each do |t| %>
+            
+          <%= check_box_tag "tag_ids[#{t.id}]", t.id, false,:name => "tag_ids[]"%>
   			<%=t.name%>
+       
   			<div class="extender"></div>
-
-			<% end %>
+         
+		  	<% end %>
          	
      		</div>
      		</div>
@@ -97,7 +109,7 @@
       <div class="label-field-pair">
       <%=form.label :tital,"Custom Tags" %>
       <div class="text-input-bg">
-      <%= text_field :cust_tag ,''%>
+      <%= text_field_tag :cust_tag %>
       </div>
       </div>
       <div class="extender"></div>
@@ -106,7 +118,7 @@
         <div class="label-field-pair">
         <%=form.label :no_of_cpoies,"No. of copies " %>
         <div class="text-input-bg">
-         <%= text_field_tag :no_of_cpoies %>
+         <%= text_field_tag :no_of_cpoies,value= "1" %>
          </div>
       </div>
 

@@ -8,6 +8,10 @@ class LibraryManagementController < ApplicationController
     
   end
 
+
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
+
   def addbooks
     @book = Book.new
 
@@ -22,19 +26,20 @@ class LibraryManagementController < ApplicationController
       unless @cust_tag.nil?
         Tag.create(name: @cust_tag)
       end
-      p "=---------------------------------"
+    
       p  params["tag_ids"]
+      
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       params[:no_of_cpoies].to_i.times do |i|
-
+ 
         @book = Book.new
         @book.book_no = params["book"]["book_no"].to_i+i
         @book.title =params["book"]["title"]
         @book.author=params["book"]["author"]
         @book.status="Available"
-        @book.save
+       if @book.save
          
-        params["tag_ids"].each do |k|
+          params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
 
@@ -42,10 +47,16 @@ class LibraryManagementController < ApplicationController
       unless params["cust_tag"][0]==""
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end
+         redirect_to library_management_books_path(@book)
+        else
+         
+          render library_management_addbooks_path
 
-
+        end 
+         
+        
       end
-
+    
     else 
 
       p "hoho--------in 2"
@@ -75,9 +86,9 @@ class LibraryManagementController < ApplicationController
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
         end
 
-
+          redirect_to library_management_books_path(@book)
     end
-
+p "-------------------------------------------4"
   end
 
   def books_sorted_list
@@ -103,6 +114,15 @@ class LibraryManagementController < ApplicationController
   end
 
   
+<<<<<<< HEAD
+
+
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
+>>>>>>> ba346be5d2e6965a01bcc13eb4b3654f7e7226c8
   def search_books
   	
   end
@@ -126,8 +146,7 @@ class LibraryManagementController < ApplicationController
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.books_tag.tag("name",@book_search_field)
-      
+        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take.books_tag).pluck(:book_id))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
