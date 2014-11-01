@@ -1,0 +1,39 @@
+<div id="content-header">
+  <h1>Library</h1>
+  <h3>Book Renewal</h3>
+  <div id="app-back-button">
+    <%= link_to image_tag("buttons/back.png",:border => 0), :back %>
+  </div>
+    <div><%= image_tag("underline.jpg",width: "100%")%></div>
+</div><br/><br/>
+<% unless flash[:notice].nil? %><p class="flash-msg"> <%= flash[:notice] %> </p><% end %>
+
+<div id="page-yield">
+
+<div align="center">
+<ul class="errors3"></ul></div>
+
+<%= form_for :msearch,url: library_book_renewals_movement_log_search_result_path,method: :get,remote:true do |c|%>
+    <table class="table" style="width:500px" align="center">
+  <tbody>
+  	<tr>
+		<td> <%= c.label :select_date_type %></td>
+		<td> <%= c.select :date_type,['Issue date','Due date'],{prompt:true}%> </td>
+	</tr>
+
+    <tr>
+      <td><%= c.label :select_date%></td>
+      <td><%= c.date_field :date %></td>
+    </tr>
+
+    
+    <tr>
+      <td><%=c.submit "Search",{:class=>"submit_button",style: "margin-left:10px;"}%></td>
+      
+    </tr>
+  </tbody>
+</table>
+<div id="show_movement_log_details"></div>
+
+<%end%></div>
+ 

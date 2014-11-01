@@ -20,8 +20,6 @@ get 'library_management/:id/book_issue_select_student_employee',to: 'library_man
 post 'library_management/student_employee_list',to: 'library_management#student_employee_list',as: 'library_management_student_employee_list'
 get 'library_management/get_book_details',to: 'library_management#get_book_details',as: 'library_management_get_book_details'
 
-
-
 devise_for :users
 mount Ckeditor::Engine => '/ckeditor'
 get 'setting/course_batch'
@@ -500,4 +498,12 @@ resources :online_exams
 resources :employees
 resources :employee_attendances
 resources :finance
+#Library Book Renewal Routes
+get 'library_book_renewals/search_book'
+get 'library_book_renewals/renewal_book_search_result'
+get 'library_book_renewals/renewal_book_form'
+patch 'library_book_renewals/update_due_date'
+get 'library_book_renewals/movement_log_search'
+get 'library_book_renewals/movement_log_search_result'
+
 end
