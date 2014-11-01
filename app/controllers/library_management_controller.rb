@@ -7,7 +7,10 @@ class LibraryManagementController < ApplicationController
     @books = Book.all
     
   end
+<<<<<<< HEAD
 
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
 
   def addbooks
     @book = Book.new
@@ -111,7 +114,10 @@ p "-------------------------------------------4"
   end
 
   
+<<<<<<< HEAD
 
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
   def search_books
   	
   end
@@ -221,9 +227,19 @@ p "-------------------------------------------4"
          @issue_book=IssueBook.new
          @book=Book.where(book_no: params["issue_book"]['book_no']).take
          @issue_book.book=@book
-           @issue_book.issue_date=params["issue_book"]['issue_date']
-           @issue_book.due_date=params["issue_book"]['due_date']
-           @issue_book.status="borrowed"
+         
+         begin
+          d=Date.parse(params["issue_book"]['issue_date'])
+          d2=Date.parse(params["issue_book"]['due_date'])
+         rescue
+        @issue_book=IssueBook.new
+        redirect_to  library_management_book_issue_select_student_employee_path(@book,@issue_book)     
+        flash[:alert]="Due/Issue date not in correct format"
+         end
+
+         @issue_book.issue_date=params["issue_book"]['issue_date']
+         @issue_book.due_date=params["issue_book"]['due_date']
+         @issue_book.status="borrowed"
           if params["issue_book"]['is_student']=="Student"
              @issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
           else
@@ -237,7 +253,9 @@ p "-------------------------------------------4"
         end
           redirect_to library_management_search_book_for_issue_path(@message)
         rescue Exception =>e
-          p e
+        @issue_book=IssueBook.new
+        redirect_to  library_management_book_issue_select_student_employee_path(@book,@issue_book)     
+        flash[:alert]="Please Select Student/Employee"
         end
 
   end
@@ -309,12 +327,39 @@ p "-------------------------------------------4"
    @message="Book has been returned "
    redirect_to library_management_search_book_for_return_path(@message)
    else
-   #save fine and update book
+   
+   @book.update(status: "available",returned_date: Date.today)
+   @book.book.update(status: "available")
+   @message="Book has been returned "
+   Fine.create(issue_book_id: @book.id,amount: params["returnbook"]["amount"])
+   redirect_to library_management_search_book_for_return_path(@message)
+
    end 
    rescue Exception=> e
-    @message="Book already returned "
+    @message="Book Alredy returned "
     redirect_to library_management_search_book_for_return_path(@message)
    end
+  end
+
+
+  def library_card_setting_add
+
+  end
+  def library_card_setting_show
+
+  end
+  def library_card_setting_edit
+
+  end
+  def library_card_setting_delete
+
+  end
+  def get_library_card_setting
+      begin
+          @cources=LibraryCardSetting.all
+      rescue Exception =>ex
+        p ex
+      end
   end
 
 

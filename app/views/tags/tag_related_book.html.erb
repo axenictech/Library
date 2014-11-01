@@ -9,9 +9,9 @@
   	</tr>
     </thead>
     <tbody>
-  	<% @book_tags.each do |book|%>
+  	<% @books.each_with_index do |book,i|%>
   	 <tr>
-  	 	<td><%=book.id %></td>
+  	 	<td><%=i+1%></td>
   	 	<td><%=book.book_no %></td>
   	 	<td><%=book.title %></td>
         <td><%=book.author%></td>
