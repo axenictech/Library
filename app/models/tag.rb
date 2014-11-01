@@ -1,6 +1,6 @@
 class Tag < ActiveRecord::Base
 
-	has_many :books_tag
+	has_and_belongs_to_many :books
 
 	def self.search(search)
   if search
