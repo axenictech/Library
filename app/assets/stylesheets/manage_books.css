@@ -1,0 +1,51 @@
+.tags_list{
+width: 400px; 
+float: left;
+font-size: 13px;
+}
+
+.tag_name {
+float: left;
+width: 367px;
+margin: 5px 0 0 3px;
+}
+
+
+.label-field-pair input {
+background: #eee;
+border: 1px solid #c6c6c6;
+margin: 5px 0 0 10px;
+width: 215px;
+height: 27px;
+
+padding: 5px;
+}
+
+.tbody {
+display: table-row-group;
+vertical-align: middle;
+border-color: inherit;
+}
+
+.table#listing td.col-3 {
+width: 13%;
+padding: 5px;
+padding-left: 10px;
+}
+
+
+
+.pagination {
+float: right;
+position: relative;
+margin-top: -30px;
+margin-right: 100px;
+}
+
+
+
+.extender {
+height: 1px;
+clear: both;
+}
+
