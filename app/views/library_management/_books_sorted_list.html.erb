@@ -1,0 +1,45 @@
+<%begin%>
+<%@count= @books.count%>
+<%if @count>0.to_i%>
+<p class="book_count"><%=params["sort_by"]['All']%> Books : <b><%= @count%></b></p>
+    
+		 <table id="listing" align="center" width="980px" height="595px" cellpadding="1" cellspacing="1" >
+     <tbody>
+        <tr class="tr-head" width="940px" height="28px">
+          <td height="25px"> Book Number </td>
+          <td>Title </td>
+          <td>Author</td>
+          <td>Tags </td>
+          <td>Status </td>
+          <td></td>
+        </tr>
+        <tr class="tr-odd"></tr>
+  <%begin%>
+      <% @books.each do |b|%>
+      <tr class="tr-blank">
+         
+          <td class="col-3"><%=b.book_no%></td>
+          <td class="col-7"><%=b.title%> </td>
+          <td class="col-7"><%=b.author%></td>
+          <td class="col-7"><%BooksTag.where(book_id: b.id).each do|booktag| %>
+            <%=booktag.tag.name%>
+            <%  end %></td>
+          <td class="col-1"><%=b.status%></td>
+          <td class="col-3"><small>
+            <%= link_to 'View',library_management_view_selected_book_path(b)%>|
+            <%= link_to 'Edit',library_management_edit_book_path(b)%>|
+            <%= link_to 'Delete',library_management_delete_book_path(b),method: :delete,data: { confirm: 'Are you sure?' }%>
+           </small></td>
+        </tr>
+      <%end%>
+
+      <%rescue Exception=>e%>
+<%end%>
+      </tbody>
+        </table>
+<%else%>
+<p class="flash-msg" style="margin-left: 160px;"> No books found.Try Again</p>
+<%end%>
+<%rescue Exception=>e%>
+<p class="flash-msg" style="margin-left: 160px;"> No books found.Try Again</p>
+ <%end%>
