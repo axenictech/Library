@@ -22,12 +22,11 @@ get 'library_management/get_book_details',to: 'library_management#get_book_detai
 get 'library_management/search_book_for_return',to: 'library_management#search_book_for_return',as: 'library_management_search_book_for_return'
 post 'library_management/search_book_for_return_result',to: 'library_management#search_book_for_return_result',as: 'library_management_search_book_for_return_result'
 get 'library_management/:id/process_return_book',to: 'library_management#process_return_book',as: 'library_management_process_return_book'
-get 'library_management/library_card_setting_show',to: 'library_management#library_card_setting_show',as: 'library_management_library_card_setting_show'
-post 'library_management/library_card_setting_add',to: 'library_management#library_card_setting_add',as: 'library_management_library_card_setting_add'
-post 'library_management/library_card_setting_edit',to: 'library_management#library_card_setting_edit',as: 'library_management_library_card_setting_edit'
-post 'library_management/get_library_card_setting',to: 'library_management#get_library_card_setting',as: 'library_management_library_get_library_card_setting'
-delete 'library_management/:id/library_card_setting_delete',to: 'library_management#library_card_setting_delete',as: 'library_management_library_card_setting_delete'
 
+get 'library_management/library_card_setting_show',to: 'library_management#library_card_setting_show',as: 'library_management_library_card_setting_show'
+post 'library_management/library_get_library_card_setting',to: 'library_management#library_get_library_card_setting',as: 'library_management_library_get_library_card_setting'
+post 'library_management/library_card_setting_add',to:'library_management#library_card_setting_add',as:'library_management_library_card_setting_add'
+get 'library_management/lirary_card_new',to: 'library_management#lirary_card_new',as: 'library_management_lirary_card_new'
 
 get 'tags/manage_tags',to: 'tags#manage_tags',as: 'tags_manage_tags'
 delete 'tags/:id/delete_tag',to: 'tags#delete_tag',as: 'tags_delete_tag'

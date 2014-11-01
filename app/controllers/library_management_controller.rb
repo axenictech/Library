@@ -7,10 +7,7 @@ class LibraryManagementController < ApplicationController
     @books = Book.all
     
   end
-<<<<<<< HEAD
 
-=======
->>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
 
   def addbooks
     @book = Book.new
@@ -114,10 +111,7 @@ p "-------------------------------------------4"
   end
 
   
-<<<<<<< HEAD
 
-=======
->>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
   def search_books
   	
   end
@@ -342,25 +336,34 @@ p "-------------------------------------------4"
   end
 
 
+  
+  def library_card_setting_show
+  end
+
+  def library_get_library_card_setting
+     @cource_choice = get_library_card_setting_choice["course_id"]
+    p @cource_choice
+    p "----------------------------"
+    @cources = LibraryCardSetting.all
+  end
+
+  def lirary_card_new
+
+    @librarycard = LibraryCardSetting.new
+
+  end
+
   def library_card_setting_add
 
   end
-  def library_card_setting_show
 
-  end
   def library_card_setting_edit
 
   end
   def library_card_setting_delete
 
   end
-  def get_library_card_setting
-      begin
-          @cources=LibraryCardSetting.all
-      rescue Exception =>ex
-        p ex
-      end
-  end
+
 
 
 
@@ -384,6 +387,10 @@ end
 
 def get_book_list_for_search
   params.require(:search_book).permit!
+end
+
+def get_library_card_setting_choice
+    params.require(:search_library_setting).permit!
 end
 
 end
