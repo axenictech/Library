@@ -16,6 +16,9 @@
      <%=form_for :returnbook,url: library_management_return_books_path  do |form|%>
       
       <div id="book_return" >
+      <%if @book.due_date <=Date.today%>
+		<div class="name exceeded"> Due date has been exceeded</div><div class="val themed_text"><span></span></div><br>
+		<%end%>
         <div class="name">Book Number</div><div class="val themed_text"><span>:</span><%=@book.book.book_no
 %></div>
         <div class="name">Book Holder</div><div class="val themed_text"><span>:</span><span class="holder_name themed_text"><%=
@@ -33,9 +36,12 @@
        <%=form.hidden_field :book_id,:value => @book.id%>
        <%if @book.due_date <=Date.today%>
 
-        <div class="name exceeded"> Due date has been exceeded</div><div class="val themed_text"><span></span></div>
+
+
+ 		<div class="name">Enter Fine Amount</div><div class="val themed_text"><span>:</span><%=form.text_field :amount,value:"0"%></div>
+
        
- 		<div class="name">Enter Fine Amount</div><div class="val themed_text"><span>:</span><%=form.text_field :amount%></div>
+       
 
        
        <%end%>
