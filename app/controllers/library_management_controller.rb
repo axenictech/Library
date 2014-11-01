@@ -328,6 +328,27 @@ class LibraryManagementController < ApplicationController
   end
 
 
+  def library_card_setting_add
+
+  end
+  def library_card_setting_show
+
+  end
+  def library_card_setting_edit
+
+  end
+  def library_card_setting_delete
+
+  end
+  def get_library_card_setting
+      begin
+          @cources=LibraryCardSetting.all
+      rescue Exception =>ex
+        p ex
+      end
+  end
+
+
 
  private
  def get_book_no_for_search
