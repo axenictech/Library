@@ -7,7 +7,7 @@ class LibraryManagementController < ApplicationController
     @books = Book.all
     
   end
-<<<<<<< HEAD
+
 
   def addbooks
     @book = Book.new
@@ -23,19 +23,20 @@ class LibraryManagementController < ApplicationController
       unless @cust_tag.nil?
         Tag.create(name: @cust_tag)
       end
-      p "=---------------------------------"
+    
       p  params["tag_ids"]
+      
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       params[:no_of_cpoies].to_i.times do |i|
-
+ 
         @book = Book.new
         @book.book_no = params["book"]["book_no"].to_i+i
         @book.title =params["book"]["title"]
         @book.author=params["book"]["author"]
         @book.status="Available"
-        @book.save
+       if @book.save
          
-        params["tag_ids"].each do |k|
+          params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
 
@@ -43,10 +44,16 @@ class LibraryManagementController < ApplicationController
       unless params["cust_tag"][0]==""
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end
+         redirect_to library_management_books_path(@book)
+        else
+         
+          render library_management_addbooks_path
 
-
+        end 
+         
+        
       end
-
+    
     else 
 
       p "hoho--------in 2"
@@ -76,9 +83,9 @@ class LibraryManagementController < ApplicationController
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
         end
 
-
+          redirect_to library_management_books_path(@book)
     end
-
+p "-------------------------------------------4"
   end
 
   def books_sorted_list
@@ -104,8 +111,7 @@ class LibraryManagementController < ApplicationController
   end
 
   
-=======
->>>>>>> c9479b7590a98c56a298a907e2304a10ae612bf5
+
   def search_books
   	
   end
@@ -129,8 +135,7 @@ class LibraryManagementController < ApplicationController
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.books_tag.tag("name",@book_search_field)
-      
+        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take.books_tag).pluck(:book_id))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end

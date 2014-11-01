@@ -34,7 +34,7 @@ patch 'tags/:id/update_tag',to: 'tags#update_tag',as: 'tags_update_tag'
 get 'tags/search_tags',to: 'tags#search_tags',as: 'tags_search_tags'
 get 'tags/:id/tag_related_book',to: 'tags#tag_related_book',as: 'tags_tag_related_book'
 
-<<<<<<< HEAD
+
 get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
 post 'library_management/search_books_list_result',to: 'library_management#search_books_list_result',as: 'library_management_search_books_list_result'
 get 'library_management/books',to: 'library_management#books',as: 'library_management_books'
@@ -46,11 +46,11 @@ post 'library_management/:id/reserve_book',to:'library_management#reserve_book',
 get 'library_management/:id/edit_book',to: 'library_management#edit_book',as:'library_management_edit_book'
 patch 'library_management/:id/update_book',to: 'library_management#update_book',as:'library_management_update_book'
 delete 'library_management/:id/delete_book',to: 'library_management#delete_book',as:'library_management_delete_book'
-=======
+
 get 'fines/library_fines'
 get 'fines/detail_fine',to: 'fines#detail_fine',as:'fines_detail_fine'
 delete 'fines/:id/delete_fine',to: 'fines#delete_fine',as: 'fines_delete_fine'
->>>>>>> 82999a718d0a41eb489d82ada3d2d2c28b25b885
+
 
 devise_for :users 
 mount Ckeditor::Engine => '/ckeditor'
