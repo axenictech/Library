@@ -29,7 +29,8 @@ class TagsController < ApplicationController
 
      def tag_related_book
      	@tag=Tag.find(params[:id])
-     	@book_tags=@tag.books_tag
+
+     	@books=@tag.books
 
 
      end
