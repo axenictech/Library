@@ -7,6 +7,10 @@ class LibraryManagementController < ApplicationController
     @books = Book.all
     
   end
+<<<<<<< HEAD
+=======
+
+>>>>>>> 104b684d10682a9e3f6b74676e747782da06a9bd
 
 
   def addbooks
@@ -112,6 +116,16 @@ p "-------------------------------------------4"
 
   
 
+<<<<<<< HEAD
+=======
+
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
+>>>>>>> ba346be5d2e6965a01bcc13eb4b3654f7e7226c8
+>>>>>>> 104b684d10682a9e3f6b74676e747782da06a9bd
   def search_books
   	
   end
