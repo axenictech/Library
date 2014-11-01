@@ -7,7 +7,7 @@ class FinesController < ApplicationController
        
     if params[:name].present?
   	   @student=Student.where("first_name LIKE '#{params[:name]}%' 
-  	   	OR admission_no='#{params[:name]}'")
+  	   	OR admission_no='#{params[:name]}%'")
   	else
   		p "-----------"
   		startdate=params[:start_date]
@@ -36,3 +36,4 @@ class FinesController < ApplicationController
 
 
 end
+      
