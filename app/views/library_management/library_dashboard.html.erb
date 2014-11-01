@@ -8,22 +8,23 @@
 
 <div id="page-yield">
 <div class="bread_crumb">
-    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Issue Books
+    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> 
   </div>
 <div class="bread_crumb">
   </div>
     <div id="box">
     <div class="link-box">
-      <div class="link-heading"><%=link_to "Manage Books", library_management_manage_books_path%> </div>
+      <div class="link-heading"><%=link_to "Manage Books", library_management_books_path%> </div>
       <div class="link-descr">Manage library books</div>
     </div>
     <div class="link-box">
-      <div class="link-heading"><%=link_to "Search book", library_management_search_books_path%> </div>
+      <div class="link-heading"><%=link_to "Search book", library_management_search_books_path%>
+      </div>
       <div class="link-descr">Search for a book here</div>
     </div>
     
       <div class="link-box">
-        <div class="link-heading"><%=link_to "Return book", library_management_return_books_path%></div>
+        <div class="link-heading"><%=link_to "Return book", library_management_search_book_for_return_path%></div>
         <div class="link-descr">Manage book returns</div>
       </div>
     
@@ -65,13 +66,13 @@
     
     
       <div class="link-box">
-        <div class="link-heading"><%=link_to "Library fines", library_management_library_fines_path%></div>
+        <div class="link-heading"><%=link_to "Library fines", fines_library_fines_path%></div>
         <div class="link-descr">Library fines</div>
       </div>
     
     
       <div class="link-box">
-        <div class="link-heading"><%=link_to "Manage Tags", library_management_manage_tags_path%></div>
+        <div class="link-heading"><%=link_to "Manage Tags", tags_manage_tags_path%></div>
         <div class="link-descr">Manage Tags</div>
       </div>
     

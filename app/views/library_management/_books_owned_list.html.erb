@@ -3,7 +3,7 @@
 
 
 
-  <%=hidden_field(:issue_book, :is_student,value: params['is_student'])%>
+  <%=hidden_field(:issue_book, :is_student_tmp,value: params['is_student'])%>
 
   <%if params['is_student']=="Student"%>
       <%  unless @student.nil?%>

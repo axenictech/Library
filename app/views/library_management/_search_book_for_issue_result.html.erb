@@ -17,7 +17,7 @@
 			<tr>
  			<td><%=book.book_no%></td>
  			<td><%=book.barcode_no%></td>
- 			<td><%=link_to book.title,library_management_book_issue_select_student_employee_path(book)%></td>
+ 			<td><%=link_to book.title,library_management_book_issue_select_student_employee_path(book.book_no)%></td>
  			<td><%=book.author%></td>
  		</tr>
  <%end%>

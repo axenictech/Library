@@ -2,6 +2,7 @@
 
 	<%if params["search"]['filter']=="Student"%>
       <%  unless @student.nil?%>
+    
     <div class="user-wrapper">
       <div class="ad-number"><%=@student.admission_no%> - </div><div class="fullname">
       <%=link_to @student.first_name+" "+@student.last_name, library_management_get_book_details_path({id: @student,is_student: "Student"}),remote: true%>
