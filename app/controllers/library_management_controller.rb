@@ -9,6 +9,9 @@ class LibraryManagementController < ApplicationController
   end
 
 
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
+
   def addbooks
     @book = Book.new
 
@@ -23,19 +26,20 @@ class LibraryManagementController < ApplicationController
       unless @cust_tag.nil?
         Tag.create(name: @cust_tag)
       end
-      p "=---------------------------------"
+    
       p  params["tag_ids"]
+      
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       params[:no_of_cpoies].to_i.times do |i|
-
+ 
         @book = Book.new
         @book.book_no = params["book"]["book_no"].to_i+i
         @book.title =params["book"]["title"]
         @book.author=params["book"]["author"]
         @book.status="Available"
-        @book.save
+       if @book.save
          
-        params["tag_ids"].each do |k|
+          params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
 
@@ -43,10 +47,16 @@ class LibraryManagementController < ApplicationController
       unless params["cust_tag"][0]==""
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end
+         redirect_to library_management_books_path(@book)
+        else
+         
+          render library_management_addbooks_path
 
-
+        end 
+         
+        
       end
-
+    
     else 
 
       p "hoho--------in 2"
@@ -76,9 +86,9 @@ class LibraryManagementController < ApplicationController
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
         end
 
-
+          redirect_to library_management_books_path(@book)
     end
-
+p "-------------------------------------------4"
   end
 
   def books_sorted_list
@@ -104,8 +114,15 @@ class LibraryManagementController < ApplicationController
   end
 
   
+<<<<<<< HEAD
 
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
+>>>>>>> ba346be5d2e6965a01bcc13eb4b3654f7e7226c8
   def search_books
   	
   end
@@ -129,8 +146,7 @@ class LibraryManagementController < ApplicationController
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.books_tag.tag("name",@book_search_field)
-      
+        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take.books_tag).pluck(:book_id))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
@@ -216,9 +232,19 @@ class LibraryManagementController < ApplicationController
          @issue_book=IssueBook.new
          @book=Book.where(book_no: params["issue_book"]['book_no']).take
          @issue_book.book=@book
-           @issue_book.issue_date=params["issue_book"]['issue_date']
-           @issue_book.due_date=params["issue_book"]['due_date']
-           @issue_book.status="borrowed"
+         
+         begin
+          d=Date.parse(params["issue_book"]['issue_date'])
+          d2=Date.parse(params["issue_book"]['due_date'])
+         rescue
+        @issue_book=IssueBook.new
+        redirect_to  library_management_book_issue_select_student_employee_path(@book,@issue_book)     
+        flash[:alert]="Due/Issue date not in correct format"
+         end
+
+         @issue_book.issue_date=params["issue_book"]['issue_date']
+         @issue_book.due_date=params["issue_book"]['due_date']
+         @issue_book.status="borrowed"
           if params["issue_book"]['is_student']=="Student"
              @issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
           else
@@ -232,7 +258,9 @@ class LibraryManagementController < ApplicationController
         end
           redirect_to library_management_search_book_for_issue_path(@message)
         rescue Exception =>e
-          p e
+        @issue_book=IssueBook.new
+        redirect_to  library_management_book_issue_select_student_employee_path(@book,@issue_book)     
+        flash[:alert]="Please Select Student/Employee"
         end
 
   end
@@ -304,12 +332,39 @@ class LibraryManagementController < ApplicationController
    @message="Book has been returned "
    redirect_to library_management_search_book_for_return_path(@message)
    else
-   #save fine and update book
+   
+   @book.update(status: "available",returned_date: Date.today)
+   @book.book.update(status: "available")
+   @message="Book has been returned "
+   Fine.create(issue_book_id: @book.id,amount: params["returnbook"]["amount"])
+   redirect_to library_management_search_book_for_return_path(@message)
+
    end 
    rescue Exception=> e
-    @message="Book already returned "
+    @message="Book Alredy returned "
     redirect_to library_management_search_book_for_return_path(@message)
    end
+  end
+
+
+  def library_card_setting_add
+
+  end
+  def library_card_setting_show
+
+  end
+  def library_card_setting_edit
+
+  end
+  def library_card_setting_delete
+
+  end
+  def get_library_card_setting
+      begin
+          @cources=LibraryCardSetting.all
+      rescue Exception =>ex
+        p ex
+      end
   end
 
 

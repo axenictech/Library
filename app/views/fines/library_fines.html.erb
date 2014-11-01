@@ -9,10 +9,10 @@
     <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Library Fines
   </div>
  <%=form_for :fine ,url:{action:'detail_fine'},method: :get,html:{id: "fine_form"},remote:true do |f|%>
-<br>
+
  <%= f.label :Payee%>
   <%= text_field_tag :name,"",{oninput:"$('#fine_form').submit();"}%>
-  
+  <br>
   <%= f.label :Start_Date%>
   <%= date_field_tag :start_date%>
   
@@ -20,7 +20,7 @@
   <%= date_field_tag :end_date,"",{oninput:"$('#fine_form').submit();"}%>
    
  <%end%>
-<br>
+
 <div id="show">
 
 </div>
