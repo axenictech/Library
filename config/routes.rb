@@ -23,13 +23,6 @@ get 'library_management/search_book_for_return',to: 'library_management#search_b
 post 'library_management/search_book_for_return_result',to: 'library_management#search_book_for_return_result',as: 'library_management_search_book_for_return_result'
 get 'library_management/:id/process_return_book',to: 'library_management#process_return_book',as: 'library_management_process_return_book'
 
-
-<<<<<<< HEAD
-devise_for :users
-=======
-
-
-
 get 'tags/manage_tags',to: 'tags#manage_tags',as: 'tags_manage_tags'
 delete 'tags/:id/delete_tag',to: 'tags#delete_tag',as: 'tags_delete_tag'
 get 'tags/:id/edit_tag',to: 'tags#edit_tag',as: 'tags_edit_tag'
@@ -37,7 +30,7 @@ patch 'tags/:id/update_tag',to: 'tags#update_tag',as: 'tags_update_tag'
 get 'tags/search_tags',to: 'tags#search_tags',as: 'tags_search_tags'
 get 'tags/:id/tag_related_book',to: 'tags#tag_related_book',as: 'tags_tag_related_book'
 
-<<<<<<< HEAD
+
 get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
 post 'library_management/search_books_list_result',to: 'library_management#search_books_list_result',as: 'library_management_search_books_list_result'
 get 'library_management/books',to: 'library_management#books',as: 'library_management_books'
@@ -49,14 +42,26 @@ post 'library_management/:id/reserve_book',to:'library_management#reserve_book',
 get 'library_management/:id/edit_book',to: 'library_management#edit_book',as:'library_management_edit_book'
 patch 'library_management/:id/update_book',to: 'library_management#update_book',as:'library_management_update_book'
 delete 'library_management/:id/delete_book',to: 'library_management#delete_book',as:'library_management_delete_book'
-=======
+
 get 'fines/library_fines'
 get 'fines/detail_fine',to: 'fines#detail_fine',as:'fines_detail_fine'
 delete 'fines/:id/delete_fine',to: 'fines#delete_fine',as: 'fines_delete_fine'
->>>>>>> 82999a718d0a41eb489d82ada3d2d2c28b25b885
+
+#Library Book Renewal Routes
+get 'library_book_renewals/search_book',to: 'library_book_renewals#search_book',as: 'library_book_renewals_search_book'
+get 'library_book_renewals/renewal_book_search_result',to: 'library_book_renewals#renewal_book_search_result',as: 'library_book_renewals_renewal_book_search_result'
+get 'library_book_renewals/renewal_book_form',to: 'library_book_renewals#renewal_book_form',as: 'library_book_renewals_renewal_book_form'
+patch 'library_book_renewals/update_due_date',to: 'library_book_renewals#update_due_date',as: 'library_book_renewals_update_due_date'
+get 'library_book_renewals/movement_log_search',to: 'library_book_renewals#movement_log_search',as: 'library_book_renewals_movement_log_search'
+get 'library_book_renewals/movement_log_search_result',to: 'library_book_renewals#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
+
+
+
+
+
 
 devise_for :users 
->>>>>>> 98719e537cf93941c9fdf2d45c155cd1a5384884
+
 mount Ckeditor::Engine => '/ckeditor'
 get 'setting/course_batch'
 get 'general_settings/all'
@@ -534,12 +539,6 @@ resources :online_exams
 resources :employees
 resources :employee_attendances
 resources :finance
-#Library Book Renewal Routes
-get 'library_book_renewals/search_book'
-get 'library_book_renewals/renewal_book_search_result'
-get 'library_book_renewals/renewal_book_form'
-patch 'library_book_renewals/update_due_date'
-get 'library_book_renewals/movement_log_search'
-get 'library_book_renewals/movement_log_search_result'
+
 
 end
