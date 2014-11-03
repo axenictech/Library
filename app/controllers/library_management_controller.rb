@@ -218,6 +218,7 @@ p "-------------------------------------------4"
         redirect_to library_management_book_issue_select_student_employee_path(@book.book_no)
     
         else
+
          @issue_book=IssueBook.new
          @book=Book.where(book_no: params["issue_book"]['book_no']).take
          @issue_book.book=@book
@@ -234,7 +235,13 @@ p "-------------------------------------------4"
          @issue_book.due_date=params["issue_book"]['due_date']
          @issue_book.status="Borrowed"
           if params["issue_book"]['is_student']=="Student"
-             @issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
+             student=@issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
+             no_of_books_to_issue=LibraryCardSetting.where(course_id:student.batch.course_id,category_id: student.category_id).pluck(:books_issuable)
+
+            no_of_books_issued=IssueBooks.where(book_id: @book.id,student_id: Student.where(batch_id: Batch.where(course_id: student.batch.course_id),category_id: student.category_id)).count
+
+              p "--------------------------------------------------------"+ no_of_books_to_issue+"    "+no_of_books_issued
+
           else
              @issue_book.employee=Employee.where(id: params["issue_book"]['student_employee_id']).take
           end
