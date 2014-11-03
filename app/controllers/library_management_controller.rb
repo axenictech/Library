@@ -18,14 +18,11 @@ class LibraryManagementController < ApplicationController
 
       p "----------haha in 1"
 
-      @cust_tag= params["cust_tag"][0]
-      unless @cust_tag.nil?
-        Tag.create(name: @cust_tag)
-      end
-    
+      @cust_tag= params["cust_tag"]
       p  params["tag_ids"]
-      
+      unless params["cust_tag"][0].nil?
       @cust_tag_tmp=Tag.create(name: @cust_tag)
+      end
       params[:no_of_cpoies].to_i.times do |i|
  
         @book = Book.new
@@ -39,8 +36,8 @@ class LibraryManagementController < ApplicationController
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
 
-        @cust_tag= params["cust_tag"][0]
-      unless params["cust_tag"][0]==""
+        @cust_tag= params["cust_tag"]
+      unless params["cust_tag"][0].nil?
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end
          redirect_to library_management_books_path(@book)

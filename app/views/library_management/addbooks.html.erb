@@ -90,10 +90,10 @@
             <div class="label-field-pair-checkbox">
             
            <% @tags.last(10).each do |t| %>
-            
+           
           <%= check_box_tag "tag_ids[#{t.id}]", t.id, false,:name => "tag_ids[]"%>
   			<%=t.name%>
-       
+      
   			<div class="extender"></div>
          
 		  	<% end %>
