@@ -1,0 +1,84 @@
+<div id="content-header">
+  <h1>Library Management</h1>
+  
+  </div>
+  <div><%= image_tag("underline.jpg",width: "100%")%></div> 
+
+
+<div id="page-yield">
+  <div class="bread_crumb">
+    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> Book Additional Detail
+  </div>
+ 
+
+<%=form_for :search ,url: library_management_book_additional_details_path, method: :post,remote:true do |form|%>
+   <div id="form-content">
+      <div class="label-field-pair">
+        <label for="category_name">Name</label>
+        <div class="text-input-bg"> 
+        <%=form.text_field :name%>
+        </div>
+      </div>
+
+        <div class="label-field-pair">
+        <label for="category_name">Status</label>
+        <div> 
+          <%=form.radio_button :status, 'true',{checked: true,style: "width: 10px"}%>Active
+        <%=form.radio_button :status, 'false',{checked: false,style: "width: 10px"}%>InActive
+        </div>
+      </div>
+      <br><br>
+      <div class="label-field-pair">
+        <label for="category_name">Is Mandatory</label>
+        <div> 
+          <%=form.check_box :is_mandatory,{value: "true",checked: false,style: "width: 10px"}%>
+        </div>
+      </div>
+       <div class="label-field-pair">
+        <label for="category_name">Input Method</label>
+        <div> 
+          <%= form.select :All , options_for_select([["TextBox","TextBox"],["Select Box","Select Box"],["Check Box","Check Box"]]) ,{},{onchange: "if($(this).val()!='TextBox'){
+            $('#add_click').show();
+            $('#add_fields').show();
+            
+            }
+            else
+              {
+                $('#add_fields').hide();
+              $('#add_click').hide();   
+                }"}%>
+        </div>
+      </div>
+      <div id="add_fields">
+    
+      </div>
+      <div id="add_click" style="display:none">
+       <div class="label-field-pair">
+        <label for="category_name"></label>
+        <div> 
+        <%=link_to "Add",'#',{class:"add_button_img",onclick: "
+          event.preventDefault();
+          $('#add_fields').append($('#add_data').html());
+          "}%></div>
+      </div>
+      </div>
+      <div id="add_data" style="display:none">
+        <div class="label-field-pair">
+        <label for="category_name"></label>
+        <div> 
+
+
+        <input  name="book_additional_field[]" size="30" type="text">
+        
+        </div>
+      </div>
+      </div>
+      
+      <br>
+      <br>
+      <%=form.submit "Create",{:class=>"submit_button",style: "margin-left:10px;"}%>
+      </div></div>
+      <%end%>
+  </div>
+
+</div>

@@ -42,6 +42,12 @@ get 'tags/search_tags',to: 'tags#search_tags',as: 'tags_search_tags'
 get 'tags/:id/tag_related_book',to: 'tags#tag_related_book',as: 'tags_tag_related_book'
 
 
+get 'barcodes/barcode_index'
+patch 'barcodes/update_barcode', to: 'barcodes#update_barcode',as: 'barcodes_update_barcode'
+get 'barcodes/manage_barcode'
+get 'barcodes/:id/edit_barcode',to: 'barcodes#edit_barcode',as: 'barcodes_edit_barcode'
+
+
 get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
 post 'library_management/search_books_list_result',to: 'library_management#search_books_list_result',as: 'library_management_search_books_list_result'
 get 'library_management/books',to: 'library_management#books',as: 'library_management_books'

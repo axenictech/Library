@@ -109,7 +109,6 @@ p "-------------------------------------------4"
 
   end
 
-
   def search_books
   	
   end
@@ -204,9 +203,7 @@ p "-------------------------------------------4"
   def book_renewal
   	
   end
-  def manage_additional_details
-  	
-  end
+ 
   def library_fines
   	
   end
@@ -386,6 +383,17 @@ p "-------------------------------------------4"
     @librarycards.destroy
     @librarycards =LibraryCardSetting.where(course_id: course_id)        
   end
+
+  def manage_additional_details
+    
+  end
+  def book_additional_details
+  
+  additional_details= BookMoreDetail.create()
+  
+
+  end
+
 
  private
  def get_book_no_for_search
