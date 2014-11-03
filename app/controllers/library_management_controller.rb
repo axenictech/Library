@@ -7,11 +7,6 @@ class LibraryManagementController < ApplicationController
     @books = Book.all
     
   end
-<<<<<<< HEAD
-=======
-
->>>>>>> 104b684d10682a9e3f6b74676e747782da06a9bd
-
 
   def addbooks
     @book = Book.new
@@ -114,18 +109,7 @@ p "-------------------------------------------4"
 
   end
 
-  
 
-<<<<<<< HEAD
-=======
-
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
->>>>>>> ba346be5d2e6965a01bcc13eb4b3654f7e7226c8
->>>>>>> 104b684d10682a9e3f6b74676e747782da06a9bd
   def search_books
   	
   end
@@ -232,11 +216,18 @@ p "-------------------------------------------4"
 
 #issue Book Actions
   def issue_books
+         
+        if params["issue_book"]['student_employee_id']=="" && params["issue_book"]['student_employee_id']==""
+        flash[:alert]="Please Select Student or Employee"
+        @book=Book.where(book_no: params["issue_book"]['book_no']).take
+        @issue_book=IssueBook.new
+        redirect_to library_management_book_issue_select_student_employee_path(@book.book_no)
+    
+        else
          @issue_book=IssueBook.new
          @book=Book.where(book_no: params["issue_book"]['book_no']).take
          @issue_book.book=@book
-         
-         begin
+          begin
           d=Date.parse(params["issue_book"]['issue_date'])
           d2=Date.parse(params["issue_book"]['due_date'])
          rescue
@@ -247,7 +238,7 @@ p "-------------------------------------------4"
 
          @issue_book.issue_date=params["issue_book"]['issue_date']
          @issue_book.due_date=params["issue_book"]['due_date']
-         @issue_book.status="borrowed"
+         @issue_book.status="Borrowed"
           if params["issue_book"]['is_student']=="Student"
              @issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
           else
@@ -256,7 +247,7 @@ p "-------------------------------------------4"
         begin
          if @issue_book.save
           @message="Book has been issued "
-          @book.update(status: "borrowed")
+          @book.update(status: "Borrowed")
           p "-----------------------------"
         end
           redirect_to library_management_search_book_for_issue_path(@message)
@@ -265,20 +256,19 @@ p "-------------------------------------------4"
         redirect_to  library_management_book_issue_select_student_employee_path(@book,@issue_book)     
         flash[:alert]="Please Select Student/Employee"
         end
-
+      end
   end
   def search_book_for_issue
   	
   end
   def book_issue_select_student_employee
-  	
   	@book=Book.where(book_no: params["id"]).take
   	@issue_book=IssueBook.new
   end
 
   def search_book_for_issue_result
   	@book_no=get_book_no_for_search['bookno_barcode']
-   	@books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'available' OR status='reserved')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
+   	@books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'Available' OR status='Reserved')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
   end
   def student_employee_list
   
@@ -304,10 +294,10 @@ p "-------------------------------------------4"
 
   if params["is_student"]=="Student"
   	@student=Student.where(id: params['id']).take
-  	@books_taken=IssueBook.where("student_id=? and status='borrowed'",@student.id)
+  	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
   	@employee=Employee.where(id: params['id']).take
-  	@books_taken=IssueBook.where("employee_id=? and status='borrowed'",@employee.id)
+  	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
   
   rescue Exception =>e
@@ -318,26 +308,26 @@ p "-------------------------------------------4"
   
   def search_book_for_return_result
     @book_no=get_book_no_for_search['bookno_barcode']
-    @books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'borrowed')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
+    @books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'Borrowed')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
   end
   def search_book_for_return
     
   end
   def process_return_book
-     @book=IssueBook.where("book_id = ? AND status='borrowed'", params['id']).take   
+     @book=IssueBook.where("book_id = ? AND status='Borrowed'", params['id']).take   
   end
   def return_books
     begin
-   @book=IssueBook.where("id = ? AND status='borrowed'",params["returnbook"]["book_id"]).take   
+   @book=IssueBook.where("id = ? AND status='Borrowed'",params["returnbook"]["book_id"]).take   
    if @book.due_date >=Date.today
-   @book.update(status: "available",returned_date: Date.today)
-   @book.book.update(status: "available")
+   @book.update(status: "Available",returned_date: Date.today)
+   @book.book.update(status: "Available")
    @message="Book has been returned "
    redirect_to library_management_search_book_for_return_path(@message)
    else
    
-   @book.update(status: "available",returned_date: Date.today)
-   @book.book.update(status: "available")
+   @book.update(status: "Available",returned_date: Date.today)
+   @book.book.update(status: "Available")
    @message="Book has been returned "
    Fine.create(issue_book_id: @book.id,amount: params["returnbook"]["amount"])
    redirect_to library_management_search_book_for_return_path(@message)
@@ -355,31 +345,47 @@ p "-------------------------------------------4"
   end
 
   def library_get_library_card_setting
-     @cource_choice = get_library_card_setting_choice["course_id"]
-    p @cource_choice
-    p "----------------------------"
-    @cources = LibraryCardSetting.all
+    #  @cource_choice = get_library_card_setting_choice["course_id"]
+    # p @cource_choice
+     p "----------------------------"
+    p params[:cources_id]
+    @cource= Course.find(params[:cources_id])
+    @librarycards  = LibraryCardSetting.where(course_id: params[:cources_id])
   end
 
-  def lirary_card_new
-
+  def library_card_new
+    @cource= Course.find(params[:id])
     @librarycard = LibraryCardSetting.new
+
 
   end
 
   def library_card_setting_add
+    @cource= Course.find(params[:card_add][:course_id])
+    @librarycard=  @cource.library_card_setting.create(params.require(:card_add).permit!)
+     @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
+    
+  end
+
+  def library_card_setting_edit  
+    @librarycard =LibraryCardSetting.find(params[:id])
+  
+    end
+
+   def library_card_setting_update
+    @librarycard =LibraryCardSetting.where(id: params[:id]).take
+    @librarycard.update(params.require(:card_add).permit!)
+    @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
 
   end
 
-  def library_card_setting_edit
-
-  end
   def library_card_setting_delete
-
+    @librarycards =LibraryCardSetting.where(id: params[:id]).take
+    @librarycard =LibraryCardSetting.where(id: params[:id]).take
+    course_id=@librarycard.course.id
+    @librarycards.destroy
+    @librarycards =LibraryCardSetting.where(course_id: course_id)        
   end
-
-
-
 
  private
  def get_book_no_for_search

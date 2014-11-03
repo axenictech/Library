@@ -1,0 +1,83 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+     <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Add Library Card setting</h4>
+     </div>
+       <div class="modal-body">
+
+       <%= form_for :card_add , url: {action: 'library_card_setting_update',librarycard: @librarycard} ,method: :patch,remote:true  do |form|%>
+
+       <% if @librarycard.errors.any? %>
+    <div class="alert alert-danger">
+    <h2>Errors prohibited to being saved:</h2>
+    <h3>Library Card Setting not created</h3>
+    <ul><% @librarycard.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %></ul>
+    </div>
+  <% end %>
+
+       <%=form.hidden_field :course_id,:value =>  @librarycard.course.id%>
+       <div class="label-field-pair">
+   		 <d><%=form.label :course,"Course"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :course ,{value:  @librarycard.course.course_name,style:"width:215px;height:27px",disabled: true}%>
+      </div>
+      </div>
+
+      <div class="label-field-pair" style="float:left" >
+  	 <%=form.label :category ,"Category" %>
+		<div class="text-input-bg" style="float:left" >
+
+<select id="card_add_category_id" name="card_add[category_id]"><option value="<%=@librarycard.category.id%>"><%=@librarycard.category.name%></option>
+<%Category.all.each do |c|%>
+<%if c.name!=@librarycard.category.name%>
+<option value="<%=c.id%>"><%=c.name%></option>
+<%end%>
+<%end%>
+</select>
+
+
+		</div>
+  	 </div>
+
+  	 <div class="label-field-pair">
+   		 <d><%=form.label :book_issue,"Books Issuable"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :books_issuable ,{style:"width:215px;height:27px",value: @librarycard.books_issuable}%>
+      </div>
+      </div>
+
+      <div class="label-field-pair">
+       <div class="text-input-bg">
+       </div>
+      </div>
+
+      <div class="label-field-pair">
+   		 <d><%=form.label :time_period,"Time Period"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :time_period,{value: @librarycard.time_period,style:"width:215px;height:27px"}%>days
+      </div>
+      </div>
+<br>
+<div >
+       
+     <%=form.submit "Update",{:class=>"submit_button",style: "margin-left: 170px;margin-top: 30px"}%>
+      
+      </div>
+
+
+     
+     <% end %>
+       </div>
+
+       <div class="modal-footer">
+               <button type="button" class="btn btn-primary" 
+                 data-dismiss="modal">Close
+               </button>
+           </div>
+
+   </div>
+
+</div>

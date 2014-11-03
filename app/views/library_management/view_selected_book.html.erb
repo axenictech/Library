@@ -37,12 +37,14 @@
       <div id="reserve_book">
 
   <div style="float:left" >
-    <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,data: { confirm: 'Are you sure?' }%>
+  <% if @book.status!='Reserved' %>
+   <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,data: { confirm: 'Are you sure?' }%>
+  <% end %>
     </div>
     </div>
-
-    <%=button_to "Issue this book" %>
-
+  <% if @book.status=='Available' || @book.status=='Reserved' %>
+    <%=link_to "Issue this book", library_management_book_issue_select_student_employee_path(@book.book_no) %>
+  <%end%>
     </div>
 
     <div id="book_reserve">
