@@ -12,13 +12,13 @@
 
 
 
-
   <div class="search_form">
-    <%=form_for :search ,url: library_management_library_get_library_card_setting_path, method: :post,remote:true do |form|%>
+    <%=form_for :search_library_setting ,
+    url: library_management_library_get_library_card_setting_path, method: :post,remote:true do |form|%>
    <div class="label-field-pair">
-      <%=form.label :Book_No, "Select Cource"%>
+      <%=form.label :courses, "Courses"%>
         <div class="text-input-bg">
-          <%=form.text_field :bookno_barcode ,style: "height:30px"%>
+         <%= form.select :course_id, Course.all.collect{|c| [c.course_name, c.id ]}%>
         </div>
       </div>
       <%=form.submit "Search",{:class=>"submit_button",style: "margin-left:10px;"}%>
@@ -31,9 +31,7 @@
   	
  </div>
 
-<div id="add_cource" class="bs-example">
-  	
-</div>
+<div id="myModal" class="modal fade"></div>
 
  </div>
 

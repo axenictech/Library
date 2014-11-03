@@ -710,6 +710,7 @@ ActiveRecord::Schema.define(version: 20141101110808) do
   end
 
   create_table "finance_transaction_triggers", force: true do |t|
+    t.integer  "finance_fee_category_id"
     t.decimal  "percentage"
     t.string   "title"
     t.string   "description"
@@ -719,6 +720,7 @@ ActiveRecord::Schema.define(version: 20141101110808) do
   end
 
   add_index "finance_transaction_triggers", ["category_id"], name: "index_finance_transaction_triggers_on_category_id", using: :btree
+  add_index "finance_transaction_triggers", ["finance_fee_category_id"], name: "index_finance_transaction_triggers_on_finance_fee_category_id", using: :btree
 
   create_table "finance_transactions", force: true do |t|
     t.string   "title"
@@ -755,6 +757,7 @@ ActiveRecord::Schema.define(version: 20141101110808) do
     t.string   "language"
     t.string   "time_zone"
     t.string   "country"
+    t.string   "network_state"
     t.string   "include_grading_system"
     t.integer  "addmission_number_auto_increament"
     t.integer  "employee_number_auto_increament"
@@ -1081,6 +1084,22 @@ ActiveRecord::Schema.define(version: 20141101110808) do
   add_index "students", ["batch_id"], name: "index_students_on_batch_id", using: :btree
   add_index "students", ["category_id"], name: "index_students_on_category_id", using: :btree
 
+  create_table "subject_leaves", force: true do |t|
+    t.integer  "student_id"
+    t.date     "month_date"
+    t.integer  "subject_id"
+    t.integer  "employee_id"
+    t.integer  "class_timing_id"
+    t.string   "reason"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subject_leaves", ["class_timing_id"], name: "index_subject_leaves_on_class_timing_id", using: :btree
+  add_index "subject_leaves", ["employee_id"], name: "index_subject_leaves_on_employee_id", using: :btree
+  add_index "subject_leaves", ["student_id"], name: "index_subject_leaves_on_student_id", using: :btree
+  add_index "subject_leaves", ["subject_id"], name: "index_subject_leaves_on_subject_id", using: :btree
+
   create_table "subjects", force: true do |t|
     t.string   "name"
     t.string   "code"
@@ -1124,11 +1143,6 @@ ActiveRecord::Schema.define(version: 20141101110808) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "is_active"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "tmps", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end

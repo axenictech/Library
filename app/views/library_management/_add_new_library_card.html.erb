@@ -1,0 +1,52 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+     <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Add Library Card setting</h4>
+     </div>
+       <div class="modal-body">
+
+       <%= form_for :card_add , url: {action: 'library_card_setting_add'} ,method: :post  do |form|%>
+
+       <div class="label-field-pair">
+   		 <d><%=form.label :course,"Course"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :course ,style:"width:215px;height:27px"%>
+      </div>
+      </div>
+
+      <div class="label-field-pair" style="float:left" >
+  	 <%=form.label :category ,"Category" %>
+		<div class="text-input-bg" style="float:left" >
+ 		<%= form.select :category_id, Category.all.collect{|c| [c.name, c.id ]}%>
+		</div>
+  	 </div>
+
+  	 <div class="label-field-pair">
+   		 <d><%=form.label :book_issue,"Books Issuable"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :books_issuable ,style:"width:215px;height:27px"%>
+      </div>
+      </div>
+
+      <div class="label-field-pair">
+   		 <d><%=form.label :time_period,"Time Period"%>days</d>
+      <div class="text-input-bg">
+      <%=form.text_field :time_period,style:"width:215px;height:27px"%>
+      </div>
+      </div>
+
+
+     <%=form.submit "Create",{:class=>"submit_button",style: "margin-left:538px;"}%>
+     <% end %>
+       </div>
+
+       <div class="modal-footer">
+               <button type="button" class="btn btn-primary" 
+                 data-dismiss="modal">Close
+               </button>
+           </div>
+
+   </div>
+
+</div>

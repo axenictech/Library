@@ -11,13 +11,14 @@
  	</thead>
 				
 			<tbody>
+			
 <%begin%>
 <%@cources.each do |cource|%>
 			<tr>
  			<td></td>
  			<td></td>
  			<td></td>
- 			<td></td>
+ 			<td> </td>
  			<td></td>
  		</tr>
  		
@@ -32,3 +33,4 @@
 <%rescue Exception=>e%>
 <p class="flash-msg" style="margin-left: 160px;"> No books found.Try Again</p>
  <%end%>
+ <%= link_to 'Add New',library_management_lirary_card_new_path, remote:true %>
