@@ -8,10 +8,6 @@ class LibraryManagementController < ApplicationController
     
   end
 
-
-=======
->>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
-
   def addbooks
     @book = Book.new
 
@@ -113,16 +109,6 @@ p "-------------------------------------------4"
 
   end
 
-  
-<<<<<<< HEAD
-
-
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> 36777cf626852cb7271ef6bd3c3a3c92e3ed2c78
->>>>>>> ba346be5d2e6965a01bcc13eb4b3654f7e7226c8
   def search_books
   	
   end
@@ -217,9 +203,7 @@ p "-------------------------------------------4"
   def book_renewal
   	
   end
-  def manage_additional_details
-  	
-  end
+ 
   def library_fines
   	
   end
@@ -367,7 +351,15 @@ p "-------------------------------------------4"
       end
   end
 
+  def manage_additional_details
+    
+  end
+  def book_additional_details
+  
+  additional_details= BookMoreDetail.create()
+  
 
+  end
 
  private
  def get_book_no_for_search

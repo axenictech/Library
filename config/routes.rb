@@ -28,7 +28,7 @@ post 'library_management/library_card_setting_add',to: 'library_management#libra
 post 'library_management/library_card_setting_edit',to: 'library_management#library_card_setting_edit',as: 'library_management_library_card_setting_edit'
 post 'library_management/get_library_card_setting',to: 'library_management#get_library_card_setting',as: 'library_management_library_get_library_card_setting'
 delete 'library_management/:id/library_card_setting_delete',to: 'library_management#library_card_setting_delete',as: 'library_management_library_card_setting_delete'
-
+post 'library_management/book_additional_details',to: 'library_management#book_additional_details',as: 'library_management_book_additional_details'
 
 
 get 'tags/manage_tags',to: 'tags#manage_tags',as: 'tags_manage_tags'

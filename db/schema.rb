@@ -222,8 +222,8 @@ ActiveRecord::Schema.define(version: 20141101110808) do
 
   create_table "book_more_details", force: true do |t|
     t.string   "name"
-    t.string   "status"
-    t.string   "is_mandatory"
+    t.boolean  "status"
+    t.boolean  "is_mandatory"
     t.string   "input_method"
     t.boolean  "is_active"
     t.integer  "serial_no"
