@@ -31,9 +31,11 @@ class LibraryManagementController < ApplicationController
         @book.author=params["book"]["author"]
         @book.status="Available"
        if @book.save
-         
+         begin
           params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
+        end
+        rescue Exception => e
         end
 
         @cust_tag= params["cust_tag"]
@@ -68,11 +70,12 @@ class LibraryManagementController < ApplicationController
         @book.status="Available"
         @book.save
      
-
-        params["tag_ids"].each do |k|
+        begin
+          params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
-
+         rescue Exception => e
+         end
         @cust_tag= params["cust_tag"][0]
         unless params["cust_tag"][0]==""
         @cust_tag_tmp=Tag.create(name: @cust_tag)
@@ -236,12 +239,6 @@ p "-------------------------------------------4"
          @issue_book.status="Borrowed"
           if params["issue_book"]['is_student']=="Student"
              student=@issue_book.student=Student.where(id: params["issue_book"]['student_employee_id']).take
-             no_of_books_to_issue=LibraryCardSetting.where(course_id:student.batch.course_id,category_id: student.category_id).pluck(:books_issuable)
-
-            no_of_books_issued=IssueBooks.where(book_id: @book.id,student_id: Student.where(batch_id: Batch.where(course_id: student.batch.course_id),category_id: student.category_id)).count
-
-              p "--------------------------------------------------------"+ no_of_books_to_issue+"    "+no_of_books_issued
-
           else
              @issue_book.employee=Employee.where(id: params["issue_book"]['student_employee_id']).take
           end
@@ -277,7 +274,15 @@ p "-------------------------------------------4"
 
   if params["search"]['filter']=="Student"
   	@student=Student.where(admission_no: params["search"]['id']).take
-  	
+    @book=Book.where(id: params["search"]['book_id'])
+  	 @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).pluck(:books_issuable)
+
+     @no_of_books_issued=IssueBook.where(book_id: @book,student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id)).count
+
+     p "--------------------------------------------------------"+ no_of_books_to_issue+"    "+no_of_books_issued
+
+
+
   else
   	
   	@employee=Employee.where(employee_number: params["search"]['id']).take
@@ -285,6 +290,7 @@ p "-------------------------------------------4"
   end
   
   rescue Exception =>e
+    p e
   end
   end
 
