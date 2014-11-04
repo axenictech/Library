@@ -1,0 +1,41 @@
+
+<%= link_to 'Add New',library_management_library_card_new_path(@cource.id), remote:true %>
+<div id="show_courses">
+<%begin%>
+
+<table align="center" class="table table-hover" style="width:800px">
+		<thead>
+ 		<tr>
+ 			<th>Cource</th>
+ 			<th>Category</th>
+ 			<th>Books Issuable</th>
+ 			<th>Time Period (in days)</th>
+ 			<th></th>
+ 		</tr>
+ 	</thead>
+				
+			<tbody>
+			
+<%begin%>
+<%@librarycards.each do |librarycard|%>
+			<tr>
+ 			<td><%=librarycard.course.course_name%></td>
+ 			<td><%=librarycard.category.name%></td>
+ 			<td><%=librarycard.books_issuable %></td>
+ 			<td><%=librarycard.time_period %></td>
+ 			<td><small><%= link_to 'Edit',library_management_library_card_setting_edit_path(librarycard),remote: true%>|
+            <%= link_to 'Delete',library_management_library_card_setting_delete_path(librarycard),method: :delete,remote: true,data: { confirm: 'Are you sure?' }%></small>
+            </td>
+ 		</tr>
+ 		
+ <%end%>
+ 
+<%rescue Exception=>e%>
+<%end%>
+
+</tbody>
+</table>
+<%rescue Exception=>e%>
+<p class="flash-msg" style="margin-left: 160px;"> No books found.Try Again</p>
+ <%end%>
+ </div>

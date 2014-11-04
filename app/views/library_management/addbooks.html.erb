@@ -28,7 +28,8 @@
 
    <div class="text-input-bg" style="float:left" >
   	
-	<%= select_tag "type" , options_for_select([["General",1],["By barcode",2]]),onchange: "showbookSelectedField();"%>
+	<%= select_tag "type" , options_for_select([["General",1],["By barcode",2]]),
+  onchange: "showbookSelectedField();"%>
 
   		 </div>
   	 </div>
@@ -89,10 +90,10 @@
             <div class="label-field-pair-checkbox">
             
            <% @tags.last(10).each do |t| %>
-            
+           
           <%= check_box_tag "tag_ids[#{t.id}]", t.id, false,:name => "tag_ids[]"%>
   			<%=t.name%>
-       
+      
   			<div class="extender"></div>
          
 		  	<% end %>

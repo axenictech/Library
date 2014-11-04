@@ -24,11 +24,12 @@ post 'library_management/search_book_for_return_result',to: 'library_management#
 get 'library_management/:id/process_return_book',to: 'library_management#process_return_book',as: 'library_management_process_return_book'
 
 get 'library_management/library_card_setting_show',to: 'library_management#library_card_setting_show',as: 'library_management_library_card_setting_show'
-post 'library_management/library_card_setting_add',to: 'library_management#library_card_setting_add',as: 'library_management_library_card_setting_add'
-post 'library_management/library_card_setting_edit',to: 'library_management#library_card_setting_edit',as: 'library_management_library_card_setting_edit'
-post 'library_management/get_library_card_setting',to: 'library_management#get_library_card_setting',as: 'library_management_library_get_library_card_setting'
+get 'library_management/library_get_library_card_setting',to: 'library_management#library_get_library_card_setting',as: 'library_management_library_get_library_card_setting'
+post 'library_management/library_card_setting_add',to:'library_management#library_card_setting_add',as:'library_management_library_card_setting_add'
+get 'library_management/:id/library_card_new',to: 'library_management#library_card_new',as: 'library_management_library_card_new'
+get 'library_management/:id/library_card_setting_edit',to: 'library_management#library_card_setting_edit',as: 'library_management_library_card_setting_edit'
 delete 'library_management/:id/library_card_setting_delete',to: 'library_management#library_card_setting_delete',as: 'library_management_library_card_setting_delete'
-
+patch 'library_management/:id/library_card_setting_update',to: 'library_management#library_card_setting_update',as: 'library_management_library_card_setting_update'
 
 
 get 'tags/manage_tags',to: 'tags#manage_tags',as: 'tags_manage_tags'
@@ -37,6 +38,12 @@ get 'tags/:id/edit_tag',to: 'tags#edit_tag',as: 'tags_edit_tag'
 patch 'tags/:id/update_tag',to: 'tags#update_tag',as: 'tags_update_tag'
 get 'tags/search_tags',to: 'tags#search_tags',as: 'tags_search_tags'
 get 'tags/:id/tag_related_book',to: 'tags#tag_related_book',as: 'tags_tag_related_book'
+
+
+get 'barcodes/barcode_index'
+patch 'barcodes/update_barcode', to: 'barcodes#update_barcode',as: 'barcodes_update_barcode'
+get 'barcodes/manage_barcode'
+get 'barcodes/:id/edit_barcode',to: 'barcodes#edit_barcode',as: 'barcodes_edit_barcode'
 
 
 get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
@@ -63,7 +70,6 @@ get 'library_book_renewals/renewal_book_form',to: 'library_book_renewals#renewal
 patch 'library_book_renewals/update_due_date',to: 'library_book_renewals#update_due_date',as: 'library_book_renewals_update_due_date'
 get 'library_book_renewals/movement_log_search',to: 'library_book_renewals#movement_log_search',as: 'library_book_renewals_movement_log_search'
 get 'library_book_renewals/movement_log_search_result',to: 'library_book_renewals#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
-
 
 
 
