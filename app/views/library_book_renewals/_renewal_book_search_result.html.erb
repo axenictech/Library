@@ -1,8 +1,10 @@
 <% if @books.nil? %>
- <h4 align="center">No Record Found </h4>
+ 
+ <p class="flash-msg" style="margin-left: 160px;">No books found.Try Again</p>
    <% else %>
 <% if @books.empty? %>
- <h4 align="center">No Record Found </h4>
+ 
+ <p class="flash-msg" style="margin-left: 160px;">No books found.Try Again</p>
    <% else %>
  <div class="col-md-1"></div>
       <table align="center" class="table table-hover" style="width:1000px">
