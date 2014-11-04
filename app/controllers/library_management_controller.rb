@@ -11,18 +11,30 @@ class LibraryManagementController < ApplicationController
   def addbooks
     @book = Book.new
 
+    if Book.first.nil?
+       @book.book_no=111
+    else
+      @last_book=Book.last
+      @book.book_no=@last_book.book_no.next
+    end   
+
   end
   
   def saveNewBook
     if params[:type]=='1'
-
-      p "----------haha in 1"
 
       @cust_tag= params["cust_tag"]
       p  params["tag_ids"]
       unless params["cust_tag"][0].nil?
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
+      if params[:no_of_cpoies].to_i<1.to_i
+       flash[:alert]="Number of copies can not be less than one"
+       @book = Book.new
+       render library_management_addbooks_path
+      else
+
+
       params[:no_of_cpoies].to_i.times do |i|
  
         @book = Book.new
@@ -32,26 +44,35 @@ class LibraryManagementController < ApplicationController
         @book.status="Available"
        if @book.save
          begin
+
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
-        end
+          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+        end # end of do
+
         rescue Exception => e
-        end
+        end # end of begin
 
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
-      end
-         redirect_to library_management_books_path(@book)
-        else
-         
-          render library_management_addbooks_path
-
-        end 
+          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+      end 
+    else 
+      @error=true
+    end
          
         
       end
-    
+       if @error
+
+          render library_management_addbooks_path
+
+        else 
+
+          redirect_to library_management_books_path
+         
+          
+       end
+      end
     else 
 
       p "hoho--------in 2"
@@ -72,14 +93,14 @@ class LibraryManagementController < ApplicationController
      
         begin
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
         end
          rescue Exception => e
          end
         @cust_tag= params["cust_tag"][0]
         unless params["cust_tag"][0]==""
         @cust_tag_tmp=Tag.create(name: @cust_tag)
-          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
         end
 
           redirect_to library_management_books_path(@book)
@@ -115,6 +136,7 @@ p "-------------------------------------------4"
 
   def search_books_list_result
 
+
     p params["search_book"]
 
     @book_search_field = get_book_list_for_search["search_field"]
@@ -132,7 +154,8 @@ p "-------------------------------------------4"
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take.books_tag).pluck(:book_id))
+        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take).pluck(:book_id))
+       
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
@@ -164,15 +187,17 @@ p "-------------------------------------------4"
         @book.books_tag.each do |books_tag|
           books_tag.destroy
         end
-
+        begin
         params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
         end
+        rescue Exception => e
+         end
 
         @cust_tag= params["cust_tag"][0]
         unless params["cust_tag"][0]==""
         @cust_tag_tmp=Tag.create(name: @cust_tag)
-        @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
+        @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
         end
        redirect_to library_management_books_path(@book)
  end
@@ -394,6 +419,20 @@ p "-------------------------------------------4"
     @librarycards =LibraryCardSetting.where(course_id: course_id)        
   end
 
+  def library_fine_per_day_new
+
+    @fineperday = PerDayFineDetail.new
+
+  end
+
+  def library_fine_per_day_add
+
+    
+    @fineperday = PerDayFineDetail.new(params.require(:add_fine).permit!)
+    @fineperday.save
+      
+  end
+
   def manage_additional_details
     
   end
@@ -430,5 +469,7 @@ end
 def get_library_card_setting_choice
     params.require(:search_library_setting).permit!
 end
+
+
 
 end

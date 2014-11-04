@@ -16,7 +16,7 @@
   <% if @book.errors.any? %>
     <div class="alert alert-danger">
     <h2>Errors prohibited to being saved:</h2>
-    <h3>User account not created</h3>
+    <h3>Book not created</h3>
     <ul><% @book.errors.full_messages.each do |message| %>
     <li><%= message %></li>
     <% end %></ul>
@@ -55,7 +55,7 @@
       <div class="label-field-pair">
 	  <d><%=form.label :book_number,"Book Number"%><span class="necessary-field">*</span></d>
       <div class="text-input-bg">
-     	<%=form.text_field :book_no ,style:"width:215px;height:27px"%>
+     	<%=form.text_field :book_no ,:value=> @book.book_no ,style:"width:215px;height:27px"%>
       </div>
       </div>
 
@@ -91,8 +91,8 @@
             
            <% @tags.last(10).each do |t| %>
            
-          <%= check_box_tag "tag_ids[#{t.id}]", t.id, false,:name => "tag_ids[]"%>
-  			<%=t.name%>
+         <%= check_box_tag "tag_ids[#{t.id}]", t.id, false,:name => "tag_ids[]"%><%=t.name%>
+  			
       
   			<div class="extender"></div>
          
