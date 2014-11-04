@@ -269,22 +269,12 @@ p "-------------------------------------------4"
    	@books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'Available' OR status='Reserved')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
   end
   def student_employee_list
-  
   begin
 
   if params["search"]['filter']=="Student"
   	@student=Student.where(admission_no: params["search"]['id']).take
-    @book=Book.where(id: params["search"]['book_id'])
-  	 @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).pluck(:books_issuable)
-
-     @no_of_books_issued=IssueBook.where(book_id: @book,student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id)).count
-
-     p "--------------------------------------------------------"+ no_of_books_to_issue+"    "+no_of_books_issued
-
-
-
-  else
-  	
+    @book=Book.where(id: params["search"]['book_id']).take
+  	 else
   	@employee=Employee.where(employee_number: params["search"]['id']).take
   	
   end
@@ -295,8 +285,15 @@ p "-------------------------------------------4"
   end
 
   def get_book_details
-
-
+  begin
+  
+  @book=Book.where(id: params["book_id"]).take
+  @student=Student.where(id: params['id']).take
+  @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
+  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id)).count 
+  
+  rescue Exception => e
+  end
   begin
 
   if params["is_student"]=="Student"
