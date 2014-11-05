@@ -2,24 +2,22 @@ class LibraryBookRenewalsController < ApplicationController
   def search_book
   end
   def renewal_book_search_result
-    @books=Book.where("(book_no=? OR barcode_no=?) AND status='borrowed'",get_book_barcode_no['bookno_barcode'],get_book_barcode_no['bookno_barcode'])
+    @books=Book.where("(book_no=? OR barcode_no=?) AND (status='Borrowed' OR status='Renewal')",get_book_barcode_no['bookno_barcode'],get_book_barcode_no['bookno_barcode'])
   end
   def renewal_book_form
   	@issue_book=IssueBook.find_by_book_id(params[:format])
   end
   def update_due_date
     @issue_book=IssueBook.find(params[:id])
-    @issue_book.status='renewal'
+    @issue_book.status='Renewal'
     if @issue_book.update(due_date_params)
-      flash.now[:notice] = 'Book renewal successfully'
+      @issue_book.book.update(status: "Renewal")
+      flash.now[:notice] = 'Book renewed successfully'
       render 'renewal_book_form'
     else
       flash.now[:notice] = 'Book renewal fail'
       render 'renewal_book_form'
     end
-    #@book=Book.find(params[:id])
-    #@book.status='renewal'
-    #@book.update()
   end
   def movement_log_search_result
     if get_date_type_date['date_type']=='Issue date' 
@@ -36,10 +34,6 @@ class LibraryBookRenewalsController < ApplicationController
     params.require(:issue_book).permit(:due_date,:status)
   end
   def get_date_type_date
-    params.require(:msearch).permit!
+    params.require(:movement_log_search).permit!
   end
-  def status_params
-    params.require(:book).permit(:status)
-  end
-  
 end

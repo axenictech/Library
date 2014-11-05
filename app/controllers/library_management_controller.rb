@@ -8,11 +8,6 @@ class LibraryManagementController < ApplicationController
     
   end
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 92371be1c3d704d726b5ae711a01969144237f89
   def addbooks
     @book = Book.new
 
@@ -114,10 +109,6 @@ p "-------------------------------------------4"
 
   end
 
-<<<<<<< HEAD
-  
-=======
->>>>>>> 92371be1c3d704d726b5ae711a01969144237f89
   def search_books
   	
   end
