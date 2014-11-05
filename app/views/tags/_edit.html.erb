@@ -1,12 +1,13 @@
 <%=form_for @tag,url:{action:'update_tag'},method: :patch,remote:true do |f|%>
-<% if @tag.errors.any? %>
-    <div class="alert alert-danger">
-    <h2>Errors prohibited to being saved:</h2>
-    <h3>User account not created</h3>
-    <ul><% @book.errors.full_messages.each do |message| %>
-    <li><%= message %></li>
-    <% end %></ul>
-    </div>
+ <% if @tag.errors.any? %>
+  <div id="error_explanation">
+    
+    <ul>
+    <% @tag.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
   <% end %>
 
 <p><%=f.text_field :name%>

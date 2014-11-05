@@ -8,10 +8,9 @@
  <div class="bread_crumb">
     <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Manage Tags
   </div>
+  
  <%=form_for :tag ,url:tags_search_tags_path,method: :get,html:{id: "tag_form"},remote:true do |f|%>
 <br>
-  <p><%= f.label :Search%>
-  <%= text_field_tag :name,"",{oninput:"$('#tag_form').submit();"}%>
  </p>
  <%end%>
 <br>
