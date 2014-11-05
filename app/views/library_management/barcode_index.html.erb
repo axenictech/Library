@@ -9,7 +9,7 @@
  <div class="bread_crumb">
     <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Manage Barcode
   </div>
-<%=form_for :barcode, url:barcodes_manage_barcode_path ,method: :get,remote:true do |f| %>
+<%=form_for :barcode, url:library_management_manage_barcode_path ,method: :get,remote:true do |f| %>
  <p><%= f.label :Search_By%>
  <%= select_tag :search,options_for_select([["Book Number","book_number"],["Title","title"],["Author","author"],["Tag","tag"]])%>
 

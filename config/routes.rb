@@ -36,25 +36,25 @@ patch 'library_management/:id/library_card_setting_update',to: 'library_manageme
 get 'library_management/library_fine_per_day_new' ,to: 'library_management#library_fine_per_day_new',as: 'library_management_library_fine_per_day_new'
 post 'library_management/library_fine_per_day_add',to: 'library_management#library_fine_per_day_add',as: 'library_management_library_fine_per_day_add'
 
-get 'tags/manage_tags',to: 'tags#manage_tags',as: 'tags_manage_tags'
-delete 'tags/:id/delete_tag',to: 'tags#delete_tag',as: 'tags_delete_tag'
-get 'tags/:id/edit_tag',to: 'tags#edit_tag',as: 'tags_edit_tag'
-patch 'tags/:id/update_tag',to: 'tags#update_tag',as: 'tags_update_tag'
-get 'tags/search_tags',to: 'tags#search_tags',as: 'tags_search_tags'
-get 'tags/:id/tag_related_book',to: 'tags#tag_related_book',as: 'tags_tag_related_book'
+get 'library_management/manage_tags',to: 'library_management#manage_tags',as: 'tags_manage_tags'
+delete 'library_management/:id/delete_tag',to: 'library_management#delete_tag',as: 'tags_delete_tag'
+get 'library_management/:id/edit_tag',to: 'library_management#edit_tag',as: 'tags_edit_tag'
+patch 'library_management/:id/update_tag',to: 'library_management#update_tag',as: 'tags_update_tag'
+get 'library_management/search_tags',to: 'library_management#search_tags',as: 'tags_search_tags'
+get 'library_management/:id/tag_related_book',to: 'library_management#tag_related_book',as: 'tags_tag_related_book'
 
 
-get 'barcodes/barcode_index'
-patch 'barcodes/update_barcode', to: 'barcodes#update_barcode',as: 'barcodes_update_barcode'
-get 'barcodes/manage_barcode'
-get 'barcodes/:id/edit_barcode',to: 'barcodes#edit_barcode',as: 'barcodes_edit_barcode'
+get 'library_management/barcode_index'
+patch 'library_management/update_barcode', to: 'library_management#update_barcode',as: 'barcodes_update_barcode'
+get 'library_management/manage_barcode'
+get 'library_management/:id/edit_barcode',to: 'library_management#edit_barcode',as: 'barcodes_edit_barcode'
 
 
 get 'library_management/search_books',to: 'library_management#search_books',as: 'library_management_search_books'
 post 'library_management/search_books_list_result',to: 'library_management#search_books_list_result',as: 'library_management_search_books_list_result'
 get 'library_management/books',to: 'library_management#books',as: 'library_management_books'
-get 'library_management/addbooks',to: 'library_management#addbooks',as: 'library_management_addbooks'
-post 'library_management/saveNewBook',to: 'library_management#saveNewBook',as: 'library_management_saveNewBook'
+get 'library_management/add_books',to: 'library_management#add_books',as: 'library_management_add_books'
+post 'library_management/save_new_book',to: 'library_management#save_new_book',as: 'library_management_save_new_book'
 post 'library_management/books_sorted_list',to: 'library_management#books_sorted_list',as:'library_management_books_sorted_list'
 get 'library_management/:id/view_selected_book',to: 'library_management#view_selected_book',as:'library_management_view_selected_book'
 post 'library_management/:id/reserve_book',to:'library_management#reserve_book',as:'library_management_reserve_book'
@@ -62,18 +62,18 @@ get 'library_management/:id/edit_book',to: 'library_management#edit_book',as:'li
 patch 'library_management/:id/update_book',to: 'library_management#update_book',as:'library_management_update_book'
 delete 'library_management/:id/delete_book',to: 'library_management#delete_book',as:'library_management_delete_book'
 
-get 'fines/library_fines'
-get 'fines/detail_fine',to: 'fines#detail_fine',as:'fines_detail_fine'
-delete 'fines/:id/delete_fine',to: 'fines#delete_fine',as: 'fines_delete_fine'
+get 'library_management/library_fines'
+get 'library_management/detail_fine',to: 'library_management#detail_fine',as:'fines_detail_fine'
+delete 'library_management/:id/delete_fine',to: 'library_management#delete_fine',as: 'fines_delete_fine'
 
 
 #Library Book Renewal Routes
-get 'library_book_renewals/search_book',to: 'library_book_renewals#search_book',as: 'library_book_renewals_search_book'
-get 'library_book_renewals/renewal_book_search_result',to: 'library_book_renewals#renewal_book_search_result',as: 'library_book_renewals_renewal_book_search_result'
-get 'library_book_renewals/renewal_book_form',to: 'library_book_renewals#renewal_book_form',as: 'library_book_renewals_renewal_book_form'
-patch 'library_book_renewals/update_due_date',to: 'library_book_renewals#update_due_date',as: 'library_book_renewals_update_due_date'
-get 'library_book_renewals/movement_log_search',to: 'library_book_renewals#movement_log_search',as: 'library_book_renewals_movement_log_search'
-get 'library_book_renewals/movement_log_search_result',to: 'library_book_renewals#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
+get 'library_management/search_book',to: 'library_management#search_book',as: 'library_book_renewals_search_book'
+get 'library_management/renewal_book_search_result',to: 'library_management#renewal_book_search_result',as: 'library_book_renewals_renewal_book_search_result'
+get 'library_management/renewal_book_form',to: 'library_management#renewal_book_form',as: 'library_book_renewals_renewal_book_form'
+patch 'library_management/update_due_date',to: 'library_management#update_due_date',as: 'library_book_renewals_update_due_date'
+get 'library_management/movement_log_search',to: 'library_management#movement_log_search',as: 'library_book_renewals_movement_log_search'
+get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
 
 
 
