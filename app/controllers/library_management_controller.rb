@@ -293,6 +293,8 @@ class LibraryManagementController < ApplicationController
     @book=Book.where(id: params["search"]['book_id']).take
   if params["search"]['filter']=="Student"
   	@student=Student.where(admission_no: params["search"]['id']).take
+
+
   else
   	@employee=Employee.where(employee_number: params["search"]['id']).take
   	
@@ -311,7 +313,12 @@ class LibraryManagementController < ApplicationController
   begin
   @student=Student.where(id: params['id']).take
   @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
-  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id)).count 
+  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id),status: "Borrowed").count 
+  
+  @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
+  if @due_date.nil?
+    @due_date=Date.today+30
+  end
   rescue Exception => e
   end
   	@student=Student.where(id: params['id']).take
@@ -336,6 +343,14 @@ class LibraryManagementController < ApplicationController
   end
   def process_return_book
      @book=IssueBook.where("book_id = ? AND status='Borrowed'", params['id']).take   
+     if @book.due_date <=Date.today
+      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+      @due_amount=((Date.today-@book.due_date)*@fine_amount).to_i
+      if@due_amount.nil?
+        @due_amount=0.to_i
+      end
+     end
+
   end
   def return_books
     begin
@@ -366,13 +381,10 @@ class LibraryManagementController < ApplicationController
   end
 
   def library_get_library_card_setting
-<<<<<<< HEAD
-=======
-    #  @cource_choice = get_library_card_setting_choice["course_id"]
+   #  @cource_choice = get_library_card_setting_choice["course_id"]
     # p @cource_choice
     
->>>>>>> e9d9bf25b7855d941a3228e5465a3117c14a590e
-    @cource= Course.find(params[:cources_id])
+   @cource= Course.find(params[:cources_id])
     @librarycards  = LibraryCardSetting.where(course_id: params[:cources_id])
   end
 
@@ -420,10 +432,8 @@ class LibraryManagementController < ApplicationController
      PerDayFineDetail.all.each do |fine|
       fine.destroy
     end
-    
-    @fineperday = PerDayFineDetail.new(params.require(:add_fine).permit!)
-    @fineperday.save
-      
+    PerDayFineDetail.create(params.require(:add_fine).permit!)
+         
   end
 
   def manage_additional_details
