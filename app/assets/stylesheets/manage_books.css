@@ -42,7 +42,10 @@ margin-top: -30px;
 margin-right: 100px;
 }
 
-
+.small-strike {
+text-decoration: line-through;
+font-size: 11px;
+}
 
 .extender {
 height: 1px;

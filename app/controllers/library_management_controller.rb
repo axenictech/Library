@@ -137,8 +137,7 @@ class LibraryManagementController < ApplicationController
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take).pluck(:book_id))
-       
+        @books=Book.where(id: BooksTag.where(tags_id: Tag.where(name: @book_search_field).take))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
@@ -146,10 +145,11 @@ class LibraryManagementController < ApplicationController
   end
 
   def reserve_book
-   
-
+    
    @book = Book.where("id = ? AND status = 'Available'",params[:book_id]).take
    @book.update(status: 'Reserved')
+   @book = Book.where(id: params[:book_id]).take
+
 
 
   end
@@ -160,10 +160,11 @@ class LibraryManagementController < ApplicationController
   def update_book
      @book = Book.find(params[:id])
 
-      @cust_tag= params["cust_tag"][0]
-      unless @cust_tag.nil?
-        Tag.create(name: @cust_tag)
+      @cust_tag= params["cust_tag"]
+       unless params["cust_tag"][0].nil?
+      @cust_tag_tmp=Tag.create(name: @cust_tag[0])
       end
+
      
         @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
         
@@ -177,11 +178,11 @@ class LibraryManagementController < ApplicationController
         rescue Exception => e
          end
 
-        @cust_tag= params["cust_tag"][0]
-        unless params["cust_tag"][0]==""
-        @cust_tag_tmp=Tag.create(name: @cust_tag)
-        @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
-        end
+        @cust_tag= params["cust_tag"]
+      unless params["cust_tag"][0].nil?
+          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+      end 
+
        redirect_to library_management_books_path(@book)
  end
 
@@ -342,7 +343,7 @@ class LibraryManagementController < ApplicationController
    if @book.due_date >=Date.today
    @book.update(status: "Available",returned_date: Date.today)
    @book.book.update(status: "Available")
-   @message="Book has been returned "
+   @message="Book has been returned"
    redirect_to library_management_search_book_for_return_path(@message)
    else
    
@@ -365,10 +366,12 @@ class LibraryManagementController < ApplicationController
   end
 
   def library_get_library_card_setting
+<<<<<<< HEAD
+=======
     #  @cource_choice = get_library_card_setting_choice["course_id"]
     # p @cource_choice
-     p "----------------------------"
-    p params[:cources_id]
+    
+>>>>>>> e9d9bf25b7855d941a3228e5465a3117c14a590e
     @cource= Course.find(params[:cources_id])
     @librarycards  = LibraryCardSetting.where(course_id: params[:cources_id])
   end

@@ -1,3 +1,6 @@
+<%if @infos.empty? %>
+<p class="flash-msg" style="margin-left: 160px;"> Record not found.</p>
+<%else%>
 <%= form_for :edit,url: barcodes_update_barcode_path,method: :patch do |fm| %>
 
 <table>
@@ -8,15 +11,19 @@
 		<th>Barcode</th>
 	</tr>
 		<% @infos.each do |f|%>
-		<tr>
-			<td><%= f.book_no%></td>
-			<td><%= f.title%></td>
-			<td><%= f.author%></td>
-		
-			<td><%=text_field_tag "barcode[#{f.id},value]",f.barcode_no%></td>
+	<tr>
+		<td><%= f.book_no%></td>
+		<td><%= f.title%></td>
+		<td><%= f.author%></td>
+		<td><%=text_field_tag "barcode[#{f.id},value]",f.barcode_no%></td>
 		<%end%>
-	</table>
-	<%= fm.submit "Finish"%>
+	</tr>
+</table>
+	     <%= fm.submit "Finish"%>
+<%end%>
+
+
+
 <%end%>
 
 
