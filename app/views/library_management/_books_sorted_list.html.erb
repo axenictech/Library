@@ -27,7 +27,11 @@
           <td class="col-1"><%=b.status%></td>
           <td class="col-3"><small>
             <%= link_to 'View',library_management_view_selected_book_path(b)%>|
-            <%= link_to 'Edit',library_management_edit_book_path(b)%>|
+             <% if b.status=="Borrowed" %>
+               <span class="small-strike">Edit |</span>
+               <% else %>
+               <%= link_to 'Edit',library_management_edit_book_path(b)%>|
+            <% end %>
             <%= link_to 'Delete',library_management_delete_book_path(b),method: :delete,data: { confirm: 'Are you sure?' }%>
            </small></td>
         </tr>
