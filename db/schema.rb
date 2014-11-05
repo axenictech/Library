@@ -222,8 +222,13 @@ ActiveRecord::Schema.define(version: 20141104074702) do
 
   create_table "book_more_details", force: true do |t|
     t.string   "name"
+<<<<<<< HEAD
     t.string   "status"
     t.string   "is_mandatory"
+=======
+    t.boolean  "status"
+    t.boolean  "is_mandatory"
+>>>>>>> e9d9bf25b7855d941a3228e5465a3117c14a590e
     t.string   "input_method"
     t.boolean  "is_active"
     t.integer  "serial_no"
@@ -1149,6 +1154,11 @@ ActiveRecord::Schema.define(version: 20141104074702) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "is_active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tmps", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
