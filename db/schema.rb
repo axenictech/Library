@@ -220,6 +220,37 @@ ActiveRecord::Schema.define(version: 20141104074702) do
   add_index "batches_online_exams", ["batch_id"], name: "index_batches_online_exams_on_batch_id", using: :btree
   add_index "batches_online_exams", ["online_exam_id"], name: "index_batches_online_exams_on_online_exam_id", using: :btree
 
+  create_table "book_more_details", force: true do |t|
+    t.string   "name"
+    t.boolean  "status"
+    t.boolean  "is_mandatory"
+    t.string   "input_method"
+    t.boolean  "is_active"
+    t.integer  "serial_no"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "book_more_fields", force: true do |t|
+    t.integer  "book_id"
+    t.integer  "book_more_detail_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "book_more_fields", ["book_id"], name: "index_book_more_fields_on_book_id", using: :btree
+  add_index "book_more_fields", ["book_more_detail_id"], name: "index_book_more_fields_on_book_more_detail_id", using: :btree
+
+  create_table "book_more_values", force: true do |t|
+    t.integer  "book_more_detail_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "book_more_values", ["book_more_detail_id"], name: "index_book_more_values_on_book_more_detail_id", using: :btree
+
   create_table "books", force: true do |t|
     t.integer  "book_no"
     t.string   "title"
@@ -232,13 +263,13 @@ ActiveRecord::Schema.define(version: 20141104074702) do
 
   create_table "books_tags", force: true do |t|
     t.integer  "book_id"
-    t.integer  "tags_id"
+    t.integer  "tag_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "books_tags", ["book_id"], name: "index_books_tags_on_book_id", using: :btree
-  add_index "books_tags", ["tags_id"], name: "index_books_tags_on_tags_id", using: :btree
+  add_index "books_tags", ["tag_id"], name: "index_books_tags_on_tag_id", using: :btree
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -1099,6 +1130,11 @@ ActiveRecord::Schema.define(version: 20141104074702) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "is_active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tmps", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
