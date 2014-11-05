@@ -99,12 +99,12 @@ end
 rescue Exception=>e
 end%>
 
-
+<div class="name">Book Taken</div><div class="val"><span>:</span><span class="cont themed_text"><%=@books_taken.count%></span></div>
 <%unless @books_taken.nil?%>
 <%@books_taken.each do |issue_books|%>
 <div class="pack"></div>
 <div class="name"></div><div class="val"><span></span><span class="cont themed_text"></span></div>
-<div class="name">Book Taken</div><div class="val"><span>:</span><span class="cont themed_text">3</span></div>
+
   <div class="name">Book Title</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.book.title%></span></div>
   <div class="name">Book Number</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.book.book_no%></span></div>
   <div class="name">Issue date</div><div class="val"><span>:</span><span class="cont themed_text"><%=issue_books.issue_date%></span></div>
