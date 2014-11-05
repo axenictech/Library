@@ -25,20 +25,24 @@ class BarcodesController < ApplicationController
 	end
 
 	def update_barcode
-		
+		 error=false
 		@barcode=params[:barcode]
 		
 		@barcode.each_pair do |k,v|
 			book=Book.find(k)
 			
-			if book.update(barcode_no:v)
-				flash.now[:notice]="Barcode Update Successfully"
-			render 'barcode_index'	
-		    else
-		    	flash.now[:notice]="Barcode is not udate"
-		    	render 'barcode_index'
+			unless book.update(barcode_no:v)
+				error=true
+			 end
+
+			if error==true
+				render 'manage_barcode'
+			else 
+				flash[:notice]="Barcode Update Successfully"
+		   
 		    end
-		end
+			end
+			redirect_to  barcodes_barcode_index_path
 	end
 
 end
