@@ -1,0 +1,31 @@
+<% if @books.nil? %>
+ 
+ <p class="flash-msg" style="margin-left: 160px;">No books found.Try Again</p>
+   <% else %>
+<% if @books.empty? %>
+ 
+ <p class="flash-msg" style="margin-left: 160px;">No books found.Try Again</p>
+   <% else %>
+ <div class="col-md-1"></div>
+      <table align="center" class="table table-hover" style="width:1000px">
+     	<tr>
+			<th col-md-2> Book Number </th>
+			<th col-md-2> Barcode </th>
+			<th col-md-2> Title </th>
+			<th col-md-2> Author </th>
+		</tr> 
+      <%@books.each do |f|%>
+          <tr>
+            <td col-md-2><%= f.book_no %></td>
+			<td col-md-2><%= f.barcode_no %></td>
+			<td col-md-2><%= link_to f.title,library_book_renewals_renewal_book_form_path(f) %></td>
+			<td col-md-2><%= f.author %></td>
+          </tr>
+      <%end%>  
+      </table>
+
+      
+  <% end %>
+  <%end%>
+
+

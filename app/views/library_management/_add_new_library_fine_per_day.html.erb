@@ -1,0 +1,49 @@
+<div class="modal-dialog">
+  <div class="modal-content">
+     <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Add Library Card setting</h4>
+     </div>
+       <div class="modal-body">
+
+       <%= form_for :add_fine , url: {action: 'library_fine_per_day_add'} ,method: :post,remote:true  do |form|%>
+
+       <% if @fineperday.errors.any? %>
+    <div class="alert alert-danger">
+    <h2>Errors prohibited to being saved:</h2>
+    <h3>Fine per day not created</h3>
+    <ul><% @fineperday.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %></ul>
+    </div>
+  <% end %>
+
+
+      <div class="label-field-pair">
+       <d><%=form.label :fine_per_day,"Time Period"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :fine_per_day,style:"width:215px;height:27px"%>Rs
+      </div>
+      </div>
+    <br>
+    <div >
+       
+     <%=form.submit "Create",{:class=>"submit_button",style: "margin-left: 170px;margin-top: 30px"}%>
+      
+      </div>
+
+
+     
+     <% end %>
+       </div>
+
+       <div class="modal-footer">
+               <button type="button" class="btn btn-primary" 
+                 data-dismiss="modal">Close
+               </button>
+           </div>
+
+   </div>
+
+</div>
+

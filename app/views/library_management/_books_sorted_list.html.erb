@@ -3,7 +3,7 @@
 <%if @count>0.to_i%>
 <p class="book_count"><%=params["sort_by"]['All']%> Books : <b><%= @count%></b></p>
     
-		 <table id="listing" align="center" width="980px" height="595px" cellpadding="1" cellspacing="1" >
+		 <table id="listing" align="center" width="980px" height="595px"  cellpadding="1" cellspacing="1" >
      <tbody>
         <tr class="tr-head" width="940px" height="28px">
           <td height="25px"> Book Number </td>
@@ -13,16 +13,16 @@
           <td>Status </td>
           <td></td>
         </tr>
-        <tr class="tr-odd"></tr>
+        <tr ></tr>
   <%begin%>
       <% @books.each do |b|%>
-      <tr class="tr-blank">
+      <tr >
          
           <td class="col-3"><%=b.book_no%></td>
           <td class="col-7"><%=b.title%> </td>
           <td class="col-7"><%=b.author%></td>
-          <td class="col-7"><%BooksTag.where(book_id: b.id).each do|booktag| %>
-            <%=booktag.tag.name%>
+          <td class="col-7"><%Tag.where(id: BooksTag.where(book_id: b).pluck(:tags_id)).each do|booktag| %>
+            <%=booktag.name%>
             <%  end %></td>
           <td class="col-1"><%=b.status%></td>
           <td class="col-3"><small>

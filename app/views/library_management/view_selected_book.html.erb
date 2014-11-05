@@ -1,5 +1,16 @@
 <div id="content-header">
   <h1>Library Management</h1>
+  
+
+  <div id="inner-tab-menu">
+    <ul>
+      
+        <li class='themed_bg themed-dark-hover-background'><%= link_to 'Edit',library_management_edit_book_path%></li>
+      
+    </ul>
+  </div>
+  
+
  </div>
   <div><%= image_tag("underline.jpg",width: "100%")%></div> 
 
@@ -25,8 +36,8 @@
     
     
     <span class="row_">
-      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%BooksTag.where(book_id: @book.id).each do|booktag| %>
-            <%=booktag.tag.name%>
+      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tags_id)).each do|booktag| %>
+            <%=booktag.name%>
             <%  end %></span></div>
     </span>
 

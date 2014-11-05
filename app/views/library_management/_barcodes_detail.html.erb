@@ -1,0 +1,26 @@
+<%= form_for :edit,url: barcodes_update_barcode_path,method: :patch do |fm| %>
+
+<table>
+	<tr>
+		<th>Book Number</th>
+		<th>Title</th>
+		<th>Author</th>
+		<th>Barcode</th>
+	</tr>
+		<% @infos.each do |f|%>
+		<tr>
+			<td><%= f.book_no%></td>
+			<td><%= f.title%></td>
+			<td><%= f.author%></td>
+		
+			<td><%=text_field_tag "barcode[#{f.id},value]",f.barcode_no%></td>
+		<%end%>
+	</table>
+	<%= fm.submit "Finish"%>
+<%end%>
+
+
+
+
+
+

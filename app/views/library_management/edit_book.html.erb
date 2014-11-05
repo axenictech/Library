@@ -1,12 +1,19 @@
 <div id="content-header">
   <h1>Library Management</h1>
+  <div id="inner-tab-menu">
+    <ul>
+      
+        <li class='themed_bg themed-dark-hover-background'><%= link_to 'View',library_management_view_selected_book_path%></li>
+      
+    </ul>
+  </div>
  </div>
   <div><%= image_tag("underline.jpg",width: "100%")%></div> 
 
 <div id="page-yield">
 
  <div class="bread_crumb">
-    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;<%=link_to "Manage Books",library_management_books_path%> &raquo;Add Book
+    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;<%=link_to "Manage Books",library_management_books_path%> &raquo;Edit Book
   </div>
 
 <div id="edit_books">
@@ -53,9 +60,9 @@
             <div class="label-field-pair-checkbox">
 
          <% @tags.last(10).each do |t| %>
-
-  			<%= check_box_tag "tag_ids[]",t.id, false%>
-  			<%=t.name%>
+        
+  			<%= check_box_tag "tag_ids[]",t.id%><%=t.name%>
+        
   			<div class="extender"></div>
 
 			<% end %>
