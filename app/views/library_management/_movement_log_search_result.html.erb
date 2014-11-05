@@ -1,0 +1,35 @@
+
+<% if @issue_book_dates.nil? %>
+  <h4 align="center">No Record Found </h4>
+<% else %>
+  <% if @issue_book_dates.empty? %>
+  <h4 align="center">No Record Found </h4>
+<% else %>
+  <div class="col-md-1"></div>
+      <table align="center" class="table table-hover" >
+      <tr>
+        <th col-md-2> Serial Number </th>
+        <th col-md-2> Book Number </th>
+        <th col-md-2> Borrewed by </th>
+        <th col-md-2> Status </th>
+        <th col-md-2> Issue date </th>
+        <th col-md-2> Due date </th>
+      </tr> 
+        <%@issue_book_dates.each_with_index do |f,i|%>
+          <tr>
+            <td col-md-2><%= i+1 %></td>
+            <td col-md-2><%= f.book.book_no %></td>
+            <% if f.employee_id.nil? %>
+            <td col-md-2><%= f.student.first_name %></td>
+            <%else%>
+            <td col-md-2><%= f.employee.first_name %></td>
+            <%end%>
+            <td col-md-2><%= f.status %></td>
+            <td col-md-2><%= f.issue_date %></td>
+            <td col-md-2><%= f.due_date %></td>
+          </tr>
+        <%end%>  
+      </table>
+    <% end %>
+<%end%>
+

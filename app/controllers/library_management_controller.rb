@@ -8,7 +8,7 @@ class LibraryManagementController < ApplicationController
     
   end
 
-  def addbooks
+  def add_books
     @book = Book.new
 
     if Book.first.nil?
@@ -20,11 +20,11 @@ class LibraryManagementController < ApplicationController
 
   end
   
-  def saveNewBook
+  def save_new_book
     if params[:type]=='1'
 
       @cust_tag= params["cust_tag"]
-      p  params["tag_ids"]
+     
       unless params["cust_tag"][0].nil?
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
@@ -75,13 +75,10 @@ class LibraryManagementController < ApplicationController
       end
     else 
 
-      p "hoho--------in 2"
-
-      @cust_tag= params["cust_tag"][0]
-      unless @cust_tag.nil?
-        Tag.create(name: @cust_tag)
+      @cust_tag= params["cust_tag"]
+       unless params["cust_tag"][0].nil?
+      @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
-     
 
         @book = Book.new
         @book.barcode_no = params["book"]["barcode_no"].to_i
@@ -97,31 +94,22 @@ class LibraryManagementController < ApplicationController
         end
          rescue Exception => e
          end
-        @cust_tag= params["cust_tag"][0]
-        unless params["cust_tag"][0]==""
-        @cust_tag_tmp=Tag.create(name: @cust_tag)
+        @cust_tag= params["cust_tag"]
+      unless params["cust_tag"][0].nil?
           @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
-        end
+      end 
 
           redirect_to library_management_books_path(@book)
     end
-p "-------------------------------------------4"
+
   end
 
   def books_sorted_list
-  
-  p "----------------"
-  p params["sort_by"]
-  p "------------"
-  p get_fiterby_status_book['All']
   @books_filter = get_fiterby_status_book['All']
 
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
 
-  p @books
-  p "----------"
-   
-  end
+   end
 
 
   def view_selected_book
@@ -136,15 +124,10 @@ p "-------------------------------------------4"
 
   def search_books_list_result
 
-
-    p params["search_book"]
-
     @book_search_field = get_book_list_for_search["search_field"]
-    p "-------------------"
-    p @book_search_field
-    p "-------------------"
+    
     @book_search_choice = get_book_list_for_search["search_choice"]
-    p get_book_list_for_search["search_choice"]
+   
 
     if @book_search_choice=="Book Number"
 
@@ -163,7 +146,7 @@ p "-------------------------------------------4"
   end
 
   def reserve_book
-   p params[:book_id]
+   
 
    @book = Book.where("id = ? AND status = 'Available'",params[:book_id]).take
    @book.update(status: 'Reserved')
@@ -371,10 +354,6 @@ p "-------------------------------------------4"
   end
 
   def library_get_library_card_setting
-    #  @cource_choice = get_library_card_setting_choice["course_id"]
-    # p @cource_choice
-     p "----------------------------"
-    p params[:cources_id]
     @cource= Course.find(params[:cources_id])
     @librarycards  = LibraryCardSetting.where(course_id: params[:cources_id])
   end
@@ -438,6 +417,196 @@ p "-------------------------------------------4"
   end
 
 
+#Ravikiran Code From here
+
+
+  def search_book
+  end
+  def renewal_book_search_result
+    @books=Book.where("(book_no=? OR barcode_no=?) AND status='borrowed'",get_book_barcode_no['bookno_barcode'],get_book_barcode_no['bookno_barcode'])
+  end
+  def renewal_book_form
+    @issue_book=IssueBook.find_by_book_id(params[:format])
+  end
+  def update_due_date
+
+    @issue_book=IssueBook.find(params[:id])
+    @issue_book.status='renewal'
+    if @issue_book.update(due_date_params)
+      flash.now[:notice] = 'Book renewal successfully'
+      render 'renewal_book_form'
+    else
+      flash.now[:notice] = 'Book renewal fail'
+      render 'renewal_book_form'
+    end
+  end
+  def movement_log_search_result
+    if get_date_type_date['date_type']=='Issue date' 
+      @issue_book_dates=IssueBook.where("issue_date=?",get_date_type_date['date'])
+    elsif get_date_type_date['date_type']=='Due date' 
+      @issue_book_dates=IssueBook.where("due_date=?",get_date_type_date['date'])
+    end
+  end
+
+
+
+#Sayali Code From Here
+
+
+def search_tags
+    # unless params[:name].empty?
+     @tags=Tag.where("name like '#{params[:name]}%'")
+  # end
+  end
+
+  def manage_tags
+     @tags=Tag.where("name like '#{params[:name]}%'")
+    end
+
+  def delete_tag
+    @tag=Tag.find(params[:id])
+         @tag.destroy
+         @tags=Tag.all
+      end
+
+     def edit_tag
+      @tag=Tag.find(params[:id])
+     end
+
+     def update_tag
+
+      @tag=Tag.find(params[:id])
+      @tag.update(get_tag)
+      @tags=Tag.all
+     end
+
+     def tag_related_book
+      @tag=Tag.find(params[:id])
+
+      @books=@tag.books
+
+
+     end
+
+
+
+
+
+def library_fines
+
+  end
+
+  def detail_fine
+       
+    if params[:name].present?
+       @student=Student.where("first_name LIKE '#{params[:name]}%' 
+        OR admission_no='#{params[:name]}%'")
+    else
+      p "-----------"
+      startdate=params[:start_date]
+        enddate=params[:end_date]
+     
+      @student=[]
+      @fines=Fine.where(created_at:startdate..enddate)
+ 
+     unless @fines.nil?
+       @fines.each do |f|
+        unless f.issue_book.nil?
+         @student<<f.issue_book.student
+        end
+       end
+      end
+     end
+  end
+
+
+
+   def delete_fine
+    @fine=Fine.find(params[:id])
+    @fine.destroy
+
+   end
+
+
+def barcode_index
+  end
+
+  def manage_barcode
+    if params[:search].eql? "book_number"
+      @infos=Book.where("book_no='#{params[:value]}'")
+    
+    elsif params[:search].eql? "title"
+      @infos=Book.where("title='#{params[:value]}'")
+      
+      elsif params[:search].eql? "author"
+      @infos=Book.where("author='#{params[:value]}'")
+      
+      elsif params[:search].eql? "tag"
+        @tag=Tag.find_by_name(params[:value])
+            @infos=@tag.books
+      end
+
+  end
+
+  def edit_barcode
+    @barcode=Book.find(params[:barcode])
+  end
+
+  def update_barcode
+       error=false
+    @barcode=params[:barcode]
+    
+    @barcode.each_pair do |k,v|
+      book=Book.find(k)
+      
+      unless book.update(barcode_no:v)
+        error=true
+      end
+
+      if error==true
+        render 'manage_barcode'  
+      else
+          flash.now[:notice]="Barcode is not udate"
+      end
+    end
+       redirect_to library_management_barcode_index_path
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  private
  def get_book_no_for_search
  	params.require(:search).permit!
@@ -463,7 +632,19 @@ end
 def get_library_card_setting_choice
     params.require(:search_library_setting).permit!
 end
-
-
-
 end
+
+#Ravikiran Parameters
+ def get_book_barcode_no
+    params.require(:search).permit!
+  end
+  def due_date_params
+    params.require(:issue_book).permit(:due_date,:status)
+  end
+  def get_date_type_date
+    params.require(:msearch).permit!
+  end
+#Sayali Parameters From Here
+ def get_tag
+      params.require(:tag).permit!
+     end
