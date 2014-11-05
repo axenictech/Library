@@ -227,10 +227,9 @@ class LibraryManagementController < ApplicationController
        duedate_selected=Date.parse(params["issue_book"]['due_date'])
         if issuedate_selected >duedate_selected
         @issue_book=IssueBook.new
-        p "---------------------------"
-        p  params["issue_book"]['book_no']
+        
         @book=Book.where(book_no: params["issue_book"]['book_no']).take
-        p @book
+        
         flash[:alert]="Issue date must be less than due date"
         redirect_to  library_management_book_issue_select_student_employee_path(@book.book_no,@issue_book)     
         return
@@ -415,7 +414,9 @@ class LibraryManagementController < ApplicationController
   end
 
   def library_fine_per_day_add
-
+     PerDayFineDetail.all.each do |fine|
+      fine.destroy
+    end
     
     @fineperday = PerDayFineDetail.new(params.require(:add_fine).permit!)
     @fineperday.save
