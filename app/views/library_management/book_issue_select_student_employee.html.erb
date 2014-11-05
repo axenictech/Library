@@ -67,14 +67,14 @@
           </div>
       </div>
       </div>
-     <%=form.submit "Issue",class: "submit_button"%>
+     <%=form.submit "Issue",{class: "submit_button",id: "submit_button"}%>
      <%end%>
   </div>
  
   <div id="issuebook_student" class="issuebook_student">
   <div>
  <%=form_for :search,url: library_management_student_employee_list_path,remote: true do |form|%>
-
+<%=form.hidden_field :book_id,:value => @book.id%>
     <label for="user_name">Search by admission no/employee no</label>
 	<div>
 	<%=form.text_field :id,{class: "form-control",style: "float:left;width: 200px"}%>

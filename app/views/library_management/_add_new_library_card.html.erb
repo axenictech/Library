@@ -6,12 +6,23 @@
      </div>
        <div class="modal-body">
 
-       <%= form_for :card_add , url: {action: 'library_card_setting_add'} ,method: :post  do |form|%>
+       <%= form_for :card_add , url: {action: 'library_card_setting_add'} ,method: :post,remote:true  do |form|%>
 
+       <% if @librarycard.errors.any? %>
+    <div class="alert alert-danger">
+    <h2>Errors prohibited to being saved:</h2>
+    <h3>Library Card Setting not created</h3>
+    <ul><% @librarycard.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %></ul>
+    </div>
+  <% end %>
+
+       <%=form.hidden_field :course_id,:value => @cource.id%>
        <div class="label-field-pair">
    		 <d><%=form.label :course,"Course"%></d>
       <div class="text-input-bg">
-      <%=form.text_field :course ,style:"width:215px;height:27px"%>
+      <%=form.text_field :course ,{value: @cource.course_name,style:"width:215px;height:27px",disabled: true}%>
       </div>
       </div>
 
@@ -30,14 +41,25 @@
       </div>
 
       <div class="label-field-pair">
-   		 <d><%=form.label :time_period,"Time Period"%>days</d>
+       <div class="text-input-bg">
+       </div>
+      </div>
+
+      <div class="label-field-pair">
+   		 <d><%=form.label :time_period,"Time Period"%></d>
       <div class="text-input-bg">
-      <%=form.text_field :time_period,style:"width:215px;height:27px"%>
+      <%=form.text_field :time_period,{value: 30,style:"width:215px;height:27px"}%>days
       </div>
+      </div>
+<br>
+<div >
+       
+     <%=form.submit "Create",{:class=>"submit_button",style: "margin-left: 170px;margin-top: 30px"}%>
+      
       </div>
 
 
-     <%=form.submit "Create",{:class=>"submit_button",style: "margin-left:538px;"}%>
+     
      <% end %>
        </div>
 

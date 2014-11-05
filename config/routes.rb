@@ -25,13 +25,16 @@ get 'library_management/:id/process_return_book',to: 'library_management#process
 
 
 
-
-
 get 'library_management/library_card_setting_show',to: 'library_management#library_card_setting_show',as: 'library_management_library_card_setting_show'
-post 'library_management/library_get_library_card_setting',to: 'library_management#library_get_library_card_setting',as: 'library_management_library_get_library_card_setting'
+get 'library_management/library_get_library_card_setting',to: 'library_management#library_get_library_card_setting',as: 'library_management_library_get_library_card_setting'
 post 'library_management/library_card_setting_add',to:'library_management#library_card_setting_add',as:'library_management_library_card_setting_add'
-get 'library_management/lirary_card_new',to: 'library_management#lirary_card_new',as: 'library_management_lirary_card_new'
+get 'library_management/:id/library_card_new',to: 'library_management#library_card_new',as: 'library_management_library_card_new'
+get 'library_management/:id/library_card_setting_edit',to: 'library_management#library_card_setting_edit',as: 'library_management_library_card_setting_edit'
+delete 'library_management/:id/library_card_setting_delete',to: 'library_management#library_card_setting_delete',as: 'library_management_library_card_setting_delete'
+patch 'library_management/:id/library_card_setting_update',to: 'library_management#library_card_setting_update',as: 'library_management_library_card_setting_update'
 
+get 'library_management/library_fine_per_day_new' ,to: 'library_management#library_fine_per_day_new',as: 'library_management_library_fine_per_day_new'
+post 'library_management/library_fine_per_day_add',to: 'library_management#library_fine_per_day_add',as: 'library_management_library_fine_per_day_add'
 
 get 'tags/manage_tags',to: 'tags#manage_tags',as: 'tags_manage_tags'
 delete 'tags/:id/delete_tag',to: 'tags#delete_tag',as: 'tags_delete_tag'

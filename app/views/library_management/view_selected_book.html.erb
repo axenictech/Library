@@ -1,5 +1,16 @@
 <div id="content-header">
   <h1>Library Management</h1>
+  
+
+  <div id="inner-tab-menu">
+    <ul>
+      
+        <li class='themed_bg themed-dark-hover-background'><%= link_to 'Edit',library_management_edit_book_path%></li>
+      
+    </ul>
+  </div>
+  
+
  </div>
   <div><%= image_tag("underline.jpg",width: "100%")%></div> 
 
@@ -25,8 +36,8 @@
     
     
     <span class="row_">
-      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%BooksTag.where(book_id: @book.id).each do|booktag| %>
-            <%=booktag.tag.name%>
+      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tags_id)).each do|booktag| %>
+            <%=booktag.name%>
             <%  end %></span></div>
     </span>
 
@@ -37,12 +48,14 @@
       <div id="reserve_book">
 
   <div style="float:left" >
-    <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,data: { confirm: 'Are you sure?' }%>
+  <% if @book.status!='Reserved' %>
+   <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,data: { confirm: 'Are you sure?' }%>
+  <% end %>
     </div>
     </div>
-
-    <%=button_to "Issue this book" %>
-
+  <% if @book.status=='Available' || @book.status=='Reserved' %>
+    <%=link_to "Issue this book", library_management_book_issue_select_student_employee_path(@book.book_no) %>
+  <%end%>
     </div>
 
     <div id="book_reserve">

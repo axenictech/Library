@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141101110808) do
+ActiveRecord::Schema.define(version: 20141104074702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,37 +220,6 @@ ActiveRecord::Schema.define(version: 20141101110808) do
   add_index "batches_online_exams", ["batch_id"], name: "index_batches_online_exams_on_batch_id", using: :btree
   add_index "batches_online_exams", ["online_exam_id"], name: "index_batches_online_exams_on_online_exam_id", using: :btree
 
-  create_table "book_more_details", force: true do |t|
-    t.string   "name"
-    t.string   "status"
-    t.string   "is_mandatory"
-    t.string   "input_method"
-    t.boolean  "is_active"
-    t.integer  "serial_no"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "book_more_fields", force: true do |t|
-    t.integer  "book_id"
-    t.integer  "book_more_detail_id"
-    t.string   "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "book_more_fields", ["book_id"], name: "index_book_more_fields_on_book_id", using: :btree
-  add_index "book_more_fields", ["book_more_detail_id"], name: "index_book_more_fields_on_book_more_detail_id", using: :btree
-
-  create_table "book_more_values", force: true do |t|
-    t.integer  "book_more_detail_id"
-    t.string   "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "book_more_values", ["book_more_detail_id"], name: "index_book_more_values_on_book_more_detail_id", using: :btree
-
   create_table "books", force: true do |t|
     t.integer  "book_no"
     t.string   "title"
@@ -263,13 +232,13 @@ ActiveRecord::Schema.define(version: 20141101110808) do
 
   create_table "books_tags", force: true do |t|
     t.integer  "book_id"
-    t.integer  "tag_id"
+    t.integer  "tags_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "books_tags", ["book_id"], name: "index_books_tags_on_book_id", using: :btree
-  add_index "books_tags", ["tag_id"], name: "index_books_tags_on_tag_id", using: :btree
+  add_index "books_tags", ["tags_id"], name: "index_books_tags_on_tags_id", using: :btree
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -710,7 +679,6 @@ ActiveRecord::Schema.define(version: 20141101110808) do
   end
 
   create_table "finance_transaction_triggers", force: true do |t|
-    t.integer  "finance_fee_category_id"
     t.decimal  "percentage"
     t.string   "title"
     t.string   "description"
@@ -720,7 +688,6 @@ ActiveRecord::Schema.define(version: 20141101110808) do
   end
 
   add_index "finance_transaction_triggers", ["category_id"], name: "index_finance_transaction_triggers_on_category_id", using: :btree
-  add_index "finance_transaction_triggers", ["finance_fee_category_id"], name: "index_finance_transaction_triggers_on_finance_fee_category_id", using: :btree
 
   create_table "finance_transactions", force: true do |t|
     t.string   "title"
@@ -757,7 +724,6 @@ ActiveRecord::Schema.define(version: 20141101110808) do
     t.string   "language"
     t.string   "time_zone"
     t.string   "country"
-    t.string   "network_state"
     t.string   "include_grading_system"
     t.integer  "addmission_number_auto_increament"
     t.integer  "employee_number_auto_increament"
@@ -948,6 +914,12 @@ ActiveRecord::Schema.define(version: 20141101110808) do
 
   add_index "payroll_categories", ["payroll_category_id"], name: "index_payroll_categories_on_payroll_category_id", using: :btree
 
+  create_table "per_day_fine_details", force: true do |t|
+    t.decimal  "fine_per_day"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "privilege_tags", force: true do |t|
     t.string   "name_tag"
     t.integer  "priority"
@@ -1083,22 +1055,6 @@ ActiveRecord::Schema.define(version: 20141101110808) do
 
   add_index "students", ["batch_id"], name: "index_students_on_batch_id", using: :btree
   add_index "students", ["category_id"], name: "index_students_on_category_id", using: :btree
-
-  create_table "subject_leaves", force: true do |t|
-    t.integer  "student_id"
-    t.date     "month_date"
-    t.integer  "subject_id"
-    t.integer  "employee_id"
-    t.integer  "class_timing_id"
-    t.string   "reason"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "subject_leaves", ["class_timing_id"], name: "index_subject_leaves_on_class_timing_id", using: :btree
-  add_index "subject_leaves", ["employee_id"], name: "index_subject_leaves_on_employee_id", using: :btree
-  add_index "subject_leaves", ["student_id"], name: "index_subject_leaves_on_student_id", using: :btree
-  add_index "subject_leaves", ["subject_id"], name: "index_subject_leaves_on_subject_id", using: :btree
 
   create_table "subjects", force: true do |t|
     t.string   "name"
