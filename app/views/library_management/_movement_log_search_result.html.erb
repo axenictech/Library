@@ -24,7 +24,7 @@ Total Number of Books : <%@count= @issue_book_dates.count%>
             <% if f.employee_id.nil? %>
             <td col-md-2><%= link_to f.student.first_name+" "+f.student.last_name+"-"+f.student.admission_no,students_profile_path(f.student.id) %></td>
             <%else%>
-            <td col-md-2><%= f.employee.first_name %>&nbsp;&nbsp;<%= f.employee.last_name %>&nbsp;-<%= f.employee.employee_number %></td>
+            <td col-md-2><%= f.employee.first_name+""+f.employee.last_name+"-"+f.employee.employee_number %></td>
             <%end%>
             <td col-md-2><%= f.status %></td>
             <td col-md-2><%= f.issue_date %></td>

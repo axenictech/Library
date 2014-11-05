@@ -66,12 +66,12 @@ delete 'library_management/:id/delete_fine',to: 'library_management#delete_fine'
 
 
 #Library Book Renewal Routes
-get 'library_management/search_book',to: 'library_management#search_book',as: 'library_book_renewals_search_book'
-get 'library_management/renewal_book_search_result',to: 'library_management#renewal_book_search_result',as: 'library_book_renewals_renewal_book_search_result'
-get 'library_management/renewal_book_form',to: 'library_management#renewal_book_form',as: 'library_book_renewals_renewal_book_form'
-patch 'library_management/update_due_date',to: 'library_management#update_due_date',as: 'library_book_renewals_update_due_date'
-get 'library_management/movement_log_search',to: 'library_management#movement_log_search',as: 'library_book_renewals_movement_log_search'
-get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
+get 'library_management/search_book',to: 'library_management#search_book',as: 'library_management_search_book'
+get 'library_management/renewal_book_search_result',to: 'library_management#renewal_book_search_result',as: 'library_management_renewal_book_search_result'
+get 'library_management/renewal_book_form',to: 'library_management#renewal_book_form',as: 'library_management_renewal_book_form'
+patch 'library_management/update_due_date',to: 'library_management#update_due_date',as: 'library_management_update_due_date'
+get 'library_management/movement_log_search',to: 'library_management#movement_log_search',as: 'library_management_movement_log_search'
+get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_management_movement_log_search_result'
 
 
 
