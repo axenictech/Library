@@ -11,21 +11,10 @@
 <div id="page-yield">
 
 <div align="center">
-<ul class="errors3">
-  <% if @issue_book.errors.any? %>
-  <div>
-    <h2>
-      <%= pluralize(@issue_book.errors.count, "error") %>
-        CHECK FIELDS 
-    </h2>
-    <ul>
-      <% @issue_book.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
+<ul class="errors3"></ul>
   </div>
-<% end %>
-</ul></div>
+
+
 
 <%= form_for @issue_book,url:{action: 'update_due_date',id:@issue_book.id} do |c|%>
     <table class="table" style="width:500px" align="center">

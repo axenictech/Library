@@ -427,18 +427,23 @@ class LibraryManagementController < ApplicationController
   end
 
   def renewal_book_form
-    @issue_book=IssueBook.find_by_book_id(params[:format])
-  end
+    @issue_book=IssueBook.where(book_id:params[:format],status:'Renewal').take
+   end
 
   def update_due_date
     @issue_book=IssueBook.find(params[:id])
     @issue_book.status='Renewal'
-    if @issue_book.update(due_date_params)
-      @issue_book.book.update(status: "Renewal")
-      flash.now[:notice] = 'Book renewed successfully'
+    @issue_book.due_date=params["issue_book"]["due_date"]
+    if @issue_book.due_date <= @issue_book.issue_date
+      flash.now[:notice] = 'Due date not allowed'
+      render 'renewal_book_form'
+    elsif @issue_book.due_date > Date.today+10
+      flash.now[:notice] = 'Due date not allowed'
       render 'renewal_book_form'
     else
-      flash.now[:notice] = 'Book renewal fail'
+      @issue_book.update(due_date_params)
+      @issue_book.book.update(status: "Renewal")
+      flash.now[:notice] = 'Book renewed successfully'
       render 'renewal_book_form'
     end
   end
