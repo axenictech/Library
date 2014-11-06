@@ -1,5 +1,6 @@
 $("#book_list").html("<%= j render 'books_owned_list'%>");
 $("#issue_book_student_employee_id").val($("#issue_book_id").val());
 $("#issue_book_is_student").val($("#issue_book_is_student_tmp").val());
+$("#issue_book_due_date").val("<%= @due_date%>");
 
 

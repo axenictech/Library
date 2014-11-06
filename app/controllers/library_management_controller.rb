@@ -46,7 +46,7 @@ class LibraryManagementController < ApplicationController
          begin
 
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end # end of do
 
         rescue Exception => e
@@ -54,7 +54,7 @@ class LibraryManagementController < ApplicationController
 
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
     else 
       @error=true
@@ -90,13 +90,13 @@ class LibraryManagementController < ApplicationController
      
         begin
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
          rescue Exception => e
          end
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
           redirect_to library_management_books_path(@book)
@@ -106,9 +106,11 @@ class LibraryManagementController < ApplicationController
 
   def books_sorted_list
   @books_filter = get_fiterby_status_book['All']
-
+  if  @books_filter=='All'
+    @books =Book.all
+ else
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
-
+end
    end
 
 
@@ -137,7 +139,7 @@ class LibraryManagementController < ApplicationController
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(tags_id: Tag.where(name: @book_search_field).take))
+        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
@@ -173,14 +175,14 @@ class LibraryManagementController < ApplicationController
         end
         begin
         params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
         rescue Exception => e
          end
 
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
        redirect_to library_management_books_path(@book)
@@ -228,10 +230,9 @@ class LibraryManagementController < ApplicationController
        duedate_selected=Date.parse(params["issue_book"]['due_date'])
         if issuedate_selected >duedate_selected
         @issue_book=IssueBook.new
-        p "---------------------------"
-        p  params["issue_book"]['book_no']
+        
         @book=Book.where(book_no: params["issue_book"]['book_no']).take
-        p @book
+        
         flash[:alert]="Issue date must be less than due date"
         redirect_to  library_management_book_issue_select_student_employee_path(@book.book_no,@issue_book)     
         return
@@ -294,6 +295,8 @@ class LibraryManagementController < ApplicationController
     @book=Book.where(id: params["search"]['book_id']).take
   if params["search"]['filter']=="Student"
   	@student=Student.where(admission_no: params["search"]['id']).take
+
+
   else
   	@employee=Employee.where(employee_number: params["search"]['id']).take
   	
@@ -312,7 +315,12 @@ class LibraryManagementController < ApplicationController
   begin
   @student=Student.where(id: params['id']).take
   @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
-  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id)).count 
+  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id),status: "Borrowed").count 
+  
+  @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
+  if @due_date.nil?
+    @due_date=Date.today+30
+  end
   rescue Exception => e
   end
   	@student=Student.where(id: params['id']).take
@@ -337,6 +345,14 @@ class LibraryManagementController < ApplicationController
   end
   def process_return_book
      @book=IssueBook.where("book_id = ? AND status='Borrowed'", params['id']).take   
+     if @book.due_date <=Date.today
+      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+      @due_amount=((Date.today-@book.due_date)*@fine_amount).to_i
+      if@due_amount.nil?
+        @due_amount=0.to_i
+      end
+     end
+
   end
   def return_books
     begin
@@ -367,13 +383,10 @@ class LibraryManagementController < ApplicationController
   end
 
   def library_get_library_card_setting
-<<<<<<< HEAD
-=======
-    #  @cource_choice = get_library_card_setting_choice["course_id"]
+   #  @cource_choice = get_library_card_setting_choice["course_id"]
     # p @cource_choice
     
->>>>>>> e9d9bf25b7855d941a3228e5465a3117c14a590e
-    @cource= Course.find(params[:cources_id])
+   @cource= Course.find(params[:cources_id])
     @librarycards  = LibraryCardSetting.where(course_id: params[:cources_id])
   end
 
@@ -418,11 +431,11 @@ class LibraryManagementController < ApplicationController
   end
 
   def library_fine_per_day_add
-
-    
-    @fineperday = PerDayFineDetail.new(params.require(:add_fine).permit!)
-    @fineperday.save
-      
+     PerDayFineDetail.all.each do |fine|
+      fine.destroy
+    end
+    PerDayFineDetail.create(params.require(:add_fine).permit!)
+         
   end
 
   def manage_additional_details
