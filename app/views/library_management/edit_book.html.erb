@@ -62,7 +62,7 @@
          <% @tags.last(10).each do |t| 
           @checked=false
           @book.books_tag.all.each do |bt|
-          if bt.tags_id==t.id
+          if bt.tag_id==t.id
             @checked=true
           end
         end

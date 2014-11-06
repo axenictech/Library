@@ -46,7 +46,7 @@ class LibraryManagementController < ApplicationController
          begin
 
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end # end of do
 
         rescue Exception => e
@@ -54,7 +54,7 @@ class LibraryManagementController < ApplicationController
 
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
     else 
       @error=true
@@ -90,13 +90,13 @@ class LibraryManagementController < ApplicationController
      
         begin
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
          rescue Exception => e
          end
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
           redirect_to library_management_books_path(@book)
@@ -137,7 +137,7 @@ class LibraryManagementController < ApplicationController
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(tags_id: Tag.where(name: @book_search_field).take))
+        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
@@ -173,14 +173,14 @@ class LibraryManagementController < ApplicationController
         end
         begin
         params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
         rescue Exception => e
          end
 
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
        redirect_to library_management_books_path(@book)
