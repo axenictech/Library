@@ -110,27 +110,17 @@ class LibraryManagementController < ApplicationController
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
 
    end
-
-
   def view_selected_book
-
     @book=Book.find(params[:id])
-
   end
 
   def search_books
-  	
+ 	
   end
-
   def search_books_list_result
-
     @book_search_field = get_book_list_for_search["search_field"]
-    
     @book_search_choice = get_book_list_for_search["search_choice"]
-   
-
     if @book_search_choice=="Book Number"
-
         @books=Book.where("book_no=?",@book_search_field)
     elsif @book_search_choice=="Barcode"
         @books=Book.where("barcode_no=?",@book_search_field)
@@ -141,7 +131,6 @@ class LibraryManagementController < ApplicationController
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
-
   end
 
   def reserve_book
@@ -312,12 +301,15 @@ class LibraryManagementController < ApplicationController
   if params["is_student"]=="Student"
   begin
   @student=Student.where(id: params['id']).take
-  @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
-  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id),status: "Borrowed").count 
-  
+   @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
+   @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id),status: "Borrowed").count 
+  p "---------------------------------------------------------"
+  p @no_of_books_to_issue
+  p @no_of_books_issued
+  begin
   @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
-  if @due_date.nil?
-    @due_date=Date.today+30
+ rescue
+  @due_date=Date.today+30
   end
   rescue Exception => e
   end
