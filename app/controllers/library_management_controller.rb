@@ -292,7 +292,6 @@ end
   end
   
   rescue Exception =>e
-    p e
   end
   end
 
@@ -303,7 +302,6 @@ end
   begin
   @student=Student.where(id: params['id']).take
    @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
-   @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id),status: "Borrowed").count 
   begin
   @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
   rescue
@@ -362,9 +360,6 @@ end
     redirect_to library_management_search_book_for_return_path(@message)
    end
   end
-
-
-  
   def library_card_setting_show
   end
 
