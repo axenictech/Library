@@ -106,9 +106,11 @@ class LibraryManagementController < ApplicationController
 
   def books_sorted_list
   @books_filter = get_fiterby_status_book['All']
-
+  if  @books_filter=='All'
+    @books =Book.all
+ else
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
-
+end
    end
 
 
