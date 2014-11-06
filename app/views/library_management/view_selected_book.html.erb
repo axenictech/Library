@@ -36,7 +36,7 @@
     
     
     <span class="row_">
-      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tags_id)).each do|booktag| %>
+      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tag_id)).each do|booktag| %>
             <%=booktag.name%>
             <%  end %></span></div>
     </span>
@@ -57,7 +57,7 @@
   <% end %>
     </div>
     </div>
-  <% if @book.status=='Available' && @book.status=='Binding' %>
+  <% if @book.status=='Available' || @book.status=='Binding' %>
     <%=link_to "Issue this book", library_management_book_issue_select_student_employee_path(@book.book_no) %>
   <%end%>
     </div>
@@ -66,7 +66,7 @@
      <span class="reserved-by-h">This book has been reserved by</span>
       <span id="reserved-by" class="themed_text">
           <p>
-       Admin User <!-- give link of issue book -->
+       <%=link_to 'Admin User' , library_management_book_issue_select_student_employee_path(@book.book_no) %>
               
             <span class="reserved-time">
               &nbsp;&nbsp;On&nbsp;&nbsp;

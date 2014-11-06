@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141104074702) do
+ActiveRecord::Schema.define(version: 20141106052002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,8 @@ ActiveRecord::Schema.define(version: 20141104074702) do
   add_index "batches_online_exams", ["batch_id"], name: "index_batches_online_exams_on_batch_id", using: :btree
   add_index "batches_online_exams", ["online_exam_id"], name: "index_batches_online_exams_on_online_exam_id", using: :btree
 
+<<<<<<< HEAD
+=======
   create_table "book_more_details", force: true do |t|
     t.string   "name"
 <<<<<<< HEAD
@@ -256,6 +258,7 @@ ActiveRecord::Schema.define(version: 20141104074702) do
 
   add_index "book_more_values", ["book_more_detail_id"], name: "index_book_more_values_on_book_more_detail_id", using: :btree
 
+>>>>>>> d2450f032e8f50c132b771d40bbb6b400de20928
   create_table "books", force: true do |t|
     t.integer  "book_no"
     t.string   "title"
@@ -1154,11 +1157,6 @@ ActiveRecord::Schema.define(version: 20141104074702) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "is_active"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "tmps", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
