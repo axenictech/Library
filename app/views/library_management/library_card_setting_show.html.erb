@@ -32,6 +32,11 @@
   <div class="search_form">
     <%=form_for :search_library_setting ,
     url: library_management_library_get_library_card_setting_path, method: :post,remote:true do |form|%>
+    
+     <% unless flash[:notice].nil? %>
+    <p class="flash-msg"> <%= flash[:notice] %> </p>
+  <% end %>
+
    <div class="label-field-pair">
       <%=form.label :courses, "Courses"%>
         <div class="text-input-bg">

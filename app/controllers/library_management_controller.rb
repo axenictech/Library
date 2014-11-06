@@ -31,7 +31,7 @@ class LibraryManagementController < ApplicationController
       if params[:no_of_cpoies].to_i<1.to_i
        flash[:alert]="Number of copies can not be less than one"
        @book = Book.new
-       render library_management_addbooks_path
+       render library_management_add_books_path
       else
 
 
@@ -64,12 +64,12 @@ class LibraryManagementController < ApplicationController
       end
        if @error
 
-          render library_management_addbooks_path
+          render library_management_add_books_path
 
         else 
 
           redirect_to library_management_books_path
-         
+          flash[:notice]="Book Created Successfully"
           
        end
       end
@@ -86,7 +86,7 @@ class LibraryManagementController < ApplicationController
         @book.title =params["book"]["title"]
         @book.author=params["book"]["author"]
         @book.status="Available"
-        @book.save
+       if @book.save
      
         begin
           params["tag_ids"].each do |k|
@@ -99,9 +99,23 @@ class LibraryManagementController < ApplicationController
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
-          redirect_to library_management_books_path(@book)
+         else 
+      @error=true
     end
+         
+        
+      
+       if @error
 
+          render library_management_add_books_path
+
+        else 
+
+          redirect_to library_management_books_path
+          flash[:notice]="Book Created Successfully"
+          
+       end
+     end
   end
 
   def books_sorted_list
@@ -166,13 +180,11 @@ end
        unless params["cust_tag"][0].nil?
       @cust_tag_tmp=Tag.create(name: @cust_tag[0])
       end
-
-     
-        @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
+       if @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
         
-        @book.books_tag.each do |books_tag|
+          @book.books_tag.each do |books_tag|
           books_tag.destroy
-        end
+          end
         begin
         params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
@@ -185,7 +197,21 @@ end
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
-       redirect_to library_management_books_path(@book)
+     
+     else 
+      @error=true
+      end
+         
+       if @error
+
+          render library_management_add_books_path
+
+        else 
+
+          redirect_to library_management_books_path
+          flash[:notice]="Book Updated Successfully"
+       
+      end
  end
 
  def delete_book
@@ -195,6 +221,7 @@ end
         end
          @book.destroy
          redirect_to library_management_books_path(@book)
+          flash[:notice]="Book Deleted Successfully"
  end
  
   #---------------------------------------------------------------------------------------------
@@ -401,6 +428,7 @@ end
     @cource= Course.find(params[:card_add][:course_id])
     @librarycard=  @cource.library_card_setting.create(params.require(:card_add).permit!)
      @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
+    flash[:notice]="Library Card Created Successfully"
     
   end
 
@@ -413,6 +441,7 @@ end
     @librarycard =LibraryCardSetting.where(id: params[:id]).take
     @librarycard.update(params.require(:card_add).permit!)
     @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
+    flash[:notice]="Library Card Updated Successfully"
 
   end
 
@@ -421,7 +450,8 @@ end
     @librarycard =LibraryCardSetting.where(id: params[:id]).take
     course_id=@librarycard.course.id
     @librarycards.destroy
-    @librarycards =LibraryCardSetting.where(course_id: course_id)        
+    @librarycards =LibraryCardSetting.where(course_id: course_id)  
+    flash[:notice]="Library Card Deleted Successfully"      
   end
 
   def library_fine_per_day_new
@@ -434,8 +464,8 @@ end
      PerDayFineDetail.all.each do |fine|
       fine.destroy
     end
-    PerDayFineDetail.create(params.require(:add_fine).permit!)
-         
+     PerDayFineDetail.create(params.require(:add_fine).permit!)
+     flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 
   def manage_additional_details

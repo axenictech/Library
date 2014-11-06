@@ -21,6 +21,11 @@
 
   <div id="manage_books_form">
   <%= form_for :sort_by , url: library_management_books_sorted_list_path ,method: :post ,remote:true do |form|%>
+
+  <% unless flash[:notice].nil? %>
+    <p class="flash-msg"> <%= flash[:notice] %> </p>
+  <% end %>
+
   	<div class="label-field-pair" style="float:left" >
   	 <%=form.label :Filterby ,"Filter by" %>
 
