@@ -298,7 +298,6 @@ end
 
   def get_book_details
   @book=Book.where(id: params["book_id"]).take
- 
   begin
   if params["is_student"]=="Student"
   begin
@@ -312,20 +311,17 @@ end
   end
   rescue Exception => e
   end
-    @due_date=Date.today+30
-  	@student=Student.where(id: params['id']).take
+   	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
   	@employee=Employee.where(id: params['id']).take
   	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
-  
   rescue Exception =>e
+   @due_date=Date.today+30
+  end
   end
 
-  end
-
-  
   def search_book_for_return_result
     @book_no=get_book_no_for_search['bookno_barcode']
     @books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'Borrowed')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
