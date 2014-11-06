@@ -19,8 +19,8 @@
  			<td><%=librarycard.category.name%></td>
  			<td><%=librarycard.books_issuable %></td>
  			<td><%=librarycard.time_period %></td>
- 			<td><small><%= link_to 'Edit',library_management_library_card_setting_edit_path(librarycard)%>|
-            <%= link_to 'Delete',library_management_library_card_setting_delete_path(librarycard),method: :delete,remote:true,data: { confirm: 'Are you sure?' }%></small></td>
+ 			<td><small><%= link_to 'Edit',library_management_library_card_setting_edit_path(librarycard),remote: true%>|
+            <%= link_to 'Delete',library_management_library_card_setting_delete_path(librarycard),method: :delete,remote: true,data: { confirm: 'Are you sure?' }%></small></td>
  		</tr>
  		
  <%end%>

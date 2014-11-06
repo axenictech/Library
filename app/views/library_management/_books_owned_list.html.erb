@@ -88,7 +88,7 @@
 </script>
 <%
 begin
-if @no_of_books_to_issue<=@no_of_books_issued%>
+if @no_of_books_to_issue<=@books_taken.count%>
 <div class="warn_text" style="color:red">This user has reached the maximum limit of availing books.</div>
 <script>
   $("#submit_button").hide();
