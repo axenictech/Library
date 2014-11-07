@@ -32,6 +32,11 @@
   <div class="search_form">
     <%=form_for :search_library_setting ,
     url: library_management_library_get_library_card_setting_path, method: :post,remote:true do |form|%>
+    <div>
+    <p class="flash-msg" style="margin-left: 160px;"> Library Card setting </p>
+    
+    </div>
+
    <div class="label-field-pair">
       <%=form.label :courses, "Courses"%>
         <div class="text-input-bg">

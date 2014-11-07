@@ -21,6 +21,11 @@
 
   <div id="manage_books_form">
   <%= form_for :sort_by , url: library_management_books_sorted_list_path ,method: :post ,remote:true do |form|%>
+
+  <% unless flash[:notice].nil? %>
+    <p class="flash-msg"> <%= flash[:notice] %> </p>
+  <% end %>
+
   	<div class="label-field-pair" style="float:left" >
   	 <%=form.label :Filterby ,"Filter by" %>
 
@@ -45,8 +50,8 @@
   <%@count= @books.count%>
   <%if @count>0.to_i%>
 		<p class="book_count">Total Books : <b><%= @count%></b></p>
-    
-		 <table id="listing" align="center" width="980px" height="595px" cellpadding="1" cellspacing="1" >
+    <br><br>
+		 <table id="listing" align="center" width="980px"  cellpadding="1" cellspacing="1" >
      <tbody>
         <tr class="tr-head" width="940px" height="28px">
 

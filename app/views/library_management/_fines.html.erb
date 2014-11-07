@@ -1,7 +1,9 @@
-<%if @student.empty? %>
-<p class="flash-msg" style="margin-left: 160px;"> No Record found.</p>
-<%else%>
-      
+<%if @student.nil? %>
+
+  
+  <p class="flash-msg" style="margin-left: 160px;"> No Record found.</p> 
+
+   <%else%>  
 <table align="center" class="table table-hover" style="width:800px">
     <thead>
     	 <tr>
@@ -27,5 +29,6 @@
   	 <%end%>
     </tbody>
 </table>
-  
+
+
   <%end%>

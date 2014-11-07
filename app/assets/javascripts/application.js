@@ -35,7 +35,8 @@ function showbookSelectedField()
           
           }
           else {
-
+              
+            $("#book_barcode_no").val("");
           		$("#barcode_field").hide();
                  $("#count_area").show();
 

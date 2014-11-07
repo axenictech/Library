@@ -5,9 +5,9 @@
 		<thead>
  		<tr width="940px" >
  			<th>Book Number</th>
- 			<th>Barcode</th>
  			<th>Book Title</th>
  			<th>Author</th>
+ 			<th>Status</th>
  		</tr>
  	</thead>
 				
@@ -17,9 +17,9 @@
 
 			<tr>
  			<td><%=book.book_no%></td>
- 			<td><%=book.barcode_no%></td>
  			<td><%=link_to book.title, library_management_view_selected_book_path(book.id)%></td>
  			<td><%=book.author%></td>
+ 			<td><%=book.status%></td>
  		</tr>
  <%end%>
  
