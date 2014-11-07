@@ -316,6 +316,7 @@ end
    	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
+    @due_date=Date.today+30
   	@employee=Employee.where(id: params['id']).take
   	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
