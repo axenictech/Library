@@ -337,14 +337,19 @@ end
    @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
   begin
   @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
+  if @due_date.nil?
+  @due_date=Date.today+30
+  end
   rescue
   @due_date=Date.today+30
   end
   rescue Exception => e
+   @due_date=Date.today+30
   end
    	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
+    @due_date=Date.today+30
   	@employee=Employee.where(id: params['id']).take
   	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
@@ -552,11 +557,12 @@ def library_fines
        
     if params[:name].present?
        @student=Student.where("first_name LIKE '#{params[:name]}%' 
-        OR admission_no='#{params[:name]}'")
-    else
-      p "-----------"
-      startdate=params[:start_date]
-        enddate=params[:end_date]
+        OR admission_no LIKE '#{params[:name]}%'")
+    
+    else 
+        if params[:start_date].present? && params[:end_date].present?
+        startdate=params[:start_date]
+       enddate=params[:end_date]
      
       @student=[]
       @fines=Fine.where(created_at:startdate..enddate)
@@ -567,6 +573,7 @@ def library_fines
          @student<<f.issue_book.student
         end
        end
+     end
       end
      end
   end
