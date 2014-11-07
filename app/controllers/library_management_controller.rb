@@ -489,8 +489,11 @@ def search_tags
      def update_tag
 
       @tag=Tag.find(params[:id])
-      @tag.update(get_tag)
+       @tag.update(get_tag)
+        flash[:notice]="Tag Update Successfully" 
       @tags=Tag.all
+
+    
      end
 
      def tag_related_book
@@ -513,7 +516,7 @@ def library_fines
        
     if params[:name].present?
        @student=Student.where("first_name LIKE '#{params[:name]}%' 
-        OR admission_no='#{params[:name]}%'")
+        OR admission_no='#{params[:name]}'")
     else
       p "-----------"
       startdate=params[:start_date]
@@ -565,8 +568,11 @@ def barcode_index
     @barcode=Book.find(params[:barcode])
   end
 
+  
+
+
   def update_barcode
-       error=false
+     error=false
     @barcode=params[:barcode]
     
     @barcode.each_pair do |k,v|
@@ -574,16 +580,18 @@ def barcode_index
       
       unless book.update(barcode_no:v)
         error=true
-      end
+       end
 
       if error==true
-        render 'manage_barcode'  
-      else
-          flash.now[:notice]="Barcode is not udate"
+        render 'manage_barcode'
+      else 
+        flash[:notice]="Barcode Update Successfully"
+       
+        end
       end
-    end
-       redirect_to library_management_barcode_index_path
+      redirect_to  library_management_barcode_index_path
   end
+
 
 
 
