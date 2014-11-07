@@ -420,7 +420,7 @@ end
     @cource= Course.find(params[:card_add][:course_id])
     @librarycard=  @cource.library_card_setting.create(params.require(:card_add).permit!)
      @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
-     flash[:notice]="Library Card Created Successfully"
+    # flash[:notice]="Library Card Created Successfully"
     
   end
 
@@ -433,7 +433,7 @@ end
     @librarycard =LibraryCardSetting.where(id: params[:id]).take
     @librarycard.update(params.require(:card_add).permit!)
     @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
-    flash[:notice]="Library Card Updated Successfully"
+   # flash[:notice]="Library Card Updated Successfully"
 
   end
 
@@ -443,7 +443,7 @@ end
     course_id=@librarycard.course.id
     @librarycards.destroy
     @librarycards =LibraryCardSetting.where(course_id: course_id)  
-    flash[:notice]="Library Card Deleted Successfully"      
+   # flash[:notice]="Library Card Deleted Successfully"      
   end
 
   def library_fine_per_day_new
@@ -457,7 +457,7 @@ end
       fine.destroy
     end
      PerDayFineDetail.create(params.require(:add_fine).permit!)
-     flash[:notice]="Library Fine For Per Day Added Successfully"        
+     #flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 
   def manage_additional_details
