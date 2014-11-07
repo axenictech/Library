@@ -1,35 +1,31 @@
-
-<%unless @student.nil? %>
+<%if @student.empty? %>
+<p class="flash-msg" style="margin-left: 160px;"> No Record found.</p>
+<%else%>
+      
 <table align="center" class="table table-hover" style="width:800px">
     <thead>
-  	<tr>
-  		<th> Sr.No</th>
-  		<th>Name </th>
-  		<th>Amount</th>
-      <th>Payment Date</th>
-      
-  	</tr>
+    	 <tr>
+      		<th> Sr.No</th>
+      		<th>Name </th>
+      		<th>Amount</th>
+          <th>Payment Date</th>
+        </tr>
     </thead>
     <tbody>
-
-  	  
-     
-     
-    <% @student.each_with_index do |student,i|%>
-      <% IssueBook.where(student_id:student.id).each do |issuebook|%>
-       <%if fine=Fine.where(issue_book_id:issuebook.id).take%>
-  	 <tr>
-  	 	<td><%=i+1 %></td>
-  	 	<td><%= fine.issue_book.student.first_name%>(<%= fine.issue_book.student.admission_no%>)</td>
-  	  
-      <td><%= fine.amount%></td>
-       <td> <%= fine.issue_book.created_at.to_date%></td>        
-      </tr>
-      <%end%>
-   <%end%>
-  	<%end%>
+      <% @student.each_with_index do |student,i|%>
+        <% IssueBook.where(student_id:student.id).each do |issuebook|%>
+          <%if fine=Fine.where(issue_book_id:issuebook.id).take%>
+    	      <tr>
+          	 	<td><%=i+1 %></td>
+          	 	<td><%= fine.issue_book.student.first_name%>(<%= fine.issue_book.student.admission_no%>)</td>
+          	  
+              <td><%= fine.amount%></td>
+               <td> <%= fine.issue_book.created_at.to_date%></td>        
+            </tr>
+          <%end%>
+        <%end%>
+  	 <%end%>
     </tbody>
-  	</table>
-<%else%>
-<p class="flash-msg" style="margin-left: 160px;"> No Record found.</p>
-<%end%>
+</table>
+  
+  <%end%>

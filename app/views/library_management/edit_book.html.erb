@@ -59,14 +59,20 @@
           <div class="tags_list">
             <div class="label-field-pair-checkbox">
 
-         <% @tags.last(10).each do |t| %>
-        
-  			<%= check_box_tag "tag_ids[]",t.id%><%=t.name%>
+         <% @tags.last(10).each do |t| 
+          @checked=false
+          @book.books_tag.all.each do |bt|
+          if bt.tag_id==t.id
+            @checked=true
+          end
+        end
+          %>
+  			 <%= check_box_tag "tag_ids[#{t.id}]", t.id, @checked,:name => "tag_ids[]"%><%=t.name%>
         
   			<div class="extender"></div>
 
 			<% end %>
-         	
+         	 
      		</div>
      		</div>
      		</div>

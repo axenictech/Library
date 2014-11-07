@@ -46,7 +46,7 @@ class LibraryManagementController < ApplicationController
          begin
 
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end # end of do
 
         rescue Exception => e
@@ -54,7 +54,7 @@ class LibraryManagementController < ApplicationController
 
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
     else 
       @error=true
@@ -90,13 +90,13 @@ class LibraryManagementController < ApplicationController
      
         begin
           params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
          rescue Exception => e
          end
         @cust_tag= params["cust_tag"]
       unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
           redirect_to library_management_books_path(@book)
@@ -106,50 +106,41 @@ class LibraryManagementController < ApplicationController
 
   def books_sorted_list
   @books_filter = get_fiterby_status_book['All']
-
+  if  @books_filter=='All'
+    @books =Book.all
+ else
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
-
+end
    end
-
-
   def view_selected_book
-
     @book=Book.find(params[:id])
-
   end
 
   def search_books
-  	
+ 	
   end
-
   def search_books_list_result
-
     @book_search_field = get_book_list_for_search["search_field"]
-    
     @book_search_choice = get_book_list_for_search["search_choice"]
-   
-
     if @book_search_choice=="Book Number"
-
         @books=Book.where("book_no=?",@book_search_field)
     elsif @book_search_choice=="Barcode"
         @books=Book.where("barcode_no=?",@book_search_field)
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(id: Tag.where(name: @book_search_field).take).pluck(:book_id))
-       
+        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
-
   end
 
   def reserve_book
-   
-
+    
    @book = Book.where("id = ? AND status = 'Available'",params[:book_id]).take
    @book.update(status: 'Reserved')
+   @book = Book.where(id: params[:book_id]).take
+
 
 
   end
@@ -160,10 +151,11 @@ class LibraryManagementController < ApplicationController
   def update_book
      @book = Book.find(params[:id])
 
-      @cust_tag= params["cust_tag"][0]
-      unless @cust_tag.nil?
-        Tag.create(name: @cust_tag)
+      @cust_tag= params["cust_tag"]
+       unless params["cust_tag"][0].nil?
+      @cust_tag_tmp=Tag.create(name: @cust_tag[0])
       end
+
      
         @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
         
@@ -172,16 +164,16 @@ class LibraryManagementController < ApplicationController
         end
         begin
         params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tags_id: k)
+          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
         end
         rescue Exception => e
          end
 
-        @cust_tag= params["cust_tag"][0]
-        unless params["cust_tag"][0]==""
-        @cust_tag_tmp=Tag.create(name: @cust_tag)
-        @book.books_tag.create(book_id: @book.id,tags_id: @cust_tag_tmp.id)
-        end
+        @cust_tag= params["cust_tag"]
+      unless params["cust_tag"][0].nil?
+          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
+      end 
+
        redirect_to library_management_books_path(@book)
  end
 
@@ -221,9 +213,29 @@ class LibraryManagementController < ApplicationController
 
 #issue Book Actions
   def issue_books
-         
+
+
+       issuedate_selected=Date.parse(params["issue_book"]['issue_date'])
+       duedate_selected=Date.parse(params["issue_book"]['due_date'])
+        if issuedate_selected >duedate_selected
+        @issue_book=IssueBook.new
+        
+        @book=Book.where(book_no: params["issue_book"]['book_no']).take
+        
+        flash[:alert]="Issue date must be less than due date"
+        redirect_to  library_management_book_issue_select_student_employee_path(@book.book_no,@issue_book)     
+        return
+        end
+
+        @book=Book.where("book_no = ? AND (status = 'Available' OR status='Reserved')",params["issue_book"]['book_no']).take   
         if params["issue_book"]['student_employee_id']=="" && params["issue_book"]['student_employee_id']==""
         flash[:alert]="Please Select Student or Employee"
+        @book=Book.where(book_no: params["issue_book"]['book_no']).take
+        @issue_book=IssueBook.new
+        redirect_to library_management_book_issue_select_student_employee_path(@book.book_no)
+    
+        elsif @book.nil?
+       flash[:alert]="Book Alredy Issued"
         @book=Book.where(book_no: params["issue_book"]['book_no']).take
         @issue_book=IssueBook.new
         redirect_to library_management_book_issue_select_student_employee_path(@book.book_no)
@@ -231,16 +243,8 @@ class LibraryManagementController < ApplicationController
         else
 
          @issue_book=IssueBook.new
-         @book=Book.where(book_no: params["issue_book"]['book_no']).take
          @issue_book.book=@book
-          begin
-          d=Date.parse(params["issue_book"]['issue_date'])
-          d2=Date.parse(params["issue_book"]['due_date'])
-         rescue
-        @issue_book=IssueBook.new
-        redirect_to  library_management_book_issue_select_student_employee_path(@book,@issue_book)     
-        flash[:alert]="Due/Issue date not in correct format"
-         end
+
 
          @issue_book.issue_date=params["issue_book"]['issue_date']
          @issue_book.due_date=params["issue_book"]['due_date']
@@ -254,8 +258,7 @@ class LibraryManagementController < ApplicationController
          if @issue_book.save
           @message="Book has been issued "
           @book.update(status: "Borrowed")
-          p "-----------------------------"
-        end
+          end
           redirect_to library_management_search_book_for_issue_path(@message)
         rescue Exception =>e
         @issue_book=IssueBook.new
@@ -281,40 +284,42 @@ class LibraryManagementController < ApplicationController
     @book=Book.where(id: params["search"]['book_id']).take
   if params["search"]['filter']=="Student"
   	@student=Student.where(admission_no: params["search"]['id']).take
+
+
   else
   	@employee=Employee.where(employee_number: params["search"]['id']).take
   	
   end
   
   rescue Exception =>e
-    p e
   end
   end
 
   def get_book_details
   @book=Book.where(id: params["book_id"]).take
- 
   begin
   if params["is_student"]=="Student"
   begin
   @student=Student.where(id: params['id']).take
-  @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
-  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id)).count 
+   @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
+  begin
+  @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
+  rescue
+  @due_date=Date.today+30
+  end
   rescue Exception => e
   end
-  	@student=Student.where(id: params['id']).take
+   	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
   	@employee=Employee.where(id: params['id']).take
   	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
-  
   rescue Exception =>e
+   @due_date=Date.today+30
+  end
   end
 
-  end
-
-  
   def search_book_for_return_result
     @book_no=get_book_no_for_search['bookno_barcode']
     @books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'Borrowed')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
@@ -324,6 +329,14 @@ class LibraryManagementController < ApplicationController
   end
   def process_return_book
      @book=IssueBook.where("book_id = ? AND status='Borrowed'", params['id']).take   
+     if @book.due_date <=Date.today
+      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+      @due_amount=((Date.today-@book.due_date)*@fine_amount).to_i
+      if@due_amount.nil?
+        @due_amount=0.to_i
+      end
+     end
+
   end
   def return_books
     begin
@@ -331,7 +344,7 @@ class LibraryManagementController < ApplicationController
    if @book.due_date >=Date.today
    @book.update(status: "Available",returned_date: Date.today)
    @book.book.update(status: "Available")
-   @message="Book has been returned "
+   @message="Book has been returned"
    redirect_to library_management_search_book_for_return_path(@message)
    else
    
@@ -347,18 +360,14 @@ class LibraryManagementController < ApplicationController
     redirect_to library_management_search_book_for_return_path(@message)
    end
   end
-
-
-  
   def library_card_setting_show
   end
 
   def library_get_library_card_setting
-    #  @cource_choice = get_library_card_setting_choice["course_id"]
+   #  @cource_choice = get_library_card_setting_choice["course_id"]
     # p @cource_choice
-     p "----------------------------"
-    p params[:cources_id]
-    @cource= Course.find(params[:cources_id])
+    
+   @cource= Course.find(params[:cources_id])
     @librarycards  = LibraryCardSetting.where(course_id: params[:cources_id])
   end
 
@@ -403,11 +412,11 @@ class LibraryManagementController < ApplicationController
   end
 
   def library_fine_per_day_add
-
-    
-    @fineperday = PerDayFineDetail.new(params.require(:add_fine).permit!)
-    @fineperday.save
-      
+     PerDayFineDetail.all.each do |fine|
+      fine.destroy
+    end
+    PerDayFineDetail.create(params.require(:add_fine).permit!)
+         
   end
 
   def manage_additional_details
@@ -424,28 +433,55 @@ class LibraryManagementController < ApplicationController
 #Ravikiran Code From here
   def renewal_book_search_result
     @book=Book.where("(book_no=? OR barcode_no=?) AND (status='Borrowed' OR status='Renewal')",get_book_barcode_no['bookno_barcode'],get_book_barcode_no['bookno_barcode'])
+    @b_id=Book.find_by_book_no(get_book_barcode_no['bookno_barcode'])
+    @issue_book_id=IssueBook.where("book_id=?",@b_id)
+    @check_due_date=@issue_book_id.where("status='Borrowed' OR status='Renewal'").take
   end
 
   def renewal_book_form
-    @issue_book=IssueBook.where(book_id:params[:format],status:'Renewal').take
-   end
+    @issue_book_id=IssueBook.where("book_id=? ",params[:format])
+    @issue_book=@issue_book_id.where("status='Borrowed' OR status='Renewal'").take
+    if @issue_book.employee_id.nil?
+      @student=Student.where(id: @issue_book.student_id).take
+      @no_of_days=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take
+    end  
+  end
 
   def update_due_date
-    @issue_book=IssueBook.find(params[:id])
-    @issue_book.status='Renewal'
-    @issue_book.due_date=params["issue_book"]["due_date"]
-    if @issue_book.due_date <= @issue_book.issue_date
-      flash.now[:notice] = 'Due date not allowed'
-      render 'renewal_book_form'
-    elsif @issue_book.due_date > Date.today+10
-      flash.now[:notice] = 'Due date not allowed'
-      render 'renewal_book_form'
-    else
-      @issue_book.update(due_date_params)
-      @issue_book.book.update(status: "Renewal")
-      flash.now[:notice] = 'Book renewed successfully'
-      render 'renewal_book_form'
-    end
+    @issue_book_record=IssueBook.find(params[:id])
+    if @issue_book_record.employee_id.nil?
+      @student=Student.where(id: @issue_book_record.student_id).take
+      @no_of_days=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take
+      @issue_book_record.status='Renewal'
+      @issue_book_record.due_date=params["issue_book"]["due_date"]
+      if @issue_book_record.due_date <= @issue_book_record.issue_date
+       flash.now[:notice] = 'Due date should be after issue date'
+       render 'search_book_for_renewal'
+      elsif @issue_book_record.due_date > Date.today+@no_of_days.time_period
+       flash.now[:notice] = 'Due date not allowed'
+       render 'search_book_for_renewal'
+      else
+       @issue_book_record.update(due_date_params)
+       @issue_book_record.book.update(status: "Renewal")
+       flash.now[:notice] = 'Book renewed successfully'
+       render 'search_book_for_renewal'
+      end
+    elsif @issue_book_record.student_id.nil?
+      @issue_book_record.status='Renewal'
+      @issue_book_record.due_date=params["issue_book"]["due_date"]
+      if @issue_book_record.due_date <= @issue_book_record.issue_date
+       flash.now[:notice] = 'Due date should be after issue date'
+       render 'search_book_for_renewal'
+      elsif @issue_book_record.due_date > Date.today+100
+       flash.now[:notice] = 'Due date not allowed'
+       render 'search_book_for_renewal'
+      else
+       @issue_book_record.update(due_date_params)
+       @issue_book_record.book.update(status: "Renewal")
+       flash.now[:notice] = 'Book renewed successfully'
+       render 'search_book_for_renewal'
+      end
+    end   
   end
   
   def movement_log_search_result
@@ -579,27 +615,6 @@ def barcode_index
     end
        redirect_to library_management_barcode_index_path
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

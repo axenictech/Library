@@ -4,7 +4,7 @@
 <% else %>
   <% if @issue_book_dates.empty? %>
   <p class="flash-msg">No books found.Try Again</p>
-<% else %>
+  <% else %>
 Total Number of Books : <%@count= @issue_book_dates.count%>
 <%=@count%>
   <div class="col-md-1"></div>

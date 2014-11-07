@@ -36,7 +36,7 @@
     
     
     <span class="row_">
-      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tags_id)).each do|booktag| %>
+      <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tag_id)).each do|booktag| %>
             <%=booktag.name%>
             <%  end %></span></div>
     </span>
@@ -48,20 +48,39 @@
       <div id="reserve_book">
 
   <div style="float:left" >
-  <% if @book.status!='Reserved' %>
-   <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,data: { confirm: 'Are you sure?' }%>
+  <% if @book.status!='Reserved' && @book.status!='Lost' %>
+  <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,id:"reserved_id"%>
+   <%else%>
+   <script>
+   $("#reserved_id").hide();
+   </script>
   <% end %>
     </div>
     </div>
-  <% if @book.status=='Available' || @book.status=='Reserved' %>
+  <% if @book.status=='Available' || @book.status=='Binding' %>
     <%=link_to "Issue this book", library_management_book_issue_select_student_employee_path(@book.book_no) %>
   <%end%>
     </div>
 
+    <% if @book.status=='Reserved'%>
+     <span class="reserved-by-h">This book has been reserved by</span>
+      <span id="reserved-by" class="themed_text">
+          <p>
+       <%=link_to 'Admin User' , library_management_book_issue_select_student_employee_path(@book.book_no) %>
+              
+            <span class="reserved-time">
+              &nbsp;&nbsp;On&nbsp;&nbsp;
+             <%=@book.updated_at%>
+            </span>
+          </p>
+        
+      </span>
+      <% end %>
     <div id="book_reserve">
+
     
   </div>
-
+   
 </div>
 
 <div class="extender"></div>

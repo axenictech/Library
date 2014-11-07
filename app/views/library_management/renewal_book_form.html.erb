@@ -13,9 +13,9 @@
 <div align="center">
 <ul class="errors3"></ul>
   </div>
-
-
-
+<% if @issue_book.employee_id.nil? %>
+Your due date for renewal is : <% d= Date.today+@no_of_days.time_period %> <%=d%>
+<%end%>
 <%= form_for @issue_book,url:{action: 'update_due_date',id:@issue_book.id} do |c|%>
     <table class="table" style="width:500px" align="center">
   <tbody>
@@ -25,28 +25,28 @@
     </tr>
 
     <tr>
-      <td><%= c.label :'book title'%></td>
-      <td><%= text_field_tag :book_name,@issue_book.book.title,readonly:true %></td>
+      <td><%= c.label :title%></td>
+      <td><%= text_field_tag :book_title,@issue_book.book.title,readonly:true %></td>
     </tr>
     <% if @issue_book.student_id.nil? %>
     <tr>
       <td><%= c.label :employee_name %></td>
-      <td><%= text_field_tag :book_name,@issue_book.employee.first_name,readonly:true %></td>
+      <td><%= text_field_tag :first_name,@issue_book.employee.first_name,readonly:true %></td>
     </tr>
 
     <tr>
       <td><%= c.label :'Employee No'%></td>
-      <td><%= text_field_tag :book_name,@issue_book.employee.employee_number,readonly:true %></td>
+      <td><%= text_field_tag :employee_number,@issue_book.employee.employee_number,readonly:true %></td>
     </tr>
     <%else%>
     <tr>
       <td><%= c.label :student_name %></td>
-      <td><%= text_field_tag :book_name,@issue_book.student.first_name,readonly:true %></td>
+      <td><%= text_field_tag :first_name,@issue_book.student.first_name,readonly:true %></td>
     </tr>
 
     <tr>
       <td><%= c.label :'admission No'%></td>
-      <td><%= text_field_tag :book_name,@issue_book.student.admission_no,readonly:true %></td>
+      <td><%= text_field_tag :admission_no,@issue_book.student.admission_no,readonly:true %></td>
     </tr>
     <%end%>
     <tr>

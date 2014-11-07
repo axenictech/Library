@@ -1,5 +1,20 @@
 <%=form_for @tag,url:{action:'update_tag'},method: :patch,remote:true do |f|%>
 <% if @tag.errors.any? %>
+<<<<<<< HEAD
+	<div id="error_explanation">
+		<ul>
+        	<% @tag.errors.full_messages.each do |msg| %>
+            	<li><%= msg %></li>
+        	<% end %>
+    	</ul>
+  	</div>
+ <% end %>
+	<p>
+		<%=f.text_field :name%>
+		<%=f.submit :'Ok'%>
+		<%=link_to "Cancel",""%>
+	</p>
+=======
     <div class="alert alert-danger">
     <h2>Errors prohibited to being saved:</h2>
     <h3>User account not created</h3>
@@ -11,10 +26,10 @@
 
 <p><%=f.text_field :name%>
 <%=f.submit :'Ok'%>
-<<<<<<< HEAD:app/views/library_management/_edit.html.erb
+
 <%=link_to "Cancle",""%></p>
-=======
+
 <%=link_to "Cancel",""%></p>
->>>>>>> 0032fd4712e6a3b3b7419955576d6a0b38b44024:app/views/tags/_edit.html.erb
+>>>>>>> e9d9bf25b7855d941a3228e5465a3117c14a590e
 <%end%>
 
