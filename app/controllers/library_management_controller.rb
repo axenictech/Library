@@ -304,10 +304,14 @@ end
    @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
   begin
   @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
+  if @due_date.nil?
+  @due_date=Date.today+30
+  end
   rescue
   @due_date=Date.today+30
   end
   rescue Exception => e
+   @due_date=Date.today+30
   end
    	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
