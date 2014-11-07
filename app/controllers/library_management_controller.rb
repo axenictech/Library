@@ -80,8 +80,14 @@ class LibraryManagementController < ApplicationController
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
 
+      if params["book"]["barcode_no"]==""
+       flash[:alert]="please enter the barcode number"
+       @book = Book.new
+       render library_management_add_books_path
+      else
+        
         @book = Book.new
-        @book.barcode_no = params["book"]["barcode_no"].to_i
+        @book.barcode_no = params["book"]["barcode_no"]
         @book.book_no = params["book"]["book_no"].to_i
         @book.title =params["book"]["title"]
         @book.author=params["book"]["author"]
@@ -103,7 +109,7 @@ class LibraryManagementController < ApplicationController
       @error=true
     end
          
-        
+     
       
        if @error
 
@@ -113,7 +119,7 @@ class LibraryManagementController < ApplicationController
 
           redirect_to library_management_books_path
           flash[:notice]="Book Created Successfully"
-          
+           end 
        end
      end
   end
@@ -126,27 +132,17 @@ class LibraryManagementController < ApplicationController
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
 end
    end
-
-
   def view_selected_book
-
     @book=Book.find(params[:id])
-
   end
 
   def search_books
-  	
+ 	
   end
-
   def search_books_list_result
-
     @book_search_field = get_book_list_for_search["search_field"]
-    
     @book_search_choice = get_book_list_for_search["search_choice"]
-   
-
     if @book_search_choice=="Book Number"
-
         @books=Book.where("book_no=?",@book_search_field)
     elsif @book_search_choice=="Barcode"
         @books=Book.where("barcode_no=?",@book_search_field)
@@ -157,7 +153,6 @@ end
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
-
   end
 
   def reserve_book
@@ -330,39 +325,34 @@ end
   end
   
   rescue Exception =>e
-    p e
   end
   end
 
   def get_book_details
   @book=Book.where(id: params["book_id"]).take
- 
   begin
   if params["is_student"]=="Student"
   begin
   @student=Student.where(id: params['id']).take
-  @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
-  @no_of_books_issued=IssueBook.where(student_id: Student.where(batch_id: Batch.where(course_id: @student.batch.course_id),category_id: @student.category_id),status: "Borrowed").count 
-  
+   @no_of_books_to_issue=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take.books_issuable
+  begin
   @due_date=Date.today+LibraryCardSetting.where(course_id: @student.batch.course_id,category_id: @student.category_id).take.time_period.to_i
-  if @due_date.nil?
-    @due_date=Date.today+30
+  rescue
+  @due_date=Date.today+30
   end
   rescue Exception => e
   end
-  	@student=Student.where(id: params['id']).take
+   	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
   	@employee=Employee.where(id: params['id']).take
   	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
-  
   rescue Exception =>e
+   @due_date=Date.today+30
+  end
   end
 
-  end
-
-  
   def search_book_for_return_result
     @book_no=get_book_no_for_search['bookno_barcode']
     @books=Book.where("(book_no = ? OR barcode_no = ?) AND (status = 'Borrowed')", get_book_no_for_search['bookno_barcode'], get_book_no_for_search['bookno_barcode'])   
@@ -403,9 +393,6 @@ end
     redirect_to library_management_search_book_for_return_path(@message)
    end
   end
-
-
-  
   def library_card_setting_show
   end
 
@@ -428,7 +415,7 @@ end
     @cource= Course.find(params[:card_add][:course_id])
     @librarycard=  @cource.library_card_setting.create(params.require(:card_add).permit!)
      @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
-    flash[:notice]="Library Card Created Successfully"
+     flash[:notice]="Library Card Created Successfully"
     
   end
 
@@ -538,8 +525,11 @@ def search_tags
      def update_tag
 
       @tag=Tag.find(params[:id])
-      @tag.update(get_tag)
+       @tag.update(get_tag)
+        flash[:notice]="Tag Update Successfully" 
       @tags=Tag.all
+
+    
      end
 
      def tag_related_book
@@ -562,7 +552,7 @@ def library_fines
        
     if params[:name].present?
        @student=Student.where("first_name LIKE '#{params[:name]}%' 
-        OR admission_no='#{params[:name]}%'")
+        OR admission_no='#{params[:name]}'")
     else
       p "-----------"
       startdate=params[:start_date]
@@ -614,8 +604,11 @@ def barcode_index
     @barcode=Book.find(params[:barcode])
   end
 
+  
+
+
   def update_barcode
-       error=false
+     error=false
     @barcode=params[:barcode]
     
     @barcode.each_pair do |k,v|
@@ -623,16 +616,18 @@ def barcode_index
       
       unless book.update(barcode_no:v)
         error=true
-      end
+       end
 
       if error==true
-        render 'manage_barcode'  
-      else
-          flash.now[:notice]="Barcode is not udate"
+        render 'manage_barcode'
+      else 
+        flash[:notice]="Barcode Update Successfully"
+       
+        end
       end
-    end
-       redirect_to library_management_barcode_index_path
+      redirect_to  library_management_barcode_index_path
   end
+
 
 
 

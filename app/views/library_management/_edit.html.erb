@@ -1,4 +1,6 @@
+<ul class="errors"></ul>
 <%=form_for @tag,url:{action:'update_tag'},method: :patch,remote:true do |f|%>
+<<<<<<< HEAD
 <% if @tag.errors.any? %>
 
 	
@@ -17,5 +19,11 @@
 <%=link_to "Cancle",""%></p>
 
 
+=======
+
+<p><%=f.text_field :name%>
+<%=f.submit :'Ok'%>
+<%=link_to "Cancel",""%></p>
+>>>>>>> 1d011e2f2e01762beaa8115fd547655d4cd57c8e
 <%end%>
 
