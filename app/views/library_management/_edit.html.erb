@@ -1,8 +1,29 @@
 <ul class="errors"></ul>
 <%=form_for @tag,url:{action:'update_tag'},method: :patch,remote:true do |f|%>
+<<<<<<< HEAD
+<% if @tag.errors.any? %>
+
+	
+    <div class="alert alert-danger">
+    <h2>Errors prohibited to being saved:</h2>
+    <h3>User account not created</h3>
+    <ul><% @book.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %></ul>
+    </div>
+  <% end %>
+
+<p><%=f.text_field :name%>
+<%=f.submit :'Ok'%>
+
+<%=link_to "Cancle",""%></p>
+
+
+=======
 
 <p><%=f.text_field :name%>
 <%=f.submit :'Ok'%>
 <%=link_to "Cancel",""%></p>
+>>>>>>> 1d011e2f2e01762beaa8115fd547655d4cd57c8e
 <%end%>
 

@@ -31,7 +31,7 @@ class LibraryManagementController < ApplicationController
       if params[:no_of_cpoies].to_i<1.to_i
        flash[:alert]="Number of copies can not be less than one"
        @book = Book.new
-       render library_management_addbooks_path
+       render library_management_add_books_path
       else
 
 
@@ -64,12 +64,12 @@ class LibraryManagementController < ApplicationController
       end
        if @error
 
-          render library_management_addbooks_path
+          render library_management_add_books_path
 
         else 
 
           redirect_to library_management_books_path
-         
+          flash[:notice]="Book Created Successfully"
           
        end
       end
@@ -80,13 +80,19 @@ class LibraryManagementController < ApplicationController
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
 
+      if params["book"]["barcode_no"]==""
+       flash[:alert]="please enter the barcode number"
+       @book = Book.new
+       render library_management_add_books_path
+      else
+        
         @book = Book.new
-        @book.barcode_no = params["book"]["barcode_no"].to_i
+        @book.barcode_no = params["book"]["barcode_no"]
         @book.book_no = params["book"]["book_no"].to_i
         @book.title =params["book"]["title"]
         @book.author=params["book"]["author"]
         @book.status="Available"
-        @book.save
+       if @book.save
      
         begin
           params["tag_ids"].each do |k|
@@ -99,9 +105,23 @@ class LibraryManagementController < ApplicationController
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
-          redirect_to library_management_books_path(@book)
+         else 
+      @error=true
     end
+         
+     
+      
+       if @error
 
+          render library_management_add_books_path
+
+        else 
+
+          redirect_to library_management_books_path
+          flash[:notice]="Book Created Successfully"
+           end 
+       end
+     end
   end
 
   def books_sorted_list
@@ -155,13 +175,11 @@ end
        unless params["cust_tag"][0].nil?
       @cust_tag_tmp=Tag.create(name: @cust_tag[0])
       end
-
-     
-        @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
+       if @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
         
-        @book.books_tag.each do |books_tag|
+          @book.books_tag.each do |books_tag|
           books_tag.destroy
-        end
+          end
         begin
         params["tag_ids"].each do |k|
           @book.books_tag.create(book_id:params["book_id"],tag_id: k)
@@ -174,7 +192,21 @@ end
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
-       redirect_to library_management_books_path(@book)
+     
+     else 
+      @error=true
+      end
+         
+       if @error
+
+          render library_management_add_books_path
+
+        else 
+
+          redirect_to library_management_books_path
+          flash[:notice]="Book Updated Successfully"
+       
+      end
  end
 
  def delete_book
@@ -184,6 +216,7 @@ end
         end
          @book.destroy
          redirect_to library_management_books_path(@book)
+          flash[:notice]="Book Deleted Successfully"
  end
  
   #---------------------------------------------------------------------------------------------
@@ -316,6 +349,7 @@ end
    	@student=Student.where(id: params['id']).take
   	@books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
   else
+    @due_date=Date.today+30
   	@employee=Employee.where(id: params['id']).take
   	@books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
   end
@@ -386,6 +420,7 @@ end
     @cource= Course.find(params[:card_add][:course_id])
     @librarycard=  @cource.library_card_setting.create(params.require(:card_add).permit!)
      @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
+    # flash[:notice]="Library Card Created Successfully"
     
   end
 
@@ -398,6 +433,7 @@ end
     @librarycard =LibraryCardSetting.where(id: params[:id]).take
     @librarycard.update(params.require(:card_add).permit!)
     @librarycards =LibraryCardSetting.where(course_id: params[:card_add][:course_id])
+   # flash[:notice]="Library Card Updated Successfully"
 
   end
 
@@ -406,7 +442,8 @@ end
     @librarycard =LibraryCardSetting.where(id: params[:id]).take
     course_id=@librarycard.course.id
     @librarycards.destroy
-    @librarycards =LibraryCardSetting.where(course_id: course_id)        
+    @librarycards =LibraryCardSetting.where(course_id: course_id)  
+   # flash[:notice]="Library Card Deleted Successfully"      
   end
 
   def library_fine_per_day_new
@@ -419,8 +456,8 @@ end
      PerDayFineDetail.all.each do |fine|
       fine.destroy
     end
-    PerDayFineDetail.create(params.require(:add_fine).permit!)
-         
+     PerDayFineDetail.create(params.require(:add_fine).permit!)
+     #flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 
   def manage_additional_details
@@ -435,28 +472,59 @@ end
 
 
 #Ravikiran Code From here
-
-
-  def search_book
-  end
   def renewal_book_search_result
-    @books=Book.where("(book_no=? OR barcode_no=?) AND status='borrowed'",get_book_barcode_no['bookno_barcode'],get_book_barcode_no['bookno_barcode'])
+    @book=Book.where("(book_no=? OR barcode_no=?) AND (status='Borrowed' OR status='Renewal')",get_book_barcode_no['bookno_barcode'],get_book_barcode_no['bookno_barcode'])
+    @b_id=Book.find_by_book_no(get_book_barcode_no['bookno_barcode'])
+    @issue_book_id=IssueBook.where("book_id=?",@b_id)
+    @check_due_date=@issue_book_id.where("status='Borrowed' OR status='Renewal'").take
   end
-  def renewal_book_form
-    @issue_book=IssueBook.find_by_book_id(params[:format])
-  end
-  def update_due_date
 
-    @issue_book=IssueBook.find(params[:id])
-    @issue_book.status='renewal'
-    if @issue_book.update(due_date_params)
-      flash.now[:notice] = 'Book renewal successfully'
-      render 'renewal_book_form'
-    else
-      flash.now[:notice] = 'Book renewal fail'
-      render 'renewal_book_form'
-    end
+  def renewal_book_form
+    @issue_book_id=IssueBook.where("book_id=? ",params[:format])
+    @issue_book=@issue_book_id.where("status='Borrowed' OR status='Renewal'").take
+    if @issue_book.employee_id.nil?
+      @student=Student.where(id: @issue_book.student_id).take
+      @no_of_days=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take
+    end  
   end
+
+  def update_due_date
+    @issue_book_record=IssueBook.find(params[:id])
+    if @issue_book_record.employee_id.nil?
+      @student=Student.where(id: @issue_book_record.student_id).take
+      @no_of_days=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take
+      @issue_book_record.status='Renewal'
+      @issue_book_record.due_date=params["issue_book"]["due_date"]
+      if @issue_book_record.due_date <= @issue_book_record.issue_date
+       flash.now[:notice] = 'Due date should be after issue date'
+       render 'search_book_for_renewal'
+      elsif @issue_book_record.due_date > Date.today+@no_of_days.time_period
+       flash.now[:notice] = 'Due date not allowed'
+       render 'search_book_for_renewal'
+      else
+       @issue_book_record.update(due_date_params)
+       @issue_book_record.book.update(status: "Renewal")
+       flash.now[:notice] = 'Book renewed successfully'
+       render 'search_book_for_renewal'
+      end
+    elsif @issue_book_record.student_id.nil?
+      @issue_book_record.status='Renewal'
+      @issue_book_record.due_date=params["issue_book"]["due_date"]
+      if @issue_book_record.due_date <= @issue_book_record.issue_date
+       flash.now[:notice] = 'Due date should be after issue date'
+       render 'search_book_for_renewal'
+      elsif @issue_book_record.due_date > Date.today+100
+       flash.now[:notice] = 'Due date not allowed'
+       render 'search_book_for_renewal'
+      else
+       @issue_book_record.update(due_date_params)
+       @issue_book_record.book.update(status: "Renewal")
+       flash.now[:notice] = 'Book renewed successfully'
+       render 'search_book_for_renewal'
+      end
+    end   
+  end
+  
   def movement_log_search_result
     if get_date_type_date['date_type']=='Issue date' 
       @issue_book_dates=IssueBook.where("issue_date=?",get_date_type_date['date'])
@@ -652,7 +720,7 @@ end
     params.require(:issue_book).permit(:due_date,:status)
   end
   def get_date_type_date
-    params.require(:msearch).permit!
+    params.require(:movement_log_search).permit!
   end
 #Sayali Parameters From Here
  def get_tag
