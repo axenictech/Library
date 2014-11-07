@@ -494,7 +494,7 @@ def search_tags
 
       @tag=Tag.find(params[:id])
        @tag.update(get_tag)
-        flash[:notice]="Tag Update Successfully" 
+        
       @tags=Tag.all
 
     
@@ -537,7 +537,10 @@ def library_fines
         end
        end
      end
+   else
+      @student=[]
       end
+
      end
   end
 
@@ -546,7 +549,8 @@ def library_fines
    def delete_fine
     @fine=Fine.find(params[:id])
     @fine.destroy
-
+    @student=[]
+   
    end
 
 

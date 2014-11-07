@@ -1,3 +1,5 @@
+
+
 <div id="content-header">
   <h1>Library Management</h1>
 </div>
@@ -9,7 +11,8 @@
     <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Library Fines
   </div>
  <%=form_for :fine ,url:{action:'detail_fine'},method: :get,html:{id: "fine_form"},remote:true do |f|%>
-
+<div id="flash-msg" style="display:none">
+<p class="flash-msg" style="margin-left: 160px;"> <d id="msg">Tag Deleted Successfully</d></p></div>
  <%= f.label :Payee%>
   <%= text_field_tag :name,"",{oninput:"$('#fine_form').submit();"}%>
   <br>
