@@ -521,11 +521,12 @@ def library_fines
        
     if params[:name].present?
        @student=Student.where("first_name LIKE '#{params[:name]}%' 
-        OR admission_no='#{params[:name]}'")
-    else
-      p "-----------"
-      startdate=params[:start_date]
-        enddate=params[:end_date]
+        OR admission_no LIKE '#{params[:name]}%'")
+    
+    else 
+        if params[:start_date].present? && params[:end_date].present?
+        startdate=params[:start_date]
+       enddate=params[:end_date]
      
       @student=[]
       @fines=Fine.where(created_at:startdate..enddate)
@@ -536,6 +537,7 @@ def library_fines
          @student<<f.issue_book.student
         end
        end
+     end
       end
      end
   end
