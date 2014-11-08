@@ -85,7 +85,6 @@ patch 'library_management/update_due_date',to: 'library_management#update_due_da
 get 'library_management/movement_log_search',to: 'library_management#movement_log_search',as: 'library_management_movement_log_search'
 get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_management_movement_log_search_result'
 
-
 devise_for :users 
 
 mount Ckeditor::Engine => '/ckeditor'

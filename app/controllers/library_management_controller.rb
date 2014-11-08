@@ -530,6 +530,8 @@ end
     @b_id=Book.find_by_book_no(get_book_barcode_no['bookno_barcode'])
     @issue_book_id=IssueBook.where("book_id=?",@b_id)
     @check_due_date=@issue_book_id.where("status='Borrowed' OR status='Renewal'").take
+    @admin_renewal_counter=OtherLibrarySetting.first.times_renew_book
+    @renewal_counter=@check_due_date.no_of_time_book_renewed
   end
 
   def renewal_book_form
@@ -538,7 +540,15 @@ end
     if @issue_book.employee_id.nil?
       @student=Student.where(id: @issue_book.student_id).take
       @no_of_days=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take
-    end  
+    end
+
+    if @issue_book.due_date <=Date.today
+      @fine_amount=OtherLibrarySetting.first.fine_per_day.to_i
+      @due_amount=((Date.today-@issue_book.due_date)*@fine_amount).to_i
+      if @due_amount.nil?
+        @due_amount=0.to_i
+      end
+    end
   end
 
   def update_due_date
@@ -548,15 +558,14 @@ end
       @no_of_days=LibraryCardSetting.where(course_id:@student.batch.course_id,category_id: @student.category_id).take
       @issue_book_record.status='Renewal'
       @issue_book_record.due_date=params["issue_book"]["due_date"]
-      if @issue_book_record.due_date <= @issue_book_record.issue_date
+      if @issue_book_record.due_date <= Date.today
        flash.now[:notice] = 'Due date should be after issue date'
-       render 'search_book_for_renewal'
-      elsif @issue_book_record.due_date > Date.today+@no_of_days.time_period
-       flash.now[:notice] = 'Due date not allowed'
        render 'search_book_for_renewal'
       else
        @issue_book_record.update(due_date_params)
        @issue_book_record.book.update(status: "Renewal")
+       Fine.create(issue_book_id: @issue_book_record.id,amount: params["issue_book"]["amount"])
+
        flash.now[:notice] = 'Book renewed successfully'
        render 'search_book_for_renewal'
       end
@@ -565,9 +574,6 @@ end
       @issue_book_record.due_date=params["issue_book"]["due_date"]
       if @issue_book_record.due_date <= @issue_book_record.issue_date
        flash.now[:notice] = 'Due date should be after issue date'
-       render 'search_book_for_renewal'
-      elsif @issue_book_record.due_date > Date.today+100
-       flash.now[:notice] = 'Due date not allowed'
        render 'search_book_for_renewal'
       else
        @issue_book_record.update(due_date_params)
@@ -771,7 +777,7 @@ end
     params.require(:search).permit!
   end
   def due_date_params
-    params.require(:issue_book).permit(:due_date,:status)
+    params.require(:issue_book).permit(:due_date,:status,:no_of_time_book_renewed)
   end
   def get_date_type_date
     params.require(:movement_log_search).permit!

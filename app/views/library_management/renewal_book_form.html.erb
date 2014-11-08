@@ -1,24 +1,38 @@
 <div id="content-header">
   <h1>Library</h1>
   <h3>Book Renewal</h3>
-  <div id="app-back-button">
-    <%= link_to image_tag("buttons/back.png",:border => 0), :back %>
-  </div>
+    <div id="app-back-button">
+      <%= link_to image_tag("buttons/back.png",:border => 0), :back %>
+    </div>
+
     <div><%= image_tag("underline.jpg",width: "100%")%></div>
 </div><br/><br/>
 
-
 <div id="page-yield">
-
 <div align="center">
 <ul class="errors3"></ul>
-  </div>
 <% if @issue_book.employee_id.nil? %>
-Your due date for renewal is : <% d= Date.today+@no_of_days.time_period %> <%=d%>
+    <%if @issue_book.due_date <=Date.today%>
+        <% day=(Date.today-@issue_book.due_date).to_i%>
+        <div class="name exceeded"> Due date has been exceeded by <%= day%> and fine amount per day is <%=@fine_amount%></div><br>
+    <%end%>
+
+    
 <%end%>
+</div>
+
+
+
 <%= form_for @issue_book,url:{action: 'update_due_date',id:@issue_book.id} do |c|%>
     <table class="table" style="width:500px" align="center">
-  <tbody>
+    <tbody>
+    <% if @issue_book.employee_id.nil? %>
+    <%if @issue_book.due_date <=Date.today%>
+    <td><%=c.label :'fine amount'%></td>
+    <td><%=c.text_field :amount,value:@due_amount%></td>
+    <%end%>
+    <%end%>
+
     <tr>
       <td><%= c.label :'book number'%></td>
       <td><%= text_field_tag :book_no,@issue_book.book.book_no,readonly:true %></td>
@@ -59,6 +73,16 @@ Your due date for renewal is : <% d= Date.today+@no_of_days.time_period %> <%=d%
       <td><%= c.date_field :due_date %></td>
     </tr>
 
+    <% if @issue_book.employee_id.nil? %>
+       <% if @issue_book.no_of_time_book_renewed.nil? %>
+          <td><%= c.label :'renewal counter'%></td>
+          <td><%= c.text_field :no_of_time_book_renewed,value:'1',readonly:true %></td>
+        <%else%>
+        <td><%= c.label :'renewal counter'%></td>
+          <td><%= c.text_field :no_of_time_book_renewed,value:@issue_book.no_of_time_book_renewed+1,readonly:true %></td>
+        
+        <%end%>
+    <%end%> 
     
     <tr>
       <td><%=c.submit "Renew",{:class=>"submit_button",style: "margin-left:10px;"}%></td>
@@ -66,5 +90,5 @@ Your due date for renewal is : <% d= Date.today+@no_of_days.time_period %> <%=d%
     </tr>
   </tbody>
 </table>
+</div>
 <%end%></div>
- 
