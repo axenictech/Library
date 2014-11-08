@@ -22,6 +22,8 @@ get 'library_management/get_book_details',to: 'library_management#get_book_detai
 get 'library_management/search_book_for_return',to: 'library_management#search_book_for_return',as: 'library_management_search_book_for_return'
 post 'library_management/search_book_for_return_result',to: 'library_management#search_book_for_return_result',as: 'library_management_search_book_for_return_result'
 get 'library_management/:id/process_return_book',to: 'library_management#process_return_book',as: 'library_management_process_return_book'
+get 'library_management/no_due_check',to: 'library_management#no_due_check',as: 'library_management_no_due_check'
+post 'library_management/no_due_check_result',to: 'library_management#no_due_check_result',as: 'library_management_no_due_check_result'
 
 get 'library_management/library_card_setting_show',to: 'library_management#library_card_setting_show',as: 'library_management_library_card_setting_show'
 get 'library_management/library_get_library_card_setting',to: 'library_management#library_get_library_card_setting',as: 'library_management_library_get_library_card_setting'

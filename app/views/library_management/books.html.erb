@@ -62,8 +62,7 @@
           <td>Status </td>
           <td></td>
         </tr>
-        <tr class="tr-odd"></tr>
-        <%begin%>
+       <%begin%>
       <% @books.each do |b|%>
       <tr class="tr-blank">
           <td class="col-3"><%=b.book_no%></td>
@@ -80,7 +79,11 @@
                <% else %>
                <%= link_to 'Edit',library_management_edit_book_path(b)%>|
             <% end %>
+            <% if b.status=="Borrowed" %>
+               <span class="small-strike">Delete |</span>
+                <% else %>
             <%= link_to 'Delete',library_management_delete_book_path(b),method: :delete,data: { confirm: 'Are you sure?' }%>
+            <% end %>
            </small></td>
         </tr>
       <%end%>
@@ -96,6 +99,7 @@
 <%rescue Exception=>e%>
 <p class="flash-msg" style="margin-left: 160px;"> No books found.Try Again</p>
  <%end%>
+ <br><br>
         <div class="pagination"><a href="/books?page=1" class="prev_page" rel="prev start">&laquo; Previous</a> <a href="/books?page=1" rel="prev start">1</a> <span class="current">2</span> <span class="disabled next_page">Next &raquo;</span></div>
 
     </div>

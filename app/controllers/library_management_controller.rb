@@ -4,8 +4,7 @@ class LibraryManagementController < ApplicationController
   end
    #-----------------------------Manage Books---------------------------------------------------
   def books
-    @books = Book.all
-    
+    @books =Book.order('book_no')
   end
 
   def add_books
@@ -30,7 +29,9 @@ class LibraryManagementController < ApplicationController
       end
       if params[:no_of_cpoies].to_i<1.to_i
        flash[:alert]="Number of copies can not be less than one"
-       @book = Book.new
+       @book = Book.new(params["book"].permit!)
+       @cust_tag=params["cust_tag"]
+       @no_of_cpoies=params["no_of_cpoies"]
        render library_management_add_books_path
       else
 
@@ -121,7 +122,7 @@ class LibraryManagementController < ApplicationController
   def books_sorted_list
   @books_filter = get_fiterby_status_book['All']
   if  @books_filter=='All'
-    @books =Book.all
+    @books =Book.order('book_no')
  else
   @books=Book.where("status = ?",get_fiterby_status_book['All'])  
 end
@@ -217,6 +218,23 @@ end
  end
  
   #---------------------------------------------------------------------------------------------
+  def no_due_check
+
+  end
+  def no_due_check_result
+  begin
+  if params["search"]["filter"]=="Student"
+  @student=Student.where(admission_no: params["search"]['id']).take
+  @books_taken=IssueBook.where("student_id=? and status='Borrowed'",@student.id)
+  else
+  @employee=Employee.where(id: params["search"]['id']).take
+  @books_taken=IssueBook.where("employee_id=? and status='Borrowed'",@employee.id)
+ end
+  rescue Exception =>e
+  end
+  end
+
+
   def return_books
   	
   end
