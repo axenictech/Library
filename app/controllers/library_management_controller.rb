@@ -25,7 +25,7 @@ class LibraryManagementController < ApplicationController
 
       @cust_tag= params["cust_tag"]
      
-      unless params["cust_tag"][0].nil?
+      unless params["cust_tag"]==""
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
       if params[:no_of_cpoies].to_i<1.to_i
@@ -53,30 +53,24 @@ class LibraryManagementController < ApplicationController
         end # end of begin
 
         @cust_tag= params["cust_tag"]
-      unless params["cust_tag"][0].nil?
+      unless params["cust_tag"]==""
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
     else 
       @error=true
-    end
-         
-        
+    end       
       end
        if @error
-
-          render library_management_add_books_path
-
-        else 
-
+      render library_management_add_books_path
+     else 
           redirect_to library_management_books_path
           flash[:notice]="Book Created Successfully"
-          
        end
       end
     else 
 
       @cust_tag= params["cust_tag"]
-       unless params["cust_tag"][0].nil?
+       unless params["cust_tag"]==""
       @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
 
@@ -101,7 +95,7 @@ class LibraryManagementController < ApplicationController
          rescue Exception => e
          end
         @cust_tag= params["cust_tag"]
-      unless params["cust_tag"][0].nil?
+      unless params["cust_tag"]==""
           @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
       end 
 
@@ -149,7 +143,7 @@ end
     elsif @book_search_choice=="Title"
         @books=Book.where("title=?",@book_search_field)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take))
+        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take).pluck(:book_id))
     else @book_search_choice=="Author"
         @books=Book.where("author=?",@book_search_field)
     end
@@ -172,40 +166,43 @@ end
      @book = Book.find(params[:id])
 
       @cust_tag= params["cust_tag"]
-       unless params["cust_tag"][0].nil?
-      @cust_tag_tmp=Tag.create(name: @cust_tag[0])
+       unless params["cust_tag"]==""
+      @cust_tag_tmp=Tag.create(name: @cust_tag)
       end
-       if @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
-        
-          @book.books_tag.each do |books_tag|
-          books_tag.destroy
-          end
-        begin
-        params["tag_ids"].each do |k|
-          @book.books_tag.create(book_id:params["book_id"],tag_id: k)
-        end
-        rescue Exception => e
-         end
+      p "--------------"
+      p @book.update(barcode_no: params["book"]["barcode_no"].to_i,book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
+       if @book.update(barcode_no: params["book"]["barcode_no"],book_no: params["book"]["book_no"].to_i,title: params["book"]["title"],author: params["book"]["author"],status: params["book"]["status"])
+                @book.books_tag.each do |books_tag|
+                books_tag.destroy
+             end
+              begin
+              params["tag_ids"].each do |k|
+                @book.books_tag.create(book_id:params["book_id"],tag_id: k)
+              end
+              rescue Exception => e
+                 render "edit_book"
+                 return
+               end
 
-        @cust_tag= params["cust_tag"]
-      unless params["cust_tag"][0].nil?
-          @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
-      end 
-
-     
+              @cust_tag= params["cust_tag"]
+            unless params["cust_tag"]==""
+                @book.books_tag.create(book_id: @book.id,tag_id: @cust_tag_tmp.id)
+            end 
      else 
       @error=true
+       render "edit_book"
+       return
       end
          
        if @error
+        p "------------------if"
+      render "edit_book"
+       else 
 
-          render library_management_add_books_path
-
-        else 
-
-          redirect_to library_management_books_path
-          flash[:notice]="Book Updated Successfully"
-       
+        p "------------------else"
+       @books = Book.all
+       redirect_to library_management_books_path(@books)
+       flash[:notice]="Book Updated Successfully"
       end
  end
 
@@ -363,14 +360,15 @@ end
   end
   def process_return_book
      @book=IssueBook.where("book_id = ? AND status='Borrowed'", params['id']).take   
-     if @book.due_date <=Date.today
-      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+     @due_amount=0
+   if @book.due_date <=Date.today
+      begin
+      @fine_amount=OtherLibrarySetting.first.fine_per_day.to_i
       @due_amount=((Date.today-@book.due_date)*@fine_amount).to_i
-      if@due_amount.nil?
+      rescue
         @due_amount=0.to_i
       end
-     end
-
+    end
   end
   def return_books
    begin
@@ -397,10 +395,12 @@ end
 
   def lost_book
   @book=IssueBook.where("id = ? AND status='Borrowed'",params["format"]).take 
+  @due_amount=0
   if @book.due_date <=Date.today
-      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+    begin
+      @fine_amount=OtherLibrarySetting.first.fine_per_day.to_i
       @due_amount=((Date.today-@book.due_date)*@fine_amount).to_i
-      if@due_amount.nil?
+      rescue
         @due_amount=0.to_i
       end
     end
@@ -475,15 +475,12 @@ end
 
   def library_fine_per_day_new
 
-    @fineperday = PerDayFineDetail.new
+    @fineperday = OtherLibrarySetting.new
 
   end
 
   def library_fine_per_day_add
-     PerDayFineDetail.all.each do |fine|
-      fine.destroy
-    end
-     PerDayFineDetail.create(params.require(:add_fine).permit!)
+      OtherLibrarySetting.create(params.require(:add_fine).permit!)
      #flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 
@@ -683,16 +680,17 @@ def barcode_index
     @barcode.each_pair do |k,v|
       book=Book.find(k)
       
-      unless book.update(barcode_no:v)
+      if book.update(barcode_no:v)
         error=true
-       end
-
-      if error==true
-        render 'manage_barcode'
+      
+     else
+      error=false
+     end
+      if error==false
+        flash[:notice]="Some or all barcodes are not updated (barcodes contains only digits)"
       else 
-        flash[:notice]="Barcode Update Successfully"
-       
-        end
+        flash[:notice]="Barcodes updated successfully"
+     end
       end
       redirect_to  library_management_barcode_index_path
   end
