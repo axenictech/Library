@@ -1,5 +1,5 @@
 
-<% unless flash[:notice].nil? %><p class="flash-msg"> <%= flash[:notice] %> </p><% end %>
+
 <div id="content-header">
   <h1>Library Management</h1>
 </div>
@@ -13,12 +13,14 @@
   
  <%=form_for :tag ,url:tags_search_tags_path,method: :get,html:{id: "tag_form"},remote:true do |f|%>
 <br>
+<div id="flash-msg" style="display:none">
+<p class="flash-msg" style="margin-left: 160px;"> <d id="msg"></d></p></div>
   <p><%= f.label :Search%>
   <%= text_field_tag :name,"",{oninput:"$('#tag_form').submit();"}%>
  </p>
  
  <%end%>
-<br><br>
+<br>
 <div id="show">
 <%= render 'tag_show'%>
 </div>

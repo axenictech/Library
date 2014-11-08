@@ -6,4 +6,6 @@ $("ul.errors").html("")
 		<% end %>
 <% else %>
 $("#show").html("<%=j render 'tag_show'%>")
+$("#msg").html("Tag updated Successfully");
+$("#flash-msg").show();
 <%end%>

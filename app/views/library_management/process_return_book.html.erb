@@ -10,9 +10,7 @@
 <div class="bread_crumb">
    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Return Books
   </div>
-  
-  
-  <div class="search_form">
+    <div class="search_form">
      <%=form_for :returnbook,url: library_management_return_books_path  do |form|%>
       
       <div id="book_return" >
@@ -40,14 +38,10 @@
 
  		<div class="name">Enter Fine Amount</div><div class="val themed_text"><span>:</span><%=form.text_field :amount,value:@due_amount%></div>
 
-       
-       
-
-       
        <%end%>
 
        <%=form.submit "Return",{:class=>"submit_button",style: "margin-left:10px;"}%>
-       <%=link_to "Lost", library_management_books_path,{class:"submit_button"}%> 
+       <%=link_to "Process to Lost Book", library_management_lost_book_path(@book),{class:"submit_button"}%> 
        <%end%>
       </div>
     

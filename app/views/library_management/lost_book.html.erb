@@ -10,10 +10,8 @@
 <div class="bread_crumb">
    <%=link_to "Home",new_user_session_path%> &raquo;<%=link_to "Library",library_management_library_dashboard_path%> &raquo;Return Books
   </div>
-  
-  
   <div class="search_form">
-     <%=form_for :returnbook,url: library_management_return_books_path  do |form|%>
+     <%=form_for :lostbook,url: library_management_lost_book_submit_path,method: :post  do |form|%>
       
       <div id="book_return" >
       <%if @book.due_date <=Date.today%>
@@ -32,22 +30,13 @@
         <div class="name">Book due date</div><div class="val themed_text"><span>:</span><%=@book.due_date%></div>
         <div class="extender"></div>
         <br/>
-      
+     
        <%=form.hidden_field :book_id,:value => @book.id%>
        <%if @book.due_date <=Date.today%>
-
-
-
-    <div class="name">Enter Fine Amount</div><div class="val themed_text"><span>:</span><%=form.text_field :amount,value:@due_amount%></div>
-
-       
-       
-
-       
+    <div class="name">Enter Due Amount</div><div class="val themed_text"><span>:</span><%=form.text_field :amount,value:@due_amount%></div>
        <%end%>
-
-       <%=form.submit "Return",{:class=>"submit_button",style: "margin-left:10px;"}%>
-       <%=link_to "Lost", library_management_books_path,{class:"submit_button"}%> 
+    <div class="name">Enter  Book Price</div><div class="val themed_text"><span>:</span><%=form.text_field :book_price,value:"0"%></div>
+       <%=form.submit "Submit Lost",{:class=>"submit_button",style: "margin-left:10px;"}%>
        <%end%>
       </div>
     
