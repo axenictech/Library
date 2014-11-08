@@ -66,7 +66,7 @@ delete 'library_management/:id/delete_fine',to: 'library_management#delete_fine'
 
 
 #Library Book Renewal Routes
-<<<<<<< HEAD
+
 get 'library_management/search_book',to: 'library_management#search_book',as: 'library_book_renewals_search_book'
 get 'library_management/renewal_book_search_result',to: 'library_management#renewal_book_search_result',as: 'library_book_renewals_renewal_book_search_result'
 get 'library_management/renewal_book_form',to: 'library_management#renewal_book_form',as: 'library_book_renewals_renewal_book_form'
@@ -75,7 +75,7 @@ get 'library_management/movement_log_search',to: 'library_management#movement_lo
 get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
 get 'library_management/lost_book',to: 'library_management#lost_book',as: 'library_management_lost_book'
 post 'library_management/lost_book_submit',to: 'library_management#lost_book_submit',as: 'library_management_lost_book_submit'
-=======
+
 get 'library_management/search_book_for_renewal',to: 'library_management#search_book_for_renewal',as: 'library_management_search_book_for_renewal'
 get 'library_management/renewal_book_search_result',to: 'library_management#renewal_book_search_result',as: 'library_management_renewal_book_search_result'
 get 'library_management/renewal_book_form',to: 'library_management#renewal_book_form',as: 'library_management_renewal_book_form'
@@ -84,7 +84,7 @@ get 'library_management/movement_log_search',to: 'library_management#movement_lo
 get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_management_movement_log_search_result'
 
 
->>>>>>> 3a282dfecd339defdd0d9a6f0ebacf8dbae7614f
+
 
 
 
