@@ -284,13 +284,9 @@ end
     @book=Book.where(id: params["search"]['book_id']).take
   if params["search"]['filter']=="Student"
   	@student=Student.where(admission_no: params["search"]['id']).take
-
-
   else
   	@employee=Employee.where(employee_number: params["search"]['id']).take
-  	
   end
-  
   rescue Exception =>e
   end
   end
@@ -344,7 +340,7 @@ end
 
   end
   def return_books
-    begin
+   begin
    @book=IssueBook.where("id = ? AND status='Borrowed'",params["returnbook"]["book_id"]).take   
    if @book.due_date >=Date.today
    @book.update(status: "Available",returned_date: Date.today)
@@ -365,6 +361,37 @@ end
     redirect_to library_management_search_book_for_return_path(@message)
    end
   end
+
+  def lost_book
+  @book=IssueBook.where("id = ? AND status='Borrowed'",params["format"]).take 
+  if @book.due_date <=Date.today
+      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+      @due_amount=((Date.today-@book.due_date)*@fine_amount).to_i
+      if@due_amount.nil?
+        @due_amount=0.to_i
+      end
+    end
+  end
+  def lost_book_submit
+  @book=IssueBook.where("id = ? AND status='Borrowed'",params["lostbook"]["book_id"]).take   
+  @fine_amount=0.to_f
+  begin
+  if @book.due_date <=Date.today
+  @fine_amount=params["lostbook"]["amount"]
+  end
+  @book_price=params["lostbook"]["book_price"]
+  @total_fine=@fine_amount.to_f+@book_price.to_f
+  Fine.create(issue_book_id: @book.id,amount: @total_fine)
+  @book.update(status: "Lost",returned_date: Date.today)
+  @book.book.update(status: "Lost")
+  @message="Book updated to Lost"
+  redirect_to library_management_search_book_for_return_path(@message)
+  rescue Exception=>e
+    @message="Book alredy updated to Lost"
+  redirect_to library_management_search_book_for_return_path(@message)
+  end
+  end
+
   def library_card_setting_show
   end
 

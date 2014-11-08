@@ -74,8 +74,8 @@ get 'library_management/renewal_book_form',to: 'library_management#renewal_book_
 patch 'library_management/update_due_date',to: 'library_management#update_due_date',as: 'library_book_renewals_update_due_date'
 get 'library_management/movement_log_search',to: 'library_management#movement_log_search',as: 'library_book_renewals_movement_log_search'
 get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_book_renewals_movement_log_search_result'
-
-
+get 'library_management/lost_book',to: 'library_management#lost_book',as: 'library_management_lost_book'
+post 'library_management/lost_book_submit',to: 'library_management#lost_book_submit',as: 'library_management_lost_book_submit'
 
 
 
