@@ -512,7 +512,7 @@ end
     end
 
     if @issue_book.due_date <=Date.today
-      @fine_amount=PerDayFineDetail.first.fine_per_day.to_i
+      @fine_amount=OtherLibrarySetting.first.fine_per_day.to_i
       @due_amount=((Date.today-@issue_book.due_date)*@fine_amount).to_i
       if @due_amount.nil?
         @due_amount=0.to_i
