@@ -16,8 +16,12 @@
         <% day=(Date.today-@issue_book.due_date).to_i%>
         <div class="name exceeded"> Due date has been exceeded by <%= day%> and fine amount per day is <%=@fine_amount%></div><br>
     <%end%>
+
+    
 <%end%>
 </div>
+
+
 
 <%= form_for @issue_book,url:{action: 'update_due_date',id:@issue_book.id} do |c|%>
     <table class="table" style="width:500px" align="center">
@@ -69,6 +73,16 @@
       <td><%= c.date_field :due_date %></td>
     </tr>
 
+    <% if @issue_book.employee_id.nil? %>
+       <% if @issue_book.no_of_time_book_renewed.nil? %>
+          <td><%= c.label :'renewal counter'%></td>
+          <td><%= c.text_field :no_of_time_book_renewed,value:'1',readonly:true %></td>
+        <%else%>
+        <td><%= c.label :'renewal counter'%></td>
+          <td><%= c.text_field :no_of_time_book_renewed,value:@issue_book.no_of_time_book_renewed+1,readonly:true %></td>
+        
+        <%end%>
+    <%end%> 
     
     <tr>
       <td><%=c.submit "Renew",{:class=>"submit_button",style: "margin-left:10px;"}%></td>

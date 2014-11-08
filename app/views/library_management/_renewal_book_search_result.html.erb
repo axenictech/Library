@@ -3,8 +3,11 @@
 <% else %>
 <% if @book.empty? %>
   <p class="flash-msg" style="margin-left: 160px">No book found</p>
-<% else %>
+    <% else %>
+<% if @renewal_counter==@admin_renewal_counter %>
+  <p class="flash-msg" style="margin-left: 160px">Book renewal limit is over</p>
 
+<% else %>
   <div class="col-md-1"></div>
     <table align="center" class="table table-hover" style="width:1000px">
       <tr>
@@ -23,5 +26,6 @@
         <%end%>
     </table>    
 <%end%>  
+<%end%>
 <%end%>
 

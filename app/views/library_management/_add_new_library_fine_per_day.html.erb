@@ -22,9 +22,16 @@
 
 
       <div class="label-field-pair">
-       <d><%=form.label :fine_per_day,"Time Period"%></d>
+       <d><%=form.label :fine_per_day,"Fine per Day (Optional)[Rs] "%></d>
       <div class="text-input-bg">
-      <%=form.text_field :fine_per_day,style:"width:215px;height:27px"%>Rs
+      <%=form.text_field :fine_per_day,style:"width:215px;height:27px"%>
+      </div>
+      </div>
+<br><br>
+       <div class="label-field-pair">
+       <d><%=form.label :book_renewed,"Number of times Book Renewed (Optional)"%></d>
+      <div class="text-input-bg">
+      <%=form.text_field :times_renew_book,style:"width:215px;height:27px"%>
       </div>
       </div>
     <br>

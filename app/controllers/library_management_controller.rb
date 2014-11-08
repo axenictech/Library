@@ -141,11 +141,11 @@ end
     elsif @book_search_choice=="Barcode"
         @books=Book.where("barcode_no=?",@book_search_field)
     elsif @book_search_choice=="Title"
-        @books=Book.where("title=?",@book_search_field)
+        @books=Book.where("title=? or title=? or title=?",@book_search_field.strip,@book_search_field.downcase.camelize.strip,@book_search_field.downcase.strip)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take).pluck(:book_id))
+        @books=Book.where(id: BooksTag.where(tag_id: Tag.where("name=? or name=? or name=?",@book_search_field.strip,@book_search_field.downcase.camelize.strip,@book_search_field.downcase.strip).take).pluck(:book_id))
     else @book_search_choice=="Author"
-        @books=Book.where("author=?",@book_search_field)
+     @books=Book.where("author=? or author=? or author=?",@book_search_field.strip,@book_search_field.downcase.camelize.strip,@book_search_field.downcase.strip)
     end
   end
 
@@ -480,7 +480,18 @@ end
   end
 
   def library_fine_per_day_add
+
+    if OtherLibrarySetting.first.nil?
       OtherLibrarySetting.create(params.require(:add_fine).permit!)
+    else
+    if params["add_fine"]["fine_per_day"].present? 
+      OtherLibrarySetting.first.update(fine_per_day: params["add_fine"]["fine_per_day"])
+    end
+    if params["add_fine"]["times_renew_book"].present?
+      OtherLibrarySetting.first.update(times_renew_book: params["add_fine"]["times_renew_book"])
+    end
+      
+  end
      #flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 
@@ -501,6 +512,8 @@ end
     @b_id=Book.find_by_book_no(get_book_barcode_no['bookno_barcode'])
     @issue_book_id=IssueBook.where("book_id=?",@b_id)
     @check_due_date=@issue_book_id.where("status='Borrowed' OR status='Renewal'").take
+    @admin_renewal_counter=OtherLibrarySetting.first.times_renew_book
+    @renewal_counter=@check_due_date.no_of_time_book_renewed
   end
 
   def renewal_book_form
@@ -746,7 +759,7 @@ end
     params.require(:search).permit!
   end
   def due_date_params
-    params.require(:issue_book).permit(:due_date,:status)
+    params.require(:issue_book).permit(:due_date,:status,:no_of_time_book_renewed)
   end
   def get_date_type_date
     params.require(:movement_log_search).permit!
@@ -754,4 +767,4 @@ end
 #Sayali Parameters From Here
  def get_tag
       params.require(:tag).permit!
-     end
+ end
