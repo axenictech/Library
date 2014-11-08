@@ -84,10 +84,13 @@ get 'library_management/movement_log_search',to: 'library_management#movement_lo
 get 'library_management/movement_log_search_result',to: 'library_management#movement_log_search_result',as: 'library_management_movement_log_search_result'
 
 
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> 591e0e70a0e0d029b1d07e8ab7fb7268e741fe2a
 devise_for :users 
 
 mount Ckeditor::Engine => '/ckeditor'
