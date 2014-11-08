@@ -141,11 +141,11 @@ end
     elsif @book_search_choice=="Barcode"
         @books=Book.where("barcode_no=?",@book_search_field)
     elsif @book_search_choice=="Title"
-        @books=Book.where("title=?",@book_search_field)
+        @books=Book.where("title=? or title=? or title=?",@book_search_field.strip,@book_search_field.downcase.camelize.strip,@book_search_field.downcase.strip)
     elsif  @book_search_choice=="Tag"
-        @books=Book.where(id: BooksTag.where(tag_id: Tag.where(name: @book_search_field).take).pluck(:book_id))
+        @books=Book.where(id: BooksTag.where(tag_id: Tag.where("name=? or name=? or name=?",@book_search_field.strip,@book_search_field.downcase.camelize.strip,@book_search_field.downcase.strip).take).pluck(:book_id))
     else @book_search_choice=="Author"
-        @books=Book.where("author=?",@book_search_field)
+     @books=Book.where("author=? or author=? or author=?",@book_search_field.strip,@book_search_field.downcase.camelize.strip,@book_search_field.downcase.strip)
     end
   end
 
@@ -480,7 +480,18 @@ end
   end
 
   def library_fine_per_day_add
+
+    if OtherLibrarySetting.first.nil?
       OtherLibrarySetting.create(params.require(:add_fine).permit!)
+    else
+    if params["add_fine"]["fine_per_day"].present? 
+      OtherLibrarySetting.first.update(fine_per_day: params["add_fine"]["fine_per_day"])
+    end
+    if params["add_fine"]["times_renew_book"].present?
+      OtherLibrarySetting.first.update(times_renew_book: params["add_fine"]["times_renew_book"])
+    end
+      
+  end
      #flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 
@@ -750,4 +761,4 @@ end
 #Sayali Parameters From Here
  def get_tag
       params.require(:tag).permit!
-     end
+ end
