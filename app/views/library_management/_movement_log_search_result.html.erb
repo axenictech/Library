@@ -1,16 +1,18 @@
 
 <% if @issue_book_dates.nil? %>
-  <h4 align="center">No Record Found </h4>
+  <p class="flash-msg">No books found.Try Again</p>
 <% else %>
   <% if @issue_book_dates.empty? %>
-  <h4 align="center">No Record Found </h4>
-<% else %>
+  <p class="flash-msg">No books found.Try Again</p>
+  <% else %>
+Total Number of Books : <%@count= @issue_book_dates.count%>
+<%=@count%>
   <div class="col-md-1"></div>
       <table align="center" class="table table-hover" >
       <tr>
         <th col-md-2> Serial Number </th>
         <th col-md-2> Book Number </th>
-        <th col-md-2> Borrewed by </th>
+        <th col-md-2> Borrowed by </th>
         <th col-md-2> Status </th>
         <th col-md-2> Issue date </th>
         <th col-md-2> Due date </th>
@@ -20,9 +22,9 @@
             <td col-md-2><%= i+1 %></td>
             <td col-md-2><%= f.book.book_no %></td>
             <% if f.employee_id.nil? %>
-            <td col-md-2><%= f.student.first_name %></td>
+            <td col-md-2><%= link_to f.student.first_name+" "+f.student.last_name+"-"+f.student.admission_no,students_profile_path(f.student.id) %></td>
             <%else%>
-            <td col-md-2><%= f.employee.first_name %></td>
+            <td col-md-2><%= f.employee.first_name+""+f.employee.last_name+"-"+f.employee.employee_number %></td>
             <%end%>
             <td col-md-2><%= f.status %></td>
             <td col-md-2><%= f.issue_date %></td>

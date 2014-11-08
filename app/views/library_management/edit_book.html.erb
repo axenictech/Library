@@ -20,6 +20,15 @@
 
  <%= form_for @book,url:{action: 'update_book', book_id: @book.id},method: :patch do |form|%>
 
+    <% if @book.errors.any? %>
+    <div class="alert alert-danger">
+    <h2>Errors prohibited to being saved:</h2>
+    <h3>Book not Updated</h3>
+    <ul><% @book.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %></ul>
+    </div>
+  <% end %>
       
       <div class="label-field-pair">
 	  <d><%=form.label :book_number,"Book Number"%><span class="necessary-field">*</span></d>

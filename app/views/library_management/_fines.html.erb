@@ -1,4 +1,5 @@
-<%if @student.nil? %>
+
+<%if @student.count<1 %>
 
   
   <p class="flash-msg" style="margin-left: 160px;"> No Record found.</p> 
@@ -11,9 +12,11 @@
       		<th>Name </th>
       		<th>Amount</th>
           <th>Payment Date</th>
+          <th></th>
         </tr>
     </thead>
     <tbody>
+
       <% @student.each_with_index do |student,i|%>
         <% IssueBook.where(student_id:student.id).each do |issuebook|%>
           <%if fine=Fine.where(issue_book_id:issuebook.id).take%>
@@ -22,7 +25,8 @@
           	 	<td><%= fine.issue_book.student.first_name%>(<%= fine.issue_book.student.admission_no%>)</td>
           	  
               <td><%= fine.amount%></td>
-               <td> <%= fine.issue_book.created_at.to_date%></td>        
+               <td> <%= fine.issue_book.created_at.to_date%></td>  
+               <td><%=link_to "Delete",fines_delete_fine_path(fine.id),method: :delete,data:{confirm:'Are you sure?'},remote:true%></td>      
             </tr>
           <%end%>
         <%end%>
