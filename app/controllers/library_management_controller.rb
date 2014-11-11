@@ -151,14 +151,10 @@ end
   end
 
   def reserve_book
-    
    @book = Book.where("id = ? AND status = 'Available'",params[:book_id]).take
    @book.update(status: 'Reserved')
    @book = Book.where(id: params[:book_id]).take
-
-
-
-  end
+   end
 
   def edit_book
     @book = Book.find(params[:id])
@@ -498,18 +494,25 @@ end
   end
 
   def library_fine_per_day_add
-
+    @msg=""
+    @msg_renew=""
     if OtherLibrarySetting.first.nil?
       OtherLibrarySetting.create(params.require(:add_fine).permit!)
     else
     if params["add_fine"]["fine_per_day"].present? 
-      OtherLibrarySetting.first.update(fine_per_day: params["add_fine"]["fine_per_day"])
+      if OtherLibrarySetting.first.update(fine_per_day: params["add_fine"]["fine_per_day"])
+      else
+        @msg="Fine Not Updated"
+      end
     end
     if params["add_fine"]["times_renew_book"].present?
-      OtherLibrarySetting.first.update(times_renew_book: params["add_fine"]["times_renew_book"])
-    end
-      
+      if OtherLibrarySetting.first.update(times_renew_book: params["add_fine"]["times_renew_book"])
+      else
+      @msg_renew="Book New times not updated"
+      end
+      end
   end
+  @fineperday=OtherLibrarySetting.new
      #flash[:notice]="Library Fine For Per Day Added Successfully"        
   end
 

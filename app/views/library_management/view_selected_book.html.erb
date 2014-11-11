@@ -4,9 +4,11 @@
 
   <div id="inner-tab-menu">
     <ul>
-      
+      <%
+      unless @book.status=== "Borrowed" || @book.status=== "Lost"
+      %>
         <li class='themed_bg themed-dark-hover-background'><%= link_to 'Edit',library_management_edit_book_path%></li>
-      
+      <%end%>
     </ul>
   </div>
   
@@ -35,6 +37,22 @@
     </span>
     
     
+     <%
+      if @book.status=== "Borrowed"
+      %>
+    <span class="row_">
+      <div class="name">Borrowed By</div><div class="val"><span>:</span><span class="taglist themed_text"><%=IssueBook.where(book_id:@book.id,status: "Borrowed").take.student.first_name+"  "+IssueBook.where(book_id:@book.id,status: "Borrowed").take.student.last_name%></span></div>
+    </span>
+    <span class="row_">
+      <div class="name">Issue Date</div><div class="val"><span>:</span><span class="taglist themed_text"><%=IssueBook.where(book_id:@book.id,status: "Borrowed").take.issue_date%></span></div>
+    </span>
+    <span class="row_">
+      <div class="name">Due Date</div><div class="val"><span>:</span><span class="taglist themed_text"><%=IssueBook.where(book_id:@book.id,status: "Borrowed").take.due_date%></span></div>
+    </span>
+<%
+    end
+      %>
+
     <span class="row_">
       <div class="name">Tag list</div><div class="val"><span>:</span><span class="taglist themed_text"><%Tag.where(id: BooksTag.where(book_id: @book.id).pluck(:tag_id)).each do|booktag| %>
             <%=booktag.name%>
@@ -48,7 +66,7 @@
       <div id="reserve_book">
 
   <div style="float:left" >
-  <% if @book.status!='Reserved' && @book.status!='Lost' %>
+  <% if @book.status!='Reserved' && @book.status!='Lost' && @book.status!='Borrowed' %>
   <%=button_to "Reserve this book",{action: 'reserve_book',book_id: @book.id},remote:true,id:"reserved_id"%>
    <%else%>
    <script>

@@ -52,7 +52,7 @@
 		<p class="book_count">Total Books : <b><%= @count%></b></p>
     <br><br>
 		 <table id="listing" align="center" width="980px"  cellpadding="1" cellspacing="1" >
-     <tbody>
+     <thead>
         <tr class="tr-head" width="940px" height="28px">
 
           <td> Book Number </td>
@@ -61,7 +61,7 @@
           <td>Tags </td>
           <td>Status </td>
           <td></td>
-        </tr>
+        </tr></thead><tbody>
        <%begin%>
       <% @books.each do |b|%>
       <tr class="tr-blank">
@@ -100,7 +100,7 @@
 <p class="flash-msg" style="margin-left: 160px;"> No books found.Try Again</p>
  <%end%>
  <br><br>
-        <div class="pagination"><a href="/books?page=1" class="prev_page" rel="prev start">&laquo; Previous</a> <a href="/books?page=1" rel="prev start">1</a> <span class="current">2</span> <span class="disabled next_page">Next &raquo;</span></div>
+        
 
     </div>
 
@@ -115,3 +115,6 @@
         </div>
       </div>
   </div>
+<script >
+  $("#listing").dataTable();
+</script>>

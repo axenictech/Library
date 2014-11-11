@@ -8,7 +8,7 @@
 
        <%= form_for :add_fine , url: {action: 'library_fine_per_day_add'} ,method: :post,remote:true  do |form|%>
 
-       <% if @fineperday.errors.any? %>
+    <% if @fineperday.errors.any? %>
     <div class="alert alert-danger">
     <h2>Errors prohibited to being saved:</h2>
     <h3>Fine per day not created</h3>
@@ -18,20 +18,20 @@
     </div>
   <% end %>
 
-    
 
-
+      <%=@msg%>
+      <%=@msg_renew%>
       <div class="label-field-pair">
        <d><%=form.label :fine_per_day,"Fine per Day (Optional)[Rs] "%></d>
       <div class="text-input-bg">
-      <%=form.text_field :fine_per_day,style:"width:215px;height:27px"%>
+      <%=form.text_field :fine_per_day,value: OtherLibrarySetting.first.fine_per_day.to_f,style:"width:215px;height:27px"%>
       </div>
       </div>
 <br><br>
        <div class="label-field-pair">
        <d><%=form.label :book_renewed,"Number of times Book Renewed (Optional)"%></d>
       <div class="text-input-bg">
-      <%=form.text_field :times_renew_book,style:"width:215px;height:27px"%>
+      <%=form.text_field :times_renew_book,value: OtherLibrarySetting.first.times_renew_book,style:"width:215px;height:27px"%>
       </div>
       </div>
     <br>

@@ -31,7 +31,7 @@
     <%=form_for :search_library_setting ,
     url: library_management_library_get_library_card_setting_path, method: :post,remote:true do |form|%>
     <div>
-    <p class="flash-msg" style="margin-left: 160px;"> Library Card setting </p>
+    <p id="flash_msg" class="flash-msg" style="margin-left: 160px; display:none"><d id="data_msg"> Library Card setting </d></p>
     
     </div>
 
