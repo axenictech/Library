@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
 
 #Library Module Routes
-root 'library_management#library_dashboard'
+get 'sendsms/sendsms'
+root 'sendsms#firstpage'
+
 get 'library_management/library_dashboard'
 post 'library_management/return_books',to: 'library_management#return_books',as: 'library_management_return_books'
 post 'library_management/issue_books',to: 'library_management#issue_books',as: 'library_management_issue_books'
